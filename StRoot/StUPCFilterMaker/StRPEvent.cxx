@@ -166,49 +166,214 @@ StUPCRpsTrackPoint *StRPEvent::getTrackPoint(Int_t iTrackPoint) const
 
 
 // Setters, i == RomanPot ID, j == Plane Id, val == value of current setter
-void StRPEvent::setSiliconBunch(UChar_t val) {mSiliconBunch = val;}
-void StRPEvent::setStatus(UInt_t i, UChar_t val) {mStatusRomanPot[i] = val;}
-void StRPEvent::setNumberPlanes(UInt_t i, UInt_t val) {mNumberPlanes[i] = val;}
-void StRPEvent::setNumberPlanesWithluster(UInt_t i, UInt_t val) {mNumberPlanesWithluster[i] = val;}
+void StRPEvent::setSiliconBunch(UChar_t val) 
+{
+  mSiliconBunch = val;
+}
+void StRPEvent::setStatus(UInt_t i, UChar_t val) 
+{
+  if( i < 0 || i > 7) return;
+  mStatusRomanPot[i] = val;
+}
+void StRPEvent::setNumberPlanes(UInt_t i, UInt_t val) 
+{
+  if( i < 0 || i > 7) return;
+  mNumberPlanes[i] = val;
+}
+void StRPEvent::setNumberPlanesWithluster(UInt_t i, UInt_t val) 
+{
+  if( i < 0 || i > 7) return;
+  mNumberPlanesWithluster[i] = val;
+}
 void StRPEvent::setAdc(UInt_t i, UInt_t adc0, UInt_t adc1) 
-{ 
- mADC[i][0] = adc0;
- mADC[i][1] = adc1;
+{
+  if( i < 0 || i > 7) return;
+
+  mADC[i][0] = adc0;
+  mADC[i][1] = adc1;
 }
 void StRPEvent::setTac(UInt_t i, UInt_t tac0, UInt_t tac1)
 { 
- mTAC[i][0] = tac0;
- mTAC[i][1] = tac1;
+  if( i < 0 || i > 7) return;
+  mTAC[i][0] = tac0;
+  mTAC[i][1] = tac1;
 }   
-void StRPEvent::setOffset(UInt_t i, UInt_t j, Double_t val) {mOffsetPlane[i][j] = val;}
-void StRPEvent::setZ(UInt_t i, UInt_t j, Double_t val) {mzPlane[i][j] = val;}
-void StRPEvent::setAngle(UInt_t i, UInt_t j, Double_t val) {mAnglePlane[i][j] = val;}
-void StRPEvent::setOrientation(UInt_t i, UInt_t j, Short_t val) {mOrientationPlane[i][j] = val;}
-void StRPEvent::setStatus(UInt_t i, UInt_t j, UChar_t val) {mStatusPlane[i][j] = val;}
-void StRPEvent::setNumberOfClusters(UInt_t i, UInt_t j, UInt_t val) {mNumberOfClusters[i][j] = val;}
-void StRPEvent::setPosition(UInt_t i, UInt_t j, Double_t val) {mPositionCluster[i][j] = val;}
-void StRPEvent::setPositionRMS(UInt_t i, UInt_t j, Double_t val) {mPositionRMSCluster[i][j] = val;}
-void StRPEvent::setLength(UInt_t i, UInt_t j, Short_t val) {mLengthCluster[i][j] = val;}
-void StRPEvent::setEnergy(UInt_t i, UInt_t j, Double_t val) {mEnergyCluster[i][j] = val;}
-void StRPEvent::setXY(UInt_t i, UInt_t j, Double_t val) {mXYCluster[i][j] = val;}
-void StRPEvent::setQuality(UInt_t i, UInt_t j, UChar_t val) {mQualityCluster[i][j] = val;}
+void StRPEvent::setOffset(UInt_t i, UInt_t j, Double_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+
+  mOffsetPlane[i][j] = val;
+}
+void StRPEvent::setZ(UInt_t i, UInt_t j, Double_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mzPlane[i][j] = val;
+}
+void StRPEvent::setAngle(UInt_t i, UInt_t j, Double_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mAnglePlane[i][j] = val;
+}
+void StRPEvent::setOrientation(UInt_t i, UInt_t j, Short_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mOrientationPlane[i][j] = val;
+}
+void StRPEvent::setStatus(UInt_t i, UInt_t j, UChar_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mStatusPlane[i][j] = val;
+}
+void StRPEvent::setNumberOfClusters(UInt_t i, UInt_t j, UInt_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mNumberOfClusters[i][j] = val;
+}
+void StRPEvent::setPosition(UInt_t i, UInt_t j, Double_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mPositionCluster[i][j] = val;
+}
+void StRPEvent::setPositionRMS(UInt_t i, UInt_t j, Double_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mPositionRMSCluster[i][j] = val;
+}
+void StRPEvent::setLength(UInt_t i, UInt_t j, Short_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mLengthCluster[i][j] = val;
+}
+void StRPEvent::setEnergy(UInt_t i, UInt_t j, Double_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mEnergyCluster[i][j] = val;
+}
+void StRPEvent::setXY(UInt_t i, UInt_t j, Double_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mXYCluster[i][j] = val;
+}
+void StRPEvent::setQuality(UInt_t i, UInt_t j, UChar_t val) 
+{
+  if( i < 0 || i > 7) return;
+  if( j < 0 || j > 3) return;
+  mQualityCluster[i][j] = val;
+}
 
 // Getters
-UChar_t StRPEvent::siliconBunch() const { return mSiliconBunch;}
-UInt_t StRPEvent::numberOfPlanes(UInt_t i) const { return mNumberPlanes[i];}
-UInt_t StRPEvent::numberOfPlanesWithClusters(UInt_t i) const { return mNumberPlanesWithluster[i];}
-UChar_t StRPEvent::status(UInt_t i) const { return mStatusRomanPot[i];}
-UInt_t StRPEvent::adc(UInt_t i, UInt_t j) const { return mADC[i][j];}
-UInt_t StRPEvent::tac(UInt_t i, UInt_t j) const { return mTAC[i][j];}
-Double_t StRPEvent::offset(UInt_t i, UInt_t j) const { return mOffsetPlane[i][j];}
-Double_t StRPEvent::StRPEvent::z(UInt_t i, UInt_t j) const { return mzPlane[i][j];}
-Double_t StRPEvent::angle(UInt_t i, UInt_t j) const { return mAnglePlane[i][j];}
-Short_t  StRPEvent::orientation(UInt_t i, UInt_t j) const { return mOrientationPlane[i][j];}
-UChar_t StRPEvent::status(UInt_t i, UInt_t j) const { return mStatusPlane[i][j];}
-UInt_t  StRPEvent::numberOfClusters(UInt_t i, UInt_t j) const { return mNumberOfClusters[i][j];}
-Double_t StRPEvent::position(UInt_t i, UInt_t j) const { return mPositionCluster[i][j];}
-Double_t StRPEvent::positionRMS(UInt_t i, UInt_t j) const { return mPositionRMSCluster[i][j];}
-Short_t  StRPEvent::length(UInt_t i, UInt_t j) const { return mLengthCluster[i][j];}
-Double_t StRPEvent::energy(UInt_t i, UInt_t j) const { return mEnergyCluster[i][j];}
-Double_t StRPEvent::xy(UInt_t i, UInt_t j) const { return mXYCluster[i][j];}
-UChar_t StRPEvent::quality(UInt_t i, UInt_t j) const { return mQualityCluster[i][j];}
+UChar_t StRPEvent::siliconBunch() const 
+{ 
+  return mSiliconBunch;
+}
+UInt_t StRPEvent::numberOfPlanes(UInt_t i) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  return mNumberPlanes[i];
+}
+UInt_t StRPEvent::numberOfPlanesWithClusters(UInt_t i) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  return mNumberPlanesWithluster[i];
+}
+UChar_t StRPEvent::status(UInt_t i) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  return mStatusRomanPot[i];
+}
+UInt_t StRPEvent::adc(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mADC[i][j];
+}
+UInt_t StRPEvent::tac(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mTAC[i][j];
+}
+Double_t StRPEvent::offset(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mOffsetPlane[i][j];
+}
+Double_t StRPEvent::StRPEvent::z(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mzPlane[i][j];
+}
+Double_t StRPEvent::angle(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mAnglePlane[i][j];
+}
+Short_t  StRPEvent::orientation(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mOrientationPlane[i][j];
+}
+
+UChar_t StRPEvent::status(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mStatusPlane[i][j];
+}
+UInt_t  StRPEvent::numberOfClusters(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mNumberOfClusters[i][j];
+}
+Double_t StRPEvent::position(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mPositionCluster[i][j];
+}
+Double_t StRPEvent::positionRMS(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mPositionRMSCluster[i][j];
+}
+Short_t  StRPEvent::length(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mLengthCluster[i][j];
+}
+Double_t StRPEvent::energy(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mEnergyCluster[i][j];
+}
+Double_t StRPEvent::xy(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mXYCluster[i][j];
+}
+UChar_t StRPEvent::quality(UInt_t i, UInt_t j) const 
+{ 
+  if( i < 0 || i > 7) return 0;
+  if( j < 0 || j > 3) return 0;
+  return mQualityCluster[i][j];
+}

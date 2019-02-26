@@ -78,7 +78,7 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
       for(Int_t iTrack=0; iTrack < collection->numberOfTracks(); ++iTrack){
 			StMuRpsTrack *track = collection->track(iTrack);
 			StUPCRpsTrack *rpTrack = rpEvt->addTrack();
-			for(Int_t iTrackPoint=0; iTrackPoint < 2; ++iTrackPoint){
+			for(Int_t iTrackPoint=0; iTrackPoint < 2; ++iTrackPoint){ // Number Of Stations In Branch = 2, one trackpoint in each station
 				const StMuRpsTrackPoint *trackPoint = track->trackPoint(iTrackPoint); 
 				StUPCRpsTrackPoint *rpTrackPoint = rpEvt->addTrackPoint();
 				rpTrackPoint->setPosition(trackPoint->positionVec());

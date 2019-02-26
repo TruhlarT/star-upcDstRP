@@ -108,9 +108,6 @@ private:
   Double_t  mXYCluster[8][4];
   UChar_t  mQualityCluster[8][4];
 
-  //vector<StUPCRpsTrackPoint*>   mTrackPoints; // StSPtrVecRpsTrackPoint mTrackPoints;
-  //vector<StUPCRpsTrack*>    mTracks; // StSPtrVecRpsTrack mTracks;
-
   static TClonesArray *mgTracks; // array of upc tracks
   TClonesArray *mTracks; //-> array of upc tracks
   Int_t mNTracks; //! number of upc tracks in event, local use when filling
