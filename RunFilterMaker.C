@@ -8,7 +8,7 @@ void AddTrigger(UInt_t id, Int_t rmin, Int_t rmax);
 //_____________________________________________________________________________
 void RunFilterMaker(string filelist="txt/test.list",
                     Int_t nFiles=1,
-                    string outfile="test.root",
+                    string outfile="test2.root",
                     string config="") {
 
   //load libraries to work with muDst
@@ -84,8 +84,8 @@ void RunFilterMaker(string filelist="txt/test.list",
   cout << "RunFilterMaker: isMC: " << isMC << endl;
   anaMaker->setIsMC(isMC);
 
-  //Int_t nevt = maker->chain()->GetEntries();
-  nevt=100000;
+  Int_t nevt = maker->chain()->GetEntries();
+  //nevt=100000;
   cout << "Number of events: " << nevt << endl;
 
   //initialize the makers

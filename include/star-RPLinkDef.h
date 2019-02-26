@@ -7,9 +7,6 @@
 #pragma link off all functions;
 
 
-#pragma link C++ class StUPCRpsPreCollection+;
-#pragma link C++ class StUPCRpsPreTrack+;
-#pragma link C++ class StUPCRpsPreTrackPoint+;
 #pragma link C++ class StUPCRpsCollection+;
 #pragma link C++ class StUPCRpsRomanPot+;
 #pragma link C++ class StUPCRpsPlane+;

@@ -27,9 +27,6 @@ ClassImp(StRPEvent);
 TClonesArray *StRPEvent::mgCollections = 0;
 TClonesArray *StRPEvent::mgTrackPoints = 0;
 TClonesArray *StRPEvent::mgTracks = 0;
-TClonesArray *StRPEvent::mgRomanPots = 0;
-TClonesArray *StRPEvent::mgPlanes = 0;
-TClonesArray *StRPEvent::mgClusters = 0;
 
 
 
@@ -37,10 +34,7 @@ TClonesArray *StRPEvent::mgClusters = 0;
 StRPEvent::StRPEvent():
 	mTracks(0x0), mNTracks(0),
    mTrackPoints(0x0), mNTrackPoints(0),
-   mCollections(0x0), mNCollections(0),
-   mRomanPots(0x0), mNRomanPots(0),
-   mClusters(0x0), mNClusters(0),
-   mPlanes(0x0), mNPlanes(0)
+   mCollections(0x0), mNCollections(0)
 {
   //default constructor
 
@@ -64,25 +58,6 @@ StRPEvent::StRPEvent():
     mTracks->SetOwner(kTRUE);
   }
 
-  if(!mgRomanPots) {
-    mgRomanPots = new TClonesArray("StUPCRpsRomanPot");
-    mRomanPots = mgRomanPots;
-    mRomanPots->SetOwner(kTRUE);
-  }
-
-  if(!mgPlanes) {
-    mgPlanes = new TClonesArray("StUPCRpsPlane");
-    mPlanes = mgPlanes;
-    mPlanes->SetOwner(kTRUE);
-  }
-
-  if(!mgClusters) {
-    mgClusters = new TClonesArray("StUPCRpsCluster");
-    mClusters = mgClusters;
-    mClusters->SetOwner(kTRUE);
-  }
-
-
 }//StRPEvent
 
 //_____________________________________________________________________________
@@ -90,9 +65,6 @@ StRPEvent::~StRPEvent()
 {
   //destructor
 
-  if(mClusters) {delete mClusters; mClusters = 0x0;}
-  if(mPlanes) {delete mPlanes; mPlanes = 0x0;}
-  if(mRomanPots) {delete mRomanPots; mRomanPots = 0x0;}
   if(mTracks) {delete mTracks; mTracks = 0x0;}
   if(mTrackPoints) {delete mTrackPoints; mTrackPoints = 0x0;}
   if(mCollections) {delete mCollections; mCollections = 0x0;}
@@ -112,12 +84,6 @@ void StRPEvent::clearEvent()
   mNTrackPoints = 0;
   mTracks->Clear("C"); 
   mNTracks = 0;
-  mRomanPots->Clear("C"); 
-  mNRomanPots = 0;
-  mPlanes->Clear("C"); 
-  mNPlanes = 0;
-  mClusters->Clear("C"); 
-  mNClusters = 0;
 
 }//clearEvent
 
@@ -155,33 +121,6 @@ StUPCRpsTrackPoint *StRPEvent::addTrackPoint()
   return dynamic_cast<StUPCRpsTrackPoint*>( mTrackPoints->ConstructedAt(mNTrackPoints++) );
 
 }//addTrackPoint
-
-//_____________________________________________________________________________
-StUPCRpsCluster *StRPEvent::addCluster()
-{
-  // construct new upc track
-
-  return dynamic_cast<StUPCRpsCluster*>( mClusters->ConstructedAt(mNClusters++) );
-
-}//addCluster
-
-//_____________________________________________________________________________
-StUPCRpsPlane *StRPEvent::addPlane()
-{
-  // construct new upc track
-
-  return dynamic_cast<StUPCRpsPlane*>( mPlanes->ConstructedAt(mNPlanes++) );
-
-}//addPlane
-
-//_____________________________________________________________________________
-StUPCRpsRomanPot *StRPEvent::addRomanPot()
-{
-  // construct new upc track
-
-  return dynamic_cast<StUPCRpsRomanPot*>( mRomanPots->ConstructedAt(mNRomanPots++) );
-
-}//addRomanPot
 
 //_____________________________________________________________________________
 StUPCRpsCollection *StRPEvent::addCollection()
@@ -243,68 +182,6 @@ StUPCRpsTrackPoint *StRPEvent::getTrackPoint(Int_t iTrackPoint) const
   return dynamic_cast<StUPCRpsTrackPoint*>( mTrackPoints->At(iTrackPoint) );
 
 }//getTrackPoint
-
-
-//_____________________________________________________________________________
-Int_t StRPEvent::getNumberOfClusters() const {
-
-  //number of Clusters in event
-
-  if( !mClusters ) return 0;
-
-  return mClusters->GetEntriesFast();
-
-}//getNumberOfClusters
-
-//_____________________________________________________________________________
-StUPCRpsCluster *StRPEvent::getCluster(Int_t iCluster) const
-{
-  // get RP Cluster
-
-  return dynamic_cast<StUPCRpsCluster*>( mClusters->At(iCluster) );
-
-}//getCluster
-
-
-//_____________________________________________________________________________
-Int_t StRPEvent::getNumberOfPlanes() const {
-
-  //number of Planes in event
-
-  if( !mPlanes ) return 0;
-
-  return mPlanes->GetEntriesFast();
-
-}//getNumberOfPlanes
-
-//_____________________________________________________________________________
-StUPCRpsPlane *StRPEvent::getPlane(Int_t iPlane) const
-{
-  // get RP Plane
-
-  return dynamic_cast<StUPCRpsPlane*>( mPlanes->At(iPlane) );
-
-}//getPlane
-
-//_____________________________________________________________________________
-Int_t StRPEvent::getNumberOfRomanPots() const {
-
-  //number of RomanPot in event
-
-  if( !mRomanPots ) return 0;
-
-  return mRomanPots->GetEntriesFast();
-
-}//getNumberOfRomanPots
-
-//_____________________________________________________________________________
-StUPCRpsRomanPot *StRPEvent::getRomanPot(Int_t iRomanPot) const
-{
-  // get RP RomanPot
-
-  return dynamic_cast<StUPCRpsRomanPot*>( mRomanPots->At(iRomanPot) );
-
-}//getRomanPot
 
 
 //_____________________________________________________________________________

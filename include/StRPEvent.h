@@ -6,11 +6,7 @@
 //    Author: Truhlar Tomas
 //_____________________________________________________________________________
 
-/*
-class StUPCRpsPreCollection; 
-class StUPCRpsPreTrack; 
-class StUPCRpsPreTrackPoint; 
-*/
+
 class StUPCRpsCollection; 
 class StUPCRpsRomanPot; 
 class StUPCRpsPlane; 
@@ -39,9 +35,6 @@ public:
 
   //setters
   StUPCRpsCollection *addCollection(); 
-  StUPCRpsRomanPot *addRomanPot(); 
-  StUPCRpsPlane *addPlane(); 
-  StUPCRpsCluster *addCluster(); 
   StUPCRpsTrack *addTrack();
   StUPCRpsTrackPoint *addTrackPoint();
 
@@ -52,15 +45,6 @@ public:
   StUPCRpsTrack *getTrack(Int_t iTrack) const;
   Int_t getNumberOfTrackPoints() const;
   StUPCRpsTrackPoint *getTrackPoint(Int_t iTrackPoint) const;
-
-  Int_t getNumberOfClusters() const;
-  StUPCRpsCluster *getCluster(Int_t iCluster) const;
-
-  Int_t getNumberOfPlanes() const;
-  StUPCRpsPlane *getPlane(Int_t iPlane) const;
-
-  Int_t getNumberOfRomanPots() const;
-  StUPCRpsRomanPot *getRomanPot(Int_t iRomanPot) const;
 
   Int_t getNumberOfCollections() const;
   StUPCRpsCollection *getCollection(Int_t iCollection) const;
@@ -84,17 +68,6 @@ private:
   TClonesArray *mCollections; //-> array of UPC vertices
   Int_t mNCollections; //! number of vertices written in event, local use when filling
 
-  static TClonesArray *mgRomanPots; // array of MC particles
-  TClonesArray *mRomanPots; // array of MC particles
-  Int_t mNRomanPots; //! number of mc particles in event, local use when filling
-
-  static TClonesArray *mgClusters; // array of MC particles
-  TClonesArray *mClusters; // array of MC particles
-  Int_t mNClusters; //! number of mc particles in event, local use when filling
-
-  static TClonesArray *mgPlanes; // array of MC particles
-  TClonesArray *mPlanes; // array of MC particles
-  Int_t mNPlanes; //! number of mc particles in event, local use when filling
 
   ClassDef(StRPEvent, 2);
 };
