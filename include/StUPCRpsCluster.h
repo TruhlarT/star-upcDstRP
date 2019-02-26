@@ -65,7 +65,7 @@ protected:
     UChar_t        mPlaneId;
     UChar_t        mRomanPotId;
 
-    ClassDef(StUPCRpsCluster,1) // was 2
+    ClassDef(StUPCRpsCluster,2) 
 };
 
 ostream& operator<<(ostream&, const StUPCRpsCluster&);

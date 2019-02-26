@@ -10,9 +10,6 @@
 #pragma link C++ class StUPCRpsCluster+;
 #pragma link C++ class StUPCRpsCollection+;
 #pragma link C++ class StUPCRpsPlane+;
-#pragma link C++ class StUPCRpsPreCollection+;
-#pragma link C++ class StUPCRpsPreTrack+;
-#pragma link C++ class StUPCRpsPreTrackPoint+;
 #pragma link C++ class StUPCRpsRomanPot+;
 #pragma link C++ class StUPCRpsTrack+;
 #pragma link C++ class  StUPCRpsTrackPoint+;
