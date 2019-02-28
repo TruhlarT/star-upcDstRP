@@ -30,7 +30,6 @@ public:
 
   void clearEvent(); 
 
-  void addTriggerId(Int_t id);
 
 
   //setters
@@ -56,7 +55,6 @@ public:
   void setQuality(UInt_t, UInt_t, UChar_t);
 
   //getters
-  Bool_t isTrigger(Int_t id) const;
 
   Int_t getNumberOfTracks() const;
   StUPCRpsTrack *getTrack(Int_t iTrack) const;
@@ -87,11 +85,9 @@ private:
   StRPEvent (const StRPEvent &o); 
   StRPEvent &operator=(const StRPEvent &o); 
 
-  TArrayI mTrgIDs; // fired trigger IDs
-
   UChar_t mSiliconBunch;
-  UInt_t  mNumberPlanes[8]; // No setter
-  UInt_t  mNumberPlanesWithluster[8]; // No setter
+  UInt_t  mNumberPlanes[8]; 
+  UInt_t  mNumberPlanesWithluster[8]; 
   UChar_t  mStatusRomanPot[8];
   UInt_t  mADC[8][2];
   UInt_t  mTAC[8][2];
@@ -100,7 +96,7 @@ private:
   Double_t  mAnglePlane[8][4];
   Short_t  mOrientationPlane[8][4];
   UChar_t  mStatusPlane[8][4];   
-  UInt_t  mNumberOfClusters[8][4]; // No setter
+  UInt_t  mNumberOfClusters[8][4]; 
   Double_t  mPositionCluster[8][4];
   Double_t  mPositionRMSCluster[8][4];
   Short_t  mLengthCluster[8][4];

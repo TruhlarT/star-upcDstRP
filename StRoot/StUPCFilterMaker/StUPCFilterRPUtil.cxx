@@ -23,10 +23,10 @@
 
 //local headers
 #include "StRPEvent.h"
-#include "StUPCRpsCollection.h"
-#include "StUPCRpsRomanPot.h"
-#include "StUPCRpsPlane.h"
-#include "StUPCRpsCluster.h"
+//#include "StUPCRpsCollection.h"
+//#include "StUPCRpsRomanPot.h"
+//#include "StUPCRpsPlane.h"
+//#include "StUPCRpsCluster.h"
 #include "StUPCRpsTrackPoint.h"
 #include "StUPCRpsTrack.h"
 
@@ -44,7 +44,7 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
 //_________________MY Part_______________________________//
 
   StMuRpsCollection *collection = mMuDst->RpsCollection();
-  StUPCRpsCollection *rpCollection; //= rpEvt->addCollection(); 
+  //StUPCRpsCollection *rpCollection; //= rpEvt->addCollection(); 
   rpEvt->setSiliconBunch(collection->siliconBunch());
 
   for(UInt_t iRomanPotId = 0; iRomanPotId < collection->numberOfRomanPots(); ++iRomanPotId){

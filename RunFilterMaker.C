@@ -8,7 +8,7 @@ void AddTrigger(UInt_t id, Int_t rmin, Int_t rmax);
 //_____________________________________________________________________________
 void RunFilterMaker(string filelist="txt/test.list",
                     Int_t nFiles=1,
-                    string outfile="test2.root",
+                    string outfile="test3.root",
                     string config="") {
 
   //load libraries to work with muDst

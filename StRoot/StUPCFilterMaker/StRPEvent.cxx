@@ -36,8 +36,6 @@ StRPEvent::StRPEvent():
 {
   //default constructor
 
-  mTrgIDs.Set(0);
-
 
   if(!mgTrackPoints) {
     mgTrackPoints = new TClonesArray("StUPCRpsTrackPoint");
@@ -69,28 +67,12 @@ void StRPEvent::clearEvent()
 {
   // clear event variables
 
-  mTrgIDs.Set(0);
   mTrackPoints->Clear("C"); 
   mNTrackPoints = 0;
   mTracks->Clear("C"); 
   mNTracks = 0;
 
 }//clearEvent
-
-//_____________________________________________________________________________
-void StRPEvent::addTriggerId(Int_t id) {
-  //add fired trigger ID
-
-  //position to put the ID
-  Int_t pos = mTrgIDs.GetSize();
-
-  //extend the array
-  mTrgIDs.Set(pos+1);
-
-  //put the ID
-  mTrgIDs.AddAt(id, pos);
-
-}//addTriggerId
 
 
 //_____________________________________________________________________________
@@ -112,17 +94,6 @@ StUPCRpsTrackPoint *StRPEvent::addTrackPoint()
 
 }//addTrackPoint
 
-//_____________________________________________________________________________
-Bool_t StRPEvent::isTrigger(Int_t id) const
-{
-  //get fired trigger ID
-  for(Int_t i=0; i<mTrgIDs.GetSize(); i++) {
-    if( mTrgIDs.At(i) == id ) return kTRUE;
-  }
-
-  return kFALSE;
-
-}//setTrigger
 
 //_____________________________________________________________________________
 Int_t StRPEvent::getNumberOfTracks() const {
