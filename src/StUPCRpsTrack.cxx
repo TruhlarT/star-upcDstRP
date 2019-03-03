@@ -1,28 +1,8 @@
-/***************************************************************************
- *
- * $Id: StUPCRpsTrack.cxx,v 2.3 2015/10/22 20:37:34 ullrich Exp $
- *
- * Author: Rafal Sikora, 1 Oct 2015
- *
- ***************************************************************************
- *
- * Description: StUPCRpsTrack class representing reconstructed track in
- * the Roman Pot system, with all associated observables, such as
- * momentum (px, py, pz) etc..
- *
- ***************************************************************************
- *
- * $Log: StUPCRpsTrack.cxx,v $
- * Revision 2.3  2015/10/22 20:37:34  ullrich
- * Moved t(double) to header file made inline. Modified t code.
- *
- * Revision 2.2  2015/10/07 17:30:11  ullrich
- * Changed const to enums and related changes.
- *
- * Revision 2.1  2015/10/02 19:48:14  ullrich
- * Initial Revision.
- *
- ***************************************************************************/
+//_____________________________________________________________________________
+//    Class for making picoDst RP data 2019
+//    Author: Truhlar Tomas
+//_____________________________________________________________________________
+
 #include "StUPCRpsTrackPoint.h"
 #include "StUPCRpsTrack.h"
 #include <cmath>
@@ -34,10 +14,6 @@ StUPCRpsTrack::StUPCRpsTrack(){
         mTrackPoints.push_back(nullptr);
     mBranch = -1;
     mType = rpsUndefined;
-}
-
-StUPCRpsTrack::StUPCRpsTrack(const StUPCRpsTrack& track) {
-    *this = track;
 }
 
 StUPCRpsTrack::~StUPCRpsTrack() { /* no op */ }

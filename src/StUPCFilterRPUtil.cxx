@@ -1,10 +1,9 @@
-
 //_____________________________________________________________________________
-//
-//    Utility class for RP in UPC filter maker
+//    Utility class for making picoDst RP data 2019
 //    Author: Truhlar Tomas
-//
 //_____________________________________________________________________________
+
+
 //c++ headers
 #include "string.h"
 #include <vector>
@@ -23,13 +22,8 @@
 
 //local headers
 #include "StRPEvent.h"
-//#include "StUPCRpsCollection.h"
-//#include "StUPCRpsRomanPot.h"
-//#include "StUPCRpsPlane.h"
-//#include "StUPCRpsCluster.h"
 #include "StUPCRpsTrackPoint.h"
 #include "StUPCRpsTrack.h"
-
 #include "StUPCFilterRPUtil.h"
 
 
@@ -41,14 +35,11 @@ StUPCFilterRPUtil::StUPCFilterRPUtil() {
 
 //_____________________________________________________________________________
 void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
-//_________________MY Part_______________________________//
 
   StMuRpsCollection *collection = mMuDst->RpsCollection();
-  //StUPCRpsCollection *rpCollection; //= rpEvt->addCollection(); 
   rpEvt->setSiliconBunch(collection->siliconBunch());
 
   for(UInt_t iRomanPotId = 0; iRomanPotId < collection->numberOfRomanPots(); ++iRomanPotId){
-    //StUPCRpsRomanPot *rpRomanPot;; // = rpCollection->romanPot(iRomanPotId);
 
     rpEvt->setStatus(iRomanPotId, collection->status(iRomanPotId));
     rpEvt->setAdc(iRomanPotId, collection->adc(iRomanPotId, 0), collection->adc(iRomanPotId, 1));
@@ -56,7 +47,6 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
     rpEvt->setNumberPlanes(iRomanPotId, collection->numberOfPlanes());
     rpEvt->setNumberPlanesWithluster(iRomanPotId, collection->numberOfPlanesWithClusters(iRomanPotId));
     for(UInt_t iPlaneId=0; iPlaneId < collection->numberOfPlanes(); ++iPlaneId){
-      //StUPCRpsPlane *rpPlane = rpRomanPot->plane(iPlaneId);
       rpEvt->setOffset(iRomanPotId, iPlaneId, collection->offsetPlane(iRomanPotId, iPlaneId));
       rpEvt->setZ(iRomanPotId, iPlaneId, collection->zPlane(iRomanPotId, iPlaneId));  
       rpEvt->setAngle(iRomanPotId, iPlaneId, collection->anglePlane(iRomanPotId, iPlaneId));  
@@ -65,36 +55,48 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
 
       rpEvt->setNumberOfClusters(iRomanPotId, iPlaneId, collection->numberOfClusters(iRomanPotId, iPlaneId));
       for(UInt_t iCluster=0; iCluster < collection->numberOfClusters(iRomanPotId, iPlaneId); ++iCluster){
-        //StUPCRpsCluster *rpCluster = rpPlane->cluster(iCluster); 
         rpEvt->setPosition(iRomanPotId, iPlaneId, collection->positionCluster(iRomanPotId, iPlaneId, iCluster));
         rpEvt->setPositionRMS(iRomanPotId, iPlaneId, collection->positionRMSCluster(iRomanPotId, iPlaneId, iCluster)); 
         rpEvt->setLength(iRomanPotId, iPlaneId, collection->lengthCluster(iRomanPotId, iPlaneId, iCluster)); 
         rpEvt->setEnergy(iRomanPotId, iPlaneId, collection->energyCluster(iRomanPotId, iPlaneId, iCluster)); 
         rpEvt->setXY(iRomanPotId, iPlaneId, collection->xyCluster(iRomanPotId, iPlaneId, iCluster)); 
         rpEvt->setQuality(iRomanPotId, iPlaneId, collection->qualityCluster(iRomanPotId, iPlaneId, iCluster));
-       // rpPlane->addCluster(rpCluster); 
       }
+
+      for(Int_t iTrackPoint=0; iTrackPoint < collection->numberOfTrackPoints(); ++iTrackPoint){ 
+			StMuRpsTrackPoint *trackPoint = collection->trackPoint(iTrackPoint);
+			mTrackPoints.push_back(*trackPoint);
+			StUPCRpsTrackPoint *rpTrackPoint = rpEvt->addTrackPoint();
+			rpTrackPoint->setPosition(trackPoint->positionVec());
+			rpTrackPoint->setRpId(trackPoint->rpId());
+			rpTrackPoint->setClusterId(trackPoint->clusterId(iPlaneId), iPlaneId);
+			rpTrackPoint->setTime(trackPoint->time(0), 0); // pmtId = 0
+			rpTrackPoint->setTime(trackPoint->time(1), 1); // pmtId = 1
+  			switch(trackPoint->quality()){
+  				case StMuRpsTrackPoint::rpsNormal: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsNormal);
+  				break;      
+  				case StMuRpsTrackPoint::rpsGolden: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsGolden);
+  				break; 
+  				default: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsNotSet);
+  				break; 
+  			}
+			rpCollection->addTrackPoint(rpTrackPoint); 
+		}
 
       for(Int_t iTrack=0; iTrack < collection->numberOfTracks(); ++iTrack){
 			StMuRpsTrack *track = collection->track(iTrack);
 			StUPCRpsTrack *rpTrack = rpEvt->addTrack();
-			for(Int_t iTrackPoint=0; iTrackPoint < 2; ++iTrackPoint){ // Number Of Stations In Branch = 2, one trackpoint in each station
-				const StMuRpsTrackPoint *trackPoint = track->trackPoint(iTrackPoint); 
+			for(Int_t iStation=0; iStation < 2; ++iStation){ // Number Of Stations In Branch = 2, one trackpoint in each station
+				const StMuRpsTrackPoint *trackPoint = track->trackPoint(iStation); 
 				StUPCRpsTrackPoint *rpTrackPoint = rpEvt->addTrackPoint();
-				rpTrackPoint->setPosition(trackPoint->positionVec());
-				rpTrackPoint->setRpId(trackPoint->rpId());
-				rpTrackPoint->setClusterId(trackPoint->clusterId(iPlaneId), iPlaneId);
-				rpTrackPoint->setTime(trackPoint->time(0), 0); // pmtId = 0
-				rpTrackPoint->setTime(trackPoint->time(1), 1); // pmtId = 1
-				switch(trackPoint->quality()){
-					case StMuRpsTrackPoint::rpsNormal: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsNormal);
-					break;      
-					case StMuRpsTrackPoint::rpsGolden: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsGolden);
-					break; 
-					default: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsNotSet);
-					break; 
+				UInt_t trckPntId = -1
+				for(UInt_t i = 0; i < collection->numberOfTrackPoints(); ++i){
+					if(trackPoint == mTrackPoints[i]){
+						trckPntId = i;
+						break;
+					}
 				}
-				rpTrack->setTrackPoint(rpTrackPoint, iTrackPoint);
+				rpTrack->setTrackPoint(i, iStation);
 			}        
 			rpTrack->setP(track->pVec()); 
 			rpTrack->setBranch(track->branch());

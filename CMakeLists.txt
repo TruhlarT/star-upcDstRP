@@ -8,6 +8,10 @@ set (SRCS
   src/StUPCTrack.cxx
   src/StUPCBemcCluster.cxx
   src/StUPCVertex.cxx
+  src/StUPCRpsTrack.cxx
+  src/StUPCRpsTrackPoint.cxx
+  src/StUPCFilterRPUtil.cxx
+  src/StRPEvent.cxx
   )
 
 #name of shared libarary LIB
@@ -19,6 +23,10 @@ set (SRCS_DICT
   src/StUPCTrack.cxx
   src/StUPCBemcCluster.cxx
   src/StUPCVertex.cxx
+  src/StUPCRpsTrack.cxx
+  src/StUPCRpsTrackPoint.cxx
+  src/StUPCFilterRPUtil.cxx
+  src/StRPEvent.cxx
   )
 
 #LinkDef file for ROOT dictionary

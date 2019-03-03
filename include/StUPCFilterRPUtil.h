@@ -1,22 +1,17 @@
 #ifndef StUPCFilterRPUtil_h
 #define StUPCFilterRPUtil_h
 
+//_____________________________________________________________________________
+//    Class for making picoDst RP data 2019
+//    Author: Truhlar Tomas
+//_____________________________________________________________________________
+
 #include "StMaker.h"
 
 class StRPEvent;
 class StMuDst;
-
-/*
-class StUPCRpsCollection;
-class StMuRpsCollection;
-class StUPCRpsRomanPot; 
-class StUPCRpsPlane;
-class StUPCRpsCluster;
 class StMuRpsTrackPoint;
-class StUPCRpsTrackPoint;
-class StMuRpsTrack;
-class StUPCRpsTrack;
-*/
+
 class StUPCFilterRPUtil {
 
 public:
@@ -28,6 +23,7 @@ public:
 
 private:
 
+	vector<StMuRpsTrackPoint*>  mTrackPoints;
  // StUPCFilterRPUtil(const StUPCFilterRPUtil &o); // not implemented
  // StUPCFilterRPUtil &operator=(const StUPCFilterRPUtil &o); // not implemented
 
