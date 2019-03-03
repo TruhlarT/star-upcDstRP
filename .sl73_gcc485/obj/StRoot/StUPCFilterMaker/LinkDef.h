@@ -7,10 +7,6 @@
 #pragma link C++ class StUPCBemcCluster+;
 #pragma link C++ class StUPCEvent+;
 #pragma link C++ class StUPCFilterMaker+;
-#pragma link C++ class StUPCRpsCluster+;
-#pragma link C++ class StUPCRpsCollection+;
-#pragma link C++ class StUPCRpsPlane+;
-#pragma link C++ class StUPCRpsRomanPot+;
 #pragma link C++ class StUPCRpsTrack+;
 #pragma link C++ class  StUPCRpsTrackPoint+;
 #pragma link C++ class StUPCTrack+;
