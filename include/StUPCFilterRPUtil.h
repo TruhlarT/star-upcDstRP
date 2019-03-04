@@ -6,8 +6,6 @@
 //    Author: Truhlar Tomas
 //_____________________________________________________________________________
 
-#include "StMaker.h"
-
 class StRPEvent;
 class StMuDst;
 class StMuRpsTrackPoint;

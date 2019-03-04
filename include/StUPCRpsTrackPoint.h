@@ -23,7 +23,7 @@ public:
 
 
 	static const Int_t mNumberOfPmtsInRp = 2;
-	static const Int_t mNumberOfPlanesInRp = 2;
+	static const Int_t mNumberOfPlanesInRp = 4;
 
 	TVector3 positionVec() const { return mPosition; }
 	int rpId() const { return mRpId; }

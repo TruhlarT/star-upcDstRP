@@ -10,7 +10,6 @@ set (SRCS
   src/StUPCVertex.cxx
   src/StUPCRpsTrack.cxx
   src/StUPCRpsTrackPoint.cxx
-  src/StUPCFilterRPUtil.cxx
   src/StRPEvent.cxx
   )
 
@@ -25,7 +24,6 @@ set (SRCS_DICT
   src/StUPCVertex.cxx
   src/StUPCRpsTrack.cxx
   src/StUPCRpsTrackPoint.cxx
-  src/StUPCFilterRPUtil.cxx
   src/StRPEvent.cxx
   )
 
