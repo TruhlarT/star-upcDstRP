@@ -15,7 +15,6 @@ class StUPCFilterBemcUtil;
 class StRPEvent;
 class StUPCFilterRPUtil;
 
-
 class StUPCFilterMaker: public StMaker {
 
 public:

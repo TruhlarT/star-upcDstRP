@@ -33,12 +33,28 @@ StUPCFilterRPUtil::StUPCFilterRPUtil() {
 
 }//StUPCFilterRPUtil
 
+
+void StUPCFilterRPUtil::clear() {
+
+  //clear hits and clusters vectors
+  mMuTrackPoints.clear();
+  mTrackPoints.clear();
+
+}//clear
+
 //_____________________________________________________________________________
 void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
 
+
   StMuRpsCollection *collection = mMuDst->RpsCollection();
+  if( !collection ){
+    cout<< "StUPCFilterRPUtil::processEvent() no muDst RpsCollection input" << endl;
+    return;
+  }
+
   rpEvt->setSiliconBunch(collection->siliconBunch());
 
+  cout<<"Go to for cycle "<<endl;
   for(UInt_t iRomanPotId = 0; iRomanPotId < collection->numberOfRomanPots(); ++iRomanPotId){
 
     rpEvt->setStatus(iRomanPotId, collection->status(iRomanPotId));

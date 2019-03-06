@@ -20,16 +20,39 @@ TClonesArray *StRPEvent::mgTrackPoints = 0;
 TClonesArray *StRPEvent::mgTracks = 0;
 
 
-
-
 //_____________________________________________________________________________
 StRPEvent::StRPEvent():
-  mTracks(0x0), mNTracks(0),
+   mSiliconBunch(0),
+   mTracks(0x0), mNTracks(0),
    mTrackPoints(0x0), mNTrackPoints(0)
 {
   //default constructor
 
-
+  for (UInt_t iRP = 0; iRP < mNumberOfRomanPots; ++iRP){
+    mNumberPlanes[iRP] = 0;
+    mNumberPlanesWithluster[iRP] = 0;
+    mStatusRomanPot[iRP] = 0;
+    for (UInt_t iPMT = 0; iPMT < mNumberOfPmtsInRp; ++iPMT){
+      mADC[iRP][iPMT] = 0;
+      mTAC[iRP][iPMT] = 0;
+    }
+    for (UInt_t iPlane = 0; iPlane < mNumberOfPlanesInRP; ++iPlane){
+      mOffsetPlane[iRP][iPlane] = 0;
+      mzPlane[iRP][iPlane] = 0;
+      mAnglePlane[iRP][iPlane] = 0;
+      mOrientationPlane[iRP][iPlane] = 0;
+      mStatusPlane[iRP][iPlane] = 0;  
+      mNumberOfClusters[iRP][iPlane] = 0;
+    }
+  }
+/*
+  vector<Double_t>  mPositionCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  vector<Double_t>  mPositionRMSCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  vector<Short_t>  mLengthCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  vector<Double_t>  mEnergyCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  vector<Double_t>  mXYCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  vector<UChar_t>  mQualityCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
+*/ // co s vektorem?
   if(!mgTrackPoints) {
     mgTrackPoints = new TClonesArray("StUPCRpsTrackPoint");
     mTrackPoints = mgTrackPoints;

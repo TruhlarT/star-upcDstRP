@@ -18,7 +18,7 @@ using namespace std;
 void test_trackpoint() {
 
   //open input file
-  TFile *infile = TFile::Open("../test3.root", "read");
+  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/cohJpsi/test.root", "read");
 
   //get picoDst tree in file
   TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
@@ -31,21 +31,24 @@ void test_trackpoint() {
 
   //connect upc event to the tree
   static StRPEvent *upcEvt = 0x0;
-  upcTree->SetBranchAddress("mUPCEvent", &upcEvt);
+  upcTree->SetBranchAddress("mRPEvent", &upcEvt);
 
   //ask for number of events
   Long64_t nev = upcTree->GetEntries();
   cout << "Number of events: " << nev << endl;
 
-  nev = 100;
+  // nev = 100;
 
   //event loop
   for(Long64_t iev=0; iev<nev; iev++) {
 
     //get the event
     upcTree->GetEntry(iev);
-
+    if(upcEvt->getNumberOfTracks() > 0)
+      cout << "Number of tracks: " << upcEvt->getNumberOfTrackPoints() << endl;
+    //cout << "Number of tracks: " << upcEvt->getNumberOfTrackPoints() << endl;
     //tracks loop
+    /*
     for(Int_t i=0; i<upcEvt->getNumberOfTracks(); ++i) {
       StUPCRpsTrack *trk = upcEvt->getTrack(i);
 
@@ -54,10 +57,10 @@ void test_trackpoint() {
         cout << trkPoint->rpId() << endl;
       }
 
-      cout << trk->branch() << endl;
-      hPt->Fill(trk->getPt());
+      //cout << trk->branch() << endl;
+      //hPt->Fill(trk->branch());
     }
-
+    */
   }
 
   //close outputs

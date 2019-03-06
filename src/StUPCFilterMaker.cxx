@@ -52,7 +52,7 @@ ClassImp(StUPCFilterMaker);
 StUPCFilterMaker::StUPCFilterMaker(StMuDstMaker *maker, string outnam) : StMaker("StReadMuDstMaker"),
   mMaker(maker), mMuDst(0x0), mIsMC(0), mOutName(outnam), mOutFile(0x0),
   mHistList(0x0), mCounter(0x0), mErrCounter(0x0),
-  mUPCEvent(0x0), mUPCTree(0x0), mTrgUtil(0x0), mBemcUtil(0x0), 
+  mUPCEvent(0x0), mUPCTree(0x0), mTrgUtil(0x0), mBemcUtil(0x0),
   mRPUtil(0x0), mRPEvent(0x0), mRPTree(0x0)
 {
   //constructor
@@ -70,15 +70,15 @@ StUPCFilterMaker::~StUPCFilterMaker()
 
   delete mTrgUtil; mTrgUtil=0;
   delete mBemcUtil; mBemcUtil=0;
-  delete mRPUtil; mRPUtil=0;
   delete mHistList; mHistList=0;
   delete mCounter; mCounter=0;
   delete mErrCounter; mErrCounter=0;
   delete mUPCTree; mUPCTree=0;
-  delete mRPTree; mRPTree=0;
   delete mUPCEvent; mUPCEvent=0;
-  delete mRPEvent; mRPEvent=0;
   delete mOutFile; mOutFile=0;
+  delete mRPEvent; mRPEvent=0;
+  delete mRPTree; mRPTree=0;
+  delete mRPUtil; mRPUtil=0;
 
 }//~StUPCFilterMaker
 
@@ -110,7 +110,7 @@ Int_t StUPCFilterMaker::Init() {
   //initialize BEMC matching utility
   mBemcUtil = new StUPCFilterBemcUtil();
 
-  //initialize RP utility
+    //initialize RP utility
   mRPUtil = new StUPCFilterRPUtil();
 
   //create the output file
@@ -127,7 +127,6 @@ Int_t StUPCFilterMaker::Init() {
   mRPTree = new TTree("mRPTree", "mRPTree");
   //add branch with event objects
   mRPTree->Branch("mRPEvent", &mRPEvent);
-
 
   //create the tree
   mUPCTree = new TTree("mUPCTree", "mUPCTree");
@@ -154,9 +153,9 @@ Int_t StUPCFilterMaker::Init() {
 Int_t StUPCFilterMaker::Make()
 {
   //called for each event
-
   mUPCEvent->clearEvent(); //clear the output UPC event
   mBemcUtil->clear(); //clear data structures in BEMC util
+  mRPUtil->clear(); // clear data structures in RP util
   mRPEvent->clearEvent(); //clear the output RP event
 
   //input muDst data
@@ -191,7 +190,8 @@ Int_t StUPCFilterMaker::Make()
   Bool_t isTrg = kFALSE; //determine whether at least one of trigger IDs was fired
   for(UInt_t i=0; i<mTrgIDs.size(); i++) {
     // run range for a given trigger ID
-    if( runnum < mTrgRanLo[i] || runnum > mTrgRanHi[i] ) continue;
+    if( mTrgRanLo[i] != 0 && runnum < mTrgRanLo[i] ) continue;
+    if( mTrgRanHi[i] != 0 && runnum > mTrgRanHi[i] ) continue;
     //test trigger ID at 'i'
     if( !trgId.isTrigger( mTrgIDs[i] ) ) continue;
 
@@ -205,7 +205,6 @@ Int_t StUPCFilterMaker::Make()
   //event passed the trigger
 
   mCounter->Fill( kTrg ); // events after trigger
-
   //run number
   mUPCEvent->setRunNumber( runnum );
   //event number
@@ -294,7 +293,6 @@ Int_t StUPCFilterMaker::Make()
       }
     }//tracks for this vertex
   }//vertex map loop
-
   //vertex loop
   for(UInt_t ivtx=0; ivtx<mMuDst->numberOfPrimaryVertices(); ivtx++) {
     //select only vertices with at least one matched track
@@ -389,7 +387,6 @@ Int_t StUPCFilterMaker::Make()
 
   mRPUtil->processEvent(mRPEvent, mMuDst);
 
-
   //write BEMC clusters
   mBemcUtil->writeBEMC(mUPCEvent);
 
@@ -462,7 +459,6 @@ Int_t StUPCFilterMaker::Finish()
   mUPCTree->Write();
   mRPTree->Write();
   mHistList->Write("HistList", TObject::kSingleKey);
-
   mOutFile->Close();
 
   return kStOk;

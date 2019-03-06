@@ -6,10 +6,7 @@ StUPCFilterMaker *anaMaker;
 void AddTrigger(UInt_t id, Int_t rmin, Int_t rmax);
 
 //_____________________________________________________________________________
-void RunFilterMaker(string filelist="txt/test.list",
-                    Int_t nFiles=1,
-                    string outfile="test3.root",
-                    string config="") {
+void RunFilterMaker(string filelist, Int_t nFiles, string outfile, string config) {
 
   //load libraries to work with muDst
   gROOT->Macro("loadMuDst.C");
@@ -53,7 +50,7 @@ void RunFilterMaker(string filelist="txt/test.list",
   // they are supposed to be loaded from configuration file
 
   //data/MC
-  Int_t isMC = 2; // 0 - data,  1 - starsim MC,  2 - embedding MC
+  Int_t isMC = 0; // 0 - data,  1 - starsim MC,  2 - embedding MC
 
   // use BEMC cluster conditions below if set to true
   Bool_t useClusterParam = kFALSE;
@@ -80,12 +77,16 @@ void RunFilterMaker(string filelist="txt/test.list",
   //no debug printouts
   StMuDebug::setLevel(0);
 
+  //show input and output for the maker
+  cout << "RunFilterMaker, filelist: " << filelist << endl;
+  cout << "RunFilterMaker, nFiles:   " << nFiles << endl;
+  cout << "RunFilterMaker, outfile:  " << outfile << endl;
+
   //apply data/mc selection
-  cout << "RunFilterMaker: isMC: " << isMC << endl;
+  cout << "RunFilterMaker, isMC: " << isMC << endl;
   anaMaker->setIsMC(isMC);
 
   Int_t nevt = maker->chain()->GetEntries();
-  //nevt=100000;
   cout << "Number of events: " << nevt << endl;
 
   //initialize the makers

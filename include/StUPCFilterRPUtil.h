@@ -18,14 +18,17 @@ public:
   StUPCFilterRPUtil();
   virtual ~StUPCFilterRPUtil() {}
 
+  void clear();
+
   void processEvent(StRPEvent *rpEvt, StMuDst *mMuDst);
 
 private:
 
 	vector<const StMuRpsTrackPoint*>  mMuTrackPoints;
 	vector<StUPCRpsTrackPoint*>  mTrackPoints;
- // StUPCFilterRPUtil(const StUPCFilterRPUtil &o); // not implemented
- // StUPCFilterRPUtil &operator=(const StUPCFilterRPUtil &o); // not implemented
+
+   StUPCFilterRPUtil(const StUPCFilterRPUtil &o); // not implemented
+   StUPCFilterRPUtil &operator=(const StUPCFilterRPUtil &o); // not implemented
 
 };
 
