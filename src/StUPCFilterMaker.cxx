@@ -1,4 +1,3 @@
-
 //_____________________________________________________________________________
 //    Class for UPC filter
 //    Author: Jaroslav Adam
@@ -75,10 +74,11 @@ StUPCFilterMaker::~StUPCFilterMaker()
   delete mErrCounter; mErrCounter=0;
   delete mUPCTree; mUPCTree=0;
   delete mUPCEvent; mUPCEvent=0;
-  delete mOutFile; mOutFile=0;
   delete mRPEvent; mRPEvent=0;
   delete mRPTree; mRPTree=0;
   delete mRPUtil; mRPUtil=0;
+  delete mOutFile; mOutFile=0;
+
 
 }//~StUPCFilterMaker
 
@@ -121,17 +121,17 @@ Int_t StUPCFilterMaker::Init() {
   //configure the UPC event
   if( mIsMC > 0 ) mUPCEvent->setIsMC( kTRUE );
 
+  //create the tree
+  mUPCTree = new TTree("mUPCTree", "mUPCTree");
+  //add branch with event objects
+  mUPCTree->Branch("mUPCEvent", &mUPCEvent);
+
   //output UPC event and tree
   mRPEvent = new StRPEvent();
   //create the tree
   mRPTree = new TTree("mRPTree", "mRPTree");
   //add branch with event objects
   mRPTree->Branch("mRPEvent", &mRPEvent);
-
-  //create the tree
-  mUPCTree = new TTree("mUPCTree", "mUPCTree");
-  //add branch with event objects
-  mUPCTree->Branch("mUPCEvent", &mUPCEvent);
 
   //output histograms
   mHistList = new TList();
@@ -455,17 +455,13 @@ Int_t StUPCFilterMaker::Finish()
 
   //write the output file
   mOutFile->cd();
-
   mUPCTree->Write();
   mRPTree->Write();
   mHistList->Write("HistList", TObject::kSingleKey);
   mOutFile->Close();
-
   return kStOk;
 
 }//Finish
-
-
 
 
 

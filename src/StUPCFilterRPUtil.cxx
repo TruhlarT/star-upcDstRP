@@ -51,10 +51,8 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
     cout<< "StUPCFilterRPUtil::processEvent() no muDst RpsCollection input" << endl;
     return;
   }
-
   rpEvt->setSiliconBunch(collection->siliconBunch());
 
-  cout<<"Go to for cycle "<<endl;
   for(UInt_t iRomanPotId = 0; iRomanPotId < collection->numberOfRomanPots(); ++iRomanPotId){
 
     rpEvt->setStatus(iRomanPotId, collection->status(iRomanPotId));

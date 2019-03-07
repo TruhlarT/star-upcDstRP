@@ -45,14 +45,7 @@ StRPEvent::StRPEvent():
       mNumberOfClusters[iRP][iPlane] = 0;
     }
   }
-/*
-  vector<Double_t>  mPositionCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<Double_t>  mPositionRMSCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<Short_t>  mLengthCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<Double_t>  mEnergyCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<Double_t>  mXYCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<UChar_t>  mQualityCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-*/ // co s vektorem?
+
   if(!mgTrackPoints) {
     mgTrackPoints = new TClonesArray("StUPCRpsTrackPoint");
     mTrackPoints = mgTrackPoints;
