@@ -18,7 +18,7 @@ using namespace std;
 void test_trackpoint() {
 
   //open input file
-  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/cohJpsi/test.root", "read");
+  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/SegViol/test_Segviol.root", "read");
 
   //get picoDst tree in file
   TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
@@ -41,11 +41,12 @@ void test_trackpoint() {
 
   //event loop
   for(Long64_t iev=0; iev<nev; iev++) {
-
     //get the event
     upcTree->GetEntry(iev);
-    if(upcEvt->getNumberOfTracks() > 0)
-      cout << "Number of tracks: " << upcEvt->getNumberOfTrackPoints() << endl;
+
+    if(upcEvt->getNumberOfTracks() > 0){
+      cout << "Number of tracks: " << upcEvt->getNumberOfTracks() << endl;
+    }
     //cout << "Number of tracks: " << upcEvt->getNumberOfTrackPoints() << endl;
     //tracks loop
     /*
@@ -62,7 +63,7 @@ void test_trackpoint() {
     }
     */
   }
-
+  cout<< "closing"<<endl;
   //close outputs
   hPt->Write();
   outfile->Close();

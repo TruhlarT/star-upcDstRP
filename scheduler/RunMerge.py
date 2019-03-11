@@ -46,7 +46,7 @@ if __name__ == "__main__":
     #size of one output chunk
     chunksiz = int(2.5e6)  # approx kB
 
-    #create output directory for merged files
+    #create output directorye for merged files
     merge_path = top+"/"+outdir
     if os.access(merge_path, os.F_OK) == False:
         os.makedirs(merge_path)
