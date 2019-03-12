@@ -52,7 +52,7 @@ StUPCFilterMaker::StUPCFilterMaker(StMuDstMaker *maker, string outnam) : StMaker
   mMaker(maker), mMuDst(0x0), mIsMC(0), mOutName(outnam), mOutFile(0x0),
   mHistList(0x0), mCounter(0x0), mErrCounter(0x0),
   mUPCEvent(0x0), mUPCTree(0x0), mTrgUtil(0x0), mBemcUtil(0x0),
-  mRPUtil(0x0), mRPEvent(0x0), mRPTree(0x0)
+  mRPEvent(0x0),  mRPTree(0x0), mRPUtil(0x0)
 {
   //constructor
 
@@ -74,9 +74,9 @@ StUPCFilterMaker::~StUPCFilterMaker()
   delete mErrCounter; mErrCounter=0;
   delete mUPCTree; mUPCTree=0;
   delete mUPCEvent; mUPCEvent=0;
-  delete mRPEvent; mRPEvent=0;
-  delete mRPTree; mRPTree=0;
   delete mRPUtil; mRPUtil=0;
+  delete mRPTree; mRPTree=0;
+  delete mRPEvent; mRPEvent=0;
   delete mOutFile; mOutFile=0;
 
 

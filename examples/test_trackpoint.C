@@ -18,7 +18,7 @@ using namespace std;
 void test_trackpoint() {
 
   //open input file
-  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/SegViol/test_Segviol.root", "read");
+  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/test/2FA1333680D49A7D8008EEB57BE6DE01_0.root", "read");
 
   //get picoDst tree in file
   TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
@@ -42,12 +42,21 @@ void test_trackpoint() {
   //event loop
   for(Long64_t iev=0; iev<nev; iev++) {
     //get the event
+    // cout<<"event "<<iev<<endl;
     upcTree->GetEntry(iev);
-
+    /*for(int i = 0; i <8 ;++i){
+      if(upcEvt->numberOfPlanesWithClusters(i) != 0)  
+        cout<<"numberOfPlanesWithClusters in "<<i<<" RP: "<<upcEvt->numberOfPlanesWithClusters(i)<<endl;
+    
+      cout<<"adc in "<<i<<" RP: "<<upcEvt->adc(i,0)<<endl;
+    } */
+   
+   
     if(upcEvt->getNumberOfTracks() > 0){
       cout << "Number of tracks: " << upcEvt->getNumberOfTracks() << endl;
-    }
-    //cout << "Number of tracks: " << upcEvt->getNumberOfTrackPoints() << endl;
+    } 
+    
+    //cout << "Number of trackPoints: " << upcEvt->getNumberOfTrackPoints() << endl;
     //tracks loop
     /*
     for(Int_t i=0; i<upcEvt->getNumberOfTracks(); ++i) {

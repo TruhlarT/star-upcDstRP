@@ -55,6 +55,7 @@ private:
   StUPCEvent *mUPCEvent; // output UPC event
   StRPEvent *mRPEvent; // output RP event
   TTree *mUPCTree; // output tree
+  TTree *mRPTree; // output tree
 
 
   //table of trigger IDs
@@ -64,9 +65,7 @@ private:
 
   StUPCFilterTrgUtil *mTrgUtil;
   StUPCFilterBemcUtil *mBemcUtil; //utility class for BEMC matching
-
   StUPCFilterRPUtil *mRPUtil; //utility class for Roman Pots
-  TTree *mRPTree; // output tree
   
   ClassDef(StUPCFilterMaker, 1);
 
