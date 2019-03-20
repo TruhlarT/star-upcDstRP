@@ -18,7 +18,7 @@ using namespace std;
 void test_trackpoint() {
 
   //open input file
-  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/testTrackPoint21/1778D29D6D479A3D577431C01CCB1323_0.root", "read");
+  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/MemQuickComp10/9065D46ECEE325B7BE7C8153D772D85D_0.root", "read");
 
   //get picoDst tree in file
   TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
@@ -28,7 +28,7 @@ void test_trackpoint() {
 
   //pT histogram
   TH1D *hPt = new TH1D("hTest", "hTest", 100, 0, 10);
-
+  cout << "Debug1: " << endl;
   //connect upc event to the tree
   static StRPEvent *upcEvt = 0x0;
   upcTree->SetBranchAddress("mRPEvent", &upcEvt);

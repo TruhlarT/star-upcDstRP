@@ -37,7 +37,7 @@ public:
 
 	StUPCRpsTrackPoint* trackPoint(unsigned int station) const
 	{
-	    return station < mNumberOfStationsInBranch ? static_cast<StUPCRpsTrackPoint*>(mTrackPoints[station].GetObject()) : nullptr;
+	    return station < mNumberOfStationsInBranch ? (StUPCRpsTrackPoint*)mTrackPoints[station].GetObject() : nullptr;
 	}
 	TVector3 pVec() const { return mP; }
 	int branch() const { return mBranch; }
@@ -58,7 +58,7 @@ public:
 	void setTrackPoint(StUPCRpsTrackPoint* trackPoint, unsigned int station)
 	{
 	    if (station<mNumberOfStationsInBranch)
-	        mTrackPoints[station] = trackPoint;
+	        mTrackPoints[station] = (TObject*)trackPoint;
 	        //mTrackPoints[station] = static_cast<const TObject*>(trackPoint);
 	}
 	void setP(const TVector3& P) { mP = P; }

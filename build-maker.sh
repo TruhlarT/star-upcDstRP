@@ -5,7 +5,7 @@ INC="include"
 DEST="StRoot/StUPCFilterMaker"
 
 srclist=( StUPCBemcCluster StUPCEvent StUPCFilterMaker StUPCFilterBemcUtil StUPCFilterTrgUtil
-StUPCTrack StUPCVertex StUPCRpsTrack StUPCRpsTrackPoint StRPEvent StUPCFilterRPUtil )
+StUPCTrack StUPCVertex StUPCRpsTrackPoint StUPCRpsTrack StRPEvent StUPCFilterRPUtil )
 
 mkdir -p $DEST
 
