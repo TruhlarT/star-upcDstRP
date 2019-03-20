@@ -7,6 +7,7 @@
 //_____________________________________________________________________________
 
 #include "TObject.h"
+#include "TRef.h"
 #include "TClonesArray.h"
 #include "TVector3.h"
 #include <vector> 
@@ -36,7 +37,7 @@ public:
 
 	StUPCRpsTrackPoint* trackPoint(unsigned int station) const
 	{
-	    return station < mNumberOfStationsInBranch ? mTrackPoints[station] : nullptr;
+	    return station < mNumberOfStationsInBranch ? static_cast<StUPCRpsTrackPoint*>(mTrackPoints[station].GetObject()) : nullptr;
 	}
 	TVector3 pVec() const { return mP; }
 	int branch() const { return mBranch; }
@@ -58,6 +59,7 @@ public:
 	{
 	    if (station<mNumberOfStationsInBranch)
 	        mTrackPoints[station] = trackPoint;
+	        //mTrackPoints[station] = static_cast<const TObject*>(trackPoint);
 	}
 	void setP(const TVector3& P) { mP = P; }
 	void setBranch(int branch) { mBranch = branch; }
@@ -65,7 +67,7 @@ public:
 
 private:	
 
-	vector<StUPCRpsTrackPoint*> 	mTrackPoints; // pointers to track points (local tracks)
+	TRef mTrackPoints[mNumberOfStationsInBranch]; // pointers to track points (local tracks)
 	TVector3 mP;				// three-vector with reconstructed track momentum
 	Int_t          mBranch;			// detectors branch, EU=0, ED=1, WU=2, WD=3 
 	StRpsTrackType mType;			// type of the track

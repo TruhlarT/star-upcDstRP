@@ -65,8 +65,8 @@ StRPEvent::~StRPEvent()
 {
   //destructor
 
-  if(mTracks) {delete mTracks; mTracks = 0x0;}
   if(mTrackPoints) {delete mTrackPoints; mTrackPoints = 0x0;}
+  if(mTracks) {delete mTracks; mTracks = 0x0;}
 
 
 }//~StRPEvent

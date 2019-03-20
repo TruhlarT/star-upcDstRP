@@ -2,22 +2,22 @@
 #upcDst local test production without scheduler
 
 #main directory for production outputs
-top  /gpfs01/star/pwg/truhlar/star-upcDst
+top  /gpfs01/star/pwg/jaroslav/test/star-upcDst/trees/MC
 
 #set for local running
 submit  local
 
 #input from local filelist
-add_input  SegViol  /star/u/truhlar/star-upcDstRP/txt/test.list  #  coherent J/psi embedding
+add_input  cohJpsi  /star/u/jaroslav/star-upc/txt/sim_slight14e1x1.list  #  coherent J/psi embedding
 
 #number of files to process from the list of files, comment-out to process all
-nfiles  1
+nfiles  3
 
 #data/MC
 is_mc  2  # 0 - data,  1 - starsim MC,  2 - embedding MC
 
 #name for output file
-outfile  test_Segviol.root
+outfile  StUPC_slight14e1x1.root
 
 #set trigger IDs and run range for each ID (not applied with MC)
 add_trigger   450705  15084051  15167014    # UPCJpsiB, Run14 AuAu, 1st id

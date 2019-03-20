@@ -12,6 +12,7 @@
 //root headers
 #include "TObjArray.h"
 #include "TClonesArray.h"
+#include "TH1I.h"
 
 //StRoot headers
 #include "StMuDSTMaker/COMMON/StMuDst.h"
@@ -43,7 +44,7 @@ void StUPCFilterRPUtil::clear() {
 }//clear
 
 //_____________________________________________________________________________
-void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
+void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mCounter) {
 
 
   StMuRpsCollection *collection = mMuDst->RpsCollection();
@@ -68,6 +69,7 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
       rpEvt->setStatus(iRomanPotId, iPlaneId, collection->statusPlane(iRomanPotId, iPlaneId));
 
       rpEvt->setNumberOfClusters(iRomanPotId, iPlaneId, collection->numberOfClusters(iRomanPotId, iPlaneId));
+      
       for(UInt_t iCluster=0; iCluster < collection->numberOfClusters(iRomanPotId, iPlaneId); ++iCluster){
         rpEvt->setPosition(iRomanPotId, iPlaneId, collection->positionCluster(iRomanPotId, iPlaneId, iCluster));
         rpEvt->setPositionRMS(iRomanPotId, iPlaneId, collection->positionRMSCluster(iRomanPotId, iPlaneId, iCluster)); 
@@ -76,10 +78,11 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
         rpEvt->setXY(iRomanPotId, iPlaneId, collection->xyCluster(iRomanPotId, iPlaneId, iCluster)); 
         rpEvt->setQuality(iRomanPotId, iPlaneId, collection->qualityCluster(iRomanPotId, iPlaneId, iCluster));
       }
-
+      
       for(Int_t iTrackPoint=0; iTrackPoint < collection->numberOfTrackPoints(); ++iTrackPoint){ 
-  			StMuRpsTrackPoint *trackPoint = collection->trackPoint(iTrackPoint);
+  			const StMuRpsTrackPoint *trackPoint = collection->trackPoint(iTrackPoint);
   			StUPCRpsTrackPoint *rpTrackPoint = rpEvt->addTrackPoint();
+        mCounter->Fill(0);
   			rpTrackPoint->setPosition(trackPoint->positionVec());
   			rpTrackPoint->setRpId(trackPoint->rpId());
   			rpTrackPoint->setClusterId(trackPoint->clusterId(iPlaneId), iPlaneId);
@@ -100,21 +103,21 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
       for(Int_t iTrack=0; iTrack < collection->numberOfTracks(); ++iTrack){
   			StMuRpsTrack *track = collection->track(iTrack);
   			StUPCRpsTrack *rpTrack = rpEvt->addTrack();
-// Start of problem section
+        mCounter->Fill(1);
   			for(Int_t iStation=0; iStation < 2; ++iStation){ // Number Of Stations In Branch = 2, one trackpoint in each station
   				const StMuRpsTrackPoint *trackPoint = track->trackPoint(iStation);
-          if(trackPoint){
+          mCounter->Fill(2);
+          if(!trackPoint){
             rpTrack->setTrackPoint(nullptr, iStation);
             continue;
-          } 
+          }
   				for(UInt_t i = 0; i < collection->numberOfTrackPoints(); ++i){
   					if(trackPoint == mMuTrackPoints[i]){
   						rpTrack->setTrackPoint(mTrackPoints[i], iStation);
   						break;
-  					}
+  					} 
   				}
-  			}      
-// End of problem section
+  			}     
   			rpTrack->setP(track->pVec()); 
   			rpTrack->setBranch(track->branch());
    			switch(track->type()){
@@ -125,7 +128,7 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
   				default: rpTrack->setType(StUPCRpsTrack::rpsUndefined);
   				break; 
   			} 
-      }
+      } 
     }
   }
 

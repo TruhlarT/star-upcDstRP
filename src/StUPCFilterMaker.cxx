@@ -50,7 +50,7 @@ ClassImp(StUPCFilterMaker);
 //_____________________________________________________________________________
 StUPCFilterMaker::StUPCFilterMaker(StMuDstMaker *maker, string outnam) : StMaker("StReadMuDstMaker"),
   mMaker(maker), mMuDst(0x0), mIsMC(0), mOutName(outnam), mOutFile(0x0),
-  mHistList(0x0), mCounter(0x0), mErrCounter(0x0),
+  mHistList(0x0), mRPCounter(0x0), mCounter(0x0), mErrCounter(0x0),
   mUPCEvent(0x0), mUPCTree(0x0), mTrgUtil(0x0), mBemcUtil(0x0),
   mRPEvent(0x0),  mRPTree(0x0), mRPUtil(0x0)
 {
@@ -71,6 +71,7 @@ StUPCFilterMaker::~StUPCFilterMaker()
   delete mBemcUtil; mBemcUtil=0;
   delete mHistList; mHistList=0;
   delete mCounter; mCounter=0;
+  delete mRPCounter; mRPCounter=0;
   delete mErrCounter; mErrCounter=0;
   delete mUPCTree; mUPCTree=0;
   delete mUPCEvent; mUPCEvent=0;
@@ -140,6 +141,8 @@ Int_t StUPCFilterMaker::Init() {
   //counter of processed events
   mCounter = new TH1I("mCounter", "mCounter", kMaxCnt-1, 1, kMaxCnt);
   mHistList->Add(mCounter);
+  mRPCounter = new TH1I("mRPCounter", "mRPCounter", 5, 0, 4);
+  mHistList->Add(mRPCounter);
 
   //counter for errors encountered during the analysis
   mErrCounter = new TH1I("mErrCounter", "mErrCounter", kMaxErrCnt-1, 1, kMaxErrCnt);
@@ -385,7 +388,7 @@ Int_t StUPCFilterMaker::Make()
 
   }//vertex loop
 
-  mRPUtil->processEvent(mRPEvent, mMuDst);
+  mRPUtil->processEvent(mRPEvent, mMuDst, mRPCounter);
 
   //write BEMC clusters
   mBemcUtil->writeBEMC(mUPCEvent);

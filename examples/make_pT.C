@@ -17,7 +17,7 @@ using namespace std;
 void make_pT() {
 
   //open input file
-  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/production/BAABDDFDF022EBE0E62711DC86E32388_5.root", "read");
+  TFile *infile = TFile::Open("/gpfs01/star/pwg/jaroslav/star-upcDst-data/test_productions/mc/StUPC_slight14e1x1.root", "read");
 
   //get picoDst tree in file
   TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
@@ -35,24 +35,23 @@ void make_pT() {
   //ask for number of events
   Long64_t nev = upcTree->GetEntries();
   cout << "Number of events: " << nev << endl;
-  
-  //nev = 3;
+
+  nev = 3;
 
   //event loop
   for(Long64_t iev=0; iev<nev; iev++) {
-    //cout<<iev<<endl;
+
     //get the event
     upcTree->GetEntry(iev);
 
     //tracks loop
-    /*
     for(Int_t i=0; i<upcEvt->getNumberOfTracks(); i++) {
       StUPCTrack *trk = upcEvt->getTrack(i);
 
       cout << trk->getPt() << endl;
       hPt->Fill(trk->getPt());
     }
-*/
+
   }
 
   //close outputs

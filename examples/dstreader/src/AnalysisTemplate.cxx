@@ -9,9 +9,6 @@
 // picoDst headers
 #include "StUPCEvent.h"
 #include "StUPCTrack.h"
-#include "StRPEvent.h"
-#include "StUPCRpsTrack.h"
-#include "StUPCRpsTrackPoint.h"
 
 using namespace std;
 
@@ -19,7 +16,7 @@ using namespace std;
 int main(void) {
 
   //open input file
-  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/cohJpsi/test.root", "read");
+  TFile *infile = TFile::Open("/gpfs01/star/pwg/jaroslav/star-upcDst-data/test_productions/mc/StUPC_slight14e1x1.root", "read");
 
   //get picoDst tree in file
   TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
