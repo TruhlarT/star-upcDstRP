@@ -169,7 +169,7 @@ StUPCRpsTrackPoint *StRPEvent::getTrackPoint(Int_t iTrackPoint) const
 //_____________________________________________________________________________
 Int_t StRPEvent::getNumberOfClusters() const {
 
-  //number of RP tracks in event
+  //number of RP Clusters in event
 
   if( !mClusters ) return 0;
 
@@ -180,7 +180,7 @@ Int_t StRPEvent::getNumberOfClusters() const {
 //_____________________________________________________________________________
 StUPCRpsCluster *StRPEvent::getCluster(Int_t iCluster) const
 {
-  // get RP track
+  // get RP Cluster
 
   return dynamic_cast<StUPCRpsCluster*>( mClusters->At(iCluster) );
 

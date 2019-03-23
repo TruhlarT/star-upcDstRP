@@ -26,7 +26,7 @@ TString type[3] = { TString("Local"), TString("Global"), TString("Not set") };
 void test_trackpoint() {
 
   //open input file
-  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/MemQuickComp14/9FE04A02E8F14FC19DA26B7D9B991BBD_0.root", "read");
+  TFile *infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/MemQuickComp15/88A0FFC754D3A211CD83CBC74531C164_0.root", "read");
 
   //get picoDst tree in file
   TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );

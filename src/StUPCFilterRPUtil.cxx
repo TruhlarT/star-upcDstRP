@@ -119,6 +119,20 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
       for(UInt_t i = 0; i < collection->numberOfTrackPoints(); ++i){
         if(trackPoint == mMuTrackPoints[i]){
           rpTrack->setTrackPoint(mTrackPoints[i], iStation);
+          /*switch (track->branch()) {
+            case 0:
+            case 1: 
+              if(mTrackPoints[i]->rpId() != track->branch() && mTrackPoints[i]->rpId() != track->branch() +2){
+                cout <<"Diference: "<< mTrackPoints[i]->rpId() << " / "<<track->branch()<< endl;
+              }
+               break;
+            case 2: 
+            case 3:  
+              if(mTrackPoints[i]->rpId() != track->branch()+2 && mTrackPoints[i]->rpId() != track->branch() +4){
+                cout <<"Diference: "<< mTrackPoints[i]->rpId() << " / "<<track->branch()<< endl;
+              }
+               break;
+          };*/
           break;
         } 
       }
