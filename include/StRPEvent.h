@@ -9,6 +9,7 @@
 
 class StUPCRpsTrack;
 class StUPCRpsTrackPoint;
+class StUPCRpsCluster;
 
 class TClonesArray;
 class TIterator;
@@ -29,13 +30,15 @@ public:
   //setters
   StUPCRpsTrack *addTrack();
   StUPCRpsTrackPoint *addTrackPoint();
-
+  StUPCRpsCluster *addCluster();
 
   //getters
   Int_t getNumberOfTracks() const;
   StUPCRpsTrack *getTrack(Int_t iTrack) const;
   Int_t getNumberOfTrackPoints() const;
   StUPCRpsTrackPoint *getTrackPoint(Int_t iTrackPoint) const;
+  Int_t getNumberOfClusters() const;
+  StUPCRpsCluster *getCluster(Int_t iCluster) const;
 
 // Setters, romanPotID == RomanPot ID, planeID == Plane Id, val == value of current setter
 void setSiliconBunch(UChar_t val) 
@@ -101,48 +104,6 @@ void setStatus(UInt_t romanPotID, UInt_t planeID, UChar_t val)
   if( planeID > mNumberOfPlanesInRP -1) return;
   mStatusPlane[romanPotID][planeID] = val;
 }
-void setNumberOfClusters(UInt_t romanPotID, UInt_t planeID, UInt_t val) 
-{
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
-  mNumberOfClusters[romanPotID][planeID] = val;
-}
-void setPosition(UInt_t romanPotID, UInt_t planeID, Double_t val) 
-{
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
-  mPositionCluster[romanPotID][planeID].push_back(val);
-}
-void setPositionRMS(UInt_t romanPotID, UInt_t planeID, Double_t val) 
-{
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
-  mPositionRMSCluster[romanPotID][planeID].push_back(val);
-}
-void setLength(UInt_t romanPotID, UInt_t planeID, Short_t val) 
-{
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
-  mLengthCluster[romanPotID][planeID].push_back(val);
-}
-void setEnergy(UInt_t romanPotID, UInt_t planeID, Double_t val) 
-{
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
-  mEnergyCluster[romanPotID][planeID].push_back(val);
-}
-void setXY(UInt_t romanPotID, UInt_t planeID, Double_t val) 
-{
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
-  mXYCluster[romanPotID][planeID].push_back(val);
-}
-void setQuality(UInt_t romanPotID, UInt_t planeID, UChar_t val) 
-{
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
-  mQualityCluster[romanPotID][planeID].push_back(val);
-}
 
 // Getters, romanPotID == RomanPot ID, planeID == Plane Id
 UChar_t siliconBunch() const 
@@ -207,54 +168,7 @@ UChar_t status(UInt_t romanPotID, UInt_t planeID) const
   if( planeID > mNumberOfPlanesInRP -1) return 0;
   return mStatusPlane[romanPotID][planeID];
 }
-UInt_t  numberOfClusters(UInt_t romanPotID, UInt_t planeID) const 
-{ 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  return mNumberOfClusters[romanPotID][planeID];
-}
-Double_t position(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
-{ 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
-  return mPositionCluster[romanPotID][planeID][cluster];
-}
-Double_t positionRMS(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
-{ 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
-  return mPositionRMSCluster[romanPotID][planeID][cluster];
-}
-Short_t  length(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
-{ 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
-  return mLengthCluster[romanPotID][planeID][cluster];
-}
-Double_t energy(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
-{ 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
-  return mEnergyCluster[romanPotID][planeID][cluster];
-}
-Double_t xy(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
-{ 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
-  return mXYCluster[romanPotID][planeID][cluster];
-}
-UChar_t quality(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
-{ 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
-  return mQualityCluster[romanPotID][planeID][cluster];
-}
+
 
 private:
 
@@ -278,21 +192,17 @@ private:
   Short_t  mOrientationPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
   UChar_t  mStatusPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];  
 
-  UInt_t  mNumberOfClusters[mNumberOfRomanPots][mNumberOfPlanesInRP]; 
-  vector<Double_t>  mPositionCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<Double_t>  mPositionRMSCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<Short_t>  mLengthCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<Double_t>  mEnergyCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<Double_t>  mXYCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  vector<UChar_t>  mQualityCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  static TClonesArray *mgClusters; // array of upc RP Clusters
+  TClonesArray *mClusters; //-> array of upc RP Clusters
+  Int_t mNClusters; //! number of upc RP Clusters in event, local use when filling
 
-  static TClonesArray *mgTracks; // array of upc tracks
-  TClonesArray *mTracks; //-> array of upc tracks
-  Int_t mNTracks; //! number of upc tracks in event, local use when filling
+  static TClonesArray *mgTracks; // array of upc RP tracks
+  TClonesArray *mTracks; //-> array of upc RP tracks
+  Int_t mNTracks; //! number of upc RP tracks in event, local use when filling
 
-  static TClonesArray *mgTrackPoints; // array of upc tracks
-  TClonesArray *mTrackPoints; //-> array of upc tracks
-  Int_t mNTrackPoints; //! number of upc tracks in event, local use when filling
+  static TClonesArray *mgTrackPoints; // array of upc RP trackPoints
+  TClonesArray *mTrackPoints; //-> array of upc RP trackPoints
+  Int_t mNTrackPoints; //! number of upc RP trackPoints in event, local use when filling
 
   ClassDef(StRPEvent, 2);
 };

@@ -25,6 +25,7 @@
 #include "StRPEvent.h"
 #include "StUPCRpsTrackPoint.h"
 #include "StUPCRpsTrack.h"
+#include "StUPCRpsCluster.h"
 #include "StUPCFilterRPUtil.h"
 
 
@@ -67,71 +68,72 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
       rpEvt->setAngle(iRomanPotId, iPlaneId, collection->anglePlane(iRomanPotId, iPlaneId));  
       rpEvt->setOrientation(iRomanPotId, iPlaneId, collection->orientationPlane(iRomanPotId, iPlaneId));  
       rpEvt->setStatus(iRomanPotId, iPlaneId, collection->statusPlane(iRomanPotId, iPlaneId));
-
-      rpEvt->setNumberOfClusters(iRomanPotId, iPlaneId, collection->numberOfClusters(iRomanPotId, iPlaneId));
-      
       for(UInt_t iCluster=0; iCluster < collection->numberOfClusters(iRomanPotId, iPlaneId); ++iCluster){
-        rpEvt->setPosition(iRomanPotId, iPlaneId, collection->positionCluster(iRomanPotId, iPlaneId, iCluster));
-        rpEvt->setPositionRMS(iRomanPotId, iPlaneId, collection->positionRMSCluster(iRomanPotId, iPlaneId, iCluster)); 
-        rpEvt->setLength(iRomanPotId, iPlaneId, collection->lengthCluster(iRomanPotId, iPlaneId, iCluster)); 
-        rpEvt->setEnergy(iRomanPotId, iPlaneId, collection->energyCluster(iRomanPotId, iPlaneId, iCluster)); 
-        rpEvt->setXY(iRomanPotId, iPlaneId, collection->xyCluster(iRomanPotId, iPlaneId, iCluster)); 
-        rpEvt->setQuality(iRomanPotId, iPlaneId, collection->qualityCluster(iRomanPotId, iPlaneId, iCluster));
+        StUPCRpsCluster *rpCluster = rpEvt->addCluster();
+        rpCluster->setPlaneId(iPlaneId);
+        rpCluster->setRomanPotId(iRomanPotId);
+        rpCluster->setPosition(collection->positionCluster(iRomanPotId, iPlaneId, iCluster));
+        rpCluster->setPositionRMS(collection->positionRMSCluster(iRomanPotId, iPlaneId, iCluster));
+        rpCluster->setLength(collection->lengthCluster(iRomanPotId, iPlaneId, iCluster));
+        rpCluster->setEnergy(collection->energyCluster(iRomanPotId, iPlaneId, iCluster));
+        rpCluster->setXY(collection->xyCluster(iRomanPotId, iPlaneId, iCluster));
+        rpCluster->setQuality(collection->qualityCluster(iRomanPotId, iPlaneId, iCluster));
       }
       
-      for(Int_t iTrackPoint=0; iTrackPoint < collection->numberOfTrackPoints(); ++iTrackPoint){ 
-  			const StMuRpsTrackPoint *trackPoint = collection->trackPoint(iTrackPoint);
-  			StUPCRpsTrackPoint *rpTrackPoint = rpEvt->addTrackPoint();
-        mCounter->Fill(0);
-  			rpTrackPoint->setPosition(trackPoint->positionVec());
-  			rpTrackPoint->setRpId(trackPoint->rpId());
-  			rpTrackPoint->setClusterId(trackPoint->clusterId(iPlaneId), iPlaneId);
-  			rpTrackPoint->setTime(trackPoint->time(0), 0); // pmtId = 0
-  			rpTrackPoint->setTime(trackPoint->time(1), 1); // pmtId = 1
-  			switch(trackPoint->quality()){
-  				case StMuRpsTrackPoint::rpsNormal: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsNormal);
-  				break;      
-  				case StMuRpsTrackPoint::rpsGolden: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsGolden);
-  				break; 
-  				default: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsNotSet);
-  				break; 
-  			}
-        mMuTrackPoints.push_back(trackPoint);
-        mTrackPoints.push_back(rpTrackPoint);
-		  }
-
-      for(Int_t iTrack=0; iTrack < collection->numberOfTracks(); ++iTrack){
-  			StMuRpsTrack *track = collection->track(iTrack);
-  			StUPCRpsTrack *rpTrack = rpEvt->addTrack();
-        mCounter->Fill(1);
-  			for(Int_t iStation=0; iStation < 2; ++iStation){ // Number Of Stations In Branch = 2, one trackpoint in each station
-  				const StMuRpsTrackPoint *trackPoint = track->trackPoint(iStation);
-          mCounter->Fill(2);
-          if(!trackPoint){
-            rpTrack->setTrackPoint(nullptr, iStation);
-            continue;
-          }
-  				for(UInt_t i = 0; i < collection->numberOfTrackPoints(); ++i){
-  					if(trackPoint == mMuTrackPoints[i]){
-  						rpTrack->setTrackPoint(mTrackPoints[i], iStation);
-  						break;
-  					} 
-  				}
-  			}     
-  			rpTrack->setP(track->pVec()); 
-  			rpTrack->setBranch(track->branch());
-   			switch(track->type()){
-  				case StMuRpsTrack::rpsLocal: rpTrack->setType(StUPCRpsTrack::rpsLocal);
-  				break;      
-  				case StMuRpsTrack::rpsGlobal: rpTrack->setType(StUPCRpsTrack::rpsGlobal);
-  				break; 
-  				default: rpTrack->setType(StUPCRpsTrack::rpsUndefined);
-  				break; 
-  			} 
-      } 
     }
   }
 
+  for(Int_t iTrackPoint=0; iTrackPoint < collection->numberOfTrackPoints(); ++iTrackPoint){ 
+    const StMuRpsTrackPoint *trackPoint = collection->trackPoint(iTrackPoint);
+    StUPCRpsTrackPoint *rpTrackPoint = rpEvt->addTrackPoint();
+    mCounter->Fill(0);
+    rpTrackPoint->setPosition(trackPoint->positionVec());
+    rpTrackPoint->setRpId(trackPoint->rpId());
+    for(UInt_t iPlaneId=0; iPlaneId < collection->numberOfPlanes(); ++iPlaneId)
+      rpTrackPoint->setClusterId(trackPoint->clusterId(iPlaneId), iPlaneId);
+    rpTrackPoint->setTime(trackPoint->time(0), 0); // pmtId = 0
+    rpTrackPoint->setTime(trackPoint->time(1), 1); // pmtId = 1
+    switch(trackPoint->quality()){
+      case StMuRpsTrackPoint::rpsNormal: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsNormal);
+      break;      
+      case StMuRpsTrackPoint::rpsGolden: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsGolden);
+      break; 
+      default: rpTrackPoint->setQuality(StUPCRpsTrackPoint::rpsNotSet);
+      break; 
+    }
+    mMuTrackPoints.push_back(trackPoint);
+    mTrackPoints.push_back(rpTrackPoint);
+  }
+
+  for(Int_t iTrack=0; iTrack < collection->numberOfTracks(); ++iTrack){
+    StMuRpsTrack *track = collection->track(iTrack);
+    StUPCRpsTrack *rpTrack = rpEvt->addTrack();
+    mCounter->Fill(1);
+    for(Int_t iStation=0; iStation < 2; ++iStation){ // Number Of Stations In Branch = 2, one trackpoint in each station
+      const StMuRpsTrackPoint *trackPoint = track->trackPoint(iStation);
+      mCounter->Fill(2);
+      if(!trackPoint){
+        //rpTrack->setTrackPoint(nullptr, iStation);
+        continue;
+      }
+      for(UInt_t i = 0; i < collection->numberOfTrackPoints(); ++i){
+        if(trackPoint == mMuTrackPoints[i]){
+          rpTrack->setTrackPoint(mTrackPoints[i], iStation);
+          break;
+        } 
+      }
+    }     
+    rpTrack->setP(track->pVec()); 
+    rpTrack->setBranch(track->branch());
+    switch(track->type()){
+      case StMuRpsTrack::rpsLocal: rpTrack->setType(StUPCRpsTrack::rpsLocal);
+      break;      
+      case StMuRpsTrack::rpsGlobal: rpTrack->setType(StUPCRpsTrack::rpsGlobal);
+      break; 
+      default: rpTrack->setType(StUPCRpsTrack::rpsUndefined);
+      break; 
+    } 
+  } 
 }//processEvent
 
 

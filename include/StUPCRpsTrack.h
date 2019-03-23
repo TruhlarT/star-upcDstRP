@@ -59,7 +59,6 @@ public:
 	{
 	    if (station<mNumberOfStationsInBranch)
 	        mTrackPoints[station] = (TObject*)trackPoint;
-	        //mTrackPoints[station] = static_cast<const TObject*>(trackPoint);
 	}
 	void setP(const TVector3& P) { mP = P; }
 	void setBranch(int branch) { mBranch = branch; }

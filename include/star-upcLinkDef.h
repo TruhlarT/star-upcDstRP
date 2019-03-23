@@ -13,6 +13,7 @@
 #pragma link C++ class StUPCRpsTrackPoint+;
 #pragma link C++ class StUPCRpsTrack+;
 #pragma link C++ class StRPEvent+;
+#pragma link C++ class StUPCRpsCluster+;
 
 #endif
 
