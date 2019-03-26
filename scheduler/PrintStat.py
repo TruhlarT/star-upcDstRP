@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     #submitted jobs
     joblist = []
-    for job in glob(basedir + "/sched/*_*.csh"):
+    for job in glob(basedir + "picoDstRHICf/sched/*_*.csh"):
         joblist.append( job.split("sched/sched")[1].split(".csh")[0] )
 
     print "Submitted:", len(joblist)

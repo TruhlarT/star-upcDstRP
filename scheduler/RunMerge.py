@@ -30,9 +30,9 @@ if __name__ == "__main__":
     qlist = parser.get("add_input")
 
     #build pattern from query list
-    pattern = "/{"
+    pattern = "/"
     for q in qlist: pattern += q[0]+","
-    pattern = pattern[:-1] + "}/*.root"
+    pattern = pattern[:-1] + "/*.root"
 
     outdir = parser.get("outdir")
     outfile = parser.get("outfile")

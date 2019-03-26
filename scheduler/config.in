@@ -17,11 +17,11 @@ is_mc  0  # 0 - data,  1 - starsim MC,  2 - embedding MC
 add_trigger   450705  15084051  15167014    # UPCJpsiB, Run14 AuAu, 1st id
 add_trigger   450725  15153036  15167007    # UPCJpsiB, Run14 AuAu, 2nd id
 
-add_trigger   1  18174044  18174055    # RP_CPT2(1), Run17rhicf pp
+add_trigger   1  		18174044  18174055    # RP_CPT2(1), Run17rhicf pp
 add_trigger   590701  18176013  18178017    # RP_CPT2(2), Run17rhicf pp
-add_trigger   2  18174044  18174055    # RP_CPT2noBBCL(1), Run17rhicf pp
+add_trigger   2  		18174044  18174055    # RP_CPT2noBBCL(1), Run17rhicf pp
 add_trigger   590705  18176013  18178017    # RP_CPT2noBBCL(2), Run17rhicf pp
-add_trigger   5  18174044  18174055    # RP_CPTnoBBCL(1), Run17rhicf pp
+add_trigger   5  		18174044  18174055    # RP_CPTnoBBCL(1), Run17rhicf pp
 add_trigger   590708  18176013  18178017    # RP_CPTnoBBCL(2), Run17rhicf pp
 
 #BEMC clustering

@@ -71,8 +71,8 @@ TString branchName[nBranches] = { TString("EU"), TString("ED"), TString("WU"), T
 TString rpName[nRomanPots] = { TString("E1U"), TString("E1D"), TString("E2U"), TString("E2D"),
                     TString("W1U"), TString("W1D"), TString("W2U"), TString("W2D") };
 TString stationName[nStations] = { TString("E1"), TString("E2"), TString("W1"), TString("W2") };
-TString summaryLabels[10] = { TString("CPTnoBBCL"), TString("Elastic"), TString("Inelastic"), TString("1 TPCvertex"), TString("2 TPC tracks"), 
-                    TString("2 TOF tracks"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), TString(""), TString("")};
+TString summaryLabels[10] = { TString("After triggers"), TString("Elastic"), TString("Inelastic"), TString("2 TPC prim trks"), TString("2 TOF tracks"), 
+                    TString("Same vertex"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), TString(""), TString("")};
 TString systemID[3] = { TString("Combi"), TString("InEl"), TString("El")};
 TString systemState[4] = { TString("TPCv1"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
 TString configLabels[4] = { TString("EUD"), TString("EDU"), TString("IUU"), TString("IDD")};
@@ -117,7 +117,7 @@ void begin(){
 
 
 // creating ROOT file which will contain all the histograms created afterwards
-  outfile = new TFile("output3.root", "recreate"); // outfile = TFile::Open("output.root", "recreate");
+  outfile = new TFile("output4.root", "recreate"); // outfile = TFile::Open("output.root", "recreate");
   
 // creating histograms
 // Having defined labels/names it is very easy and fast to create multiple histograms differing only by name
@@ -229,7 +229,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
         hAnalysisFlow->Fill(2);
       }
       hConfiguration->Fill(i);
-
+/*
       const unsigned int nTpcVertex = upcEvt->getNumberOfVertices();
       if(nTpcVertex != 1) 
         return;
@@ -238,7 +238,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
       const StUPCVertex* vertex = upcEvt->getVertex(0);
 
       const double vertexZ = vertex->getPosZ();
-
+*/
       int totalCharge = 0;
       int nTofTrks = 0;
       int nTpcTrks = 0;
@@ -250,6 +250,9 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           trkInfo[tr][tc]=-1000;
       TLorentzVector centralTracksTotalFourMomentum;
 
+      if(upcEvt->getNPrimTracks()!=2)
+        return;
+      hAnalysisFlow->Fill(3);
 
     // loop over all TPC tracks
       for(int j=0; j<upcEvt->getNumberOfTracks(); ++j){
@@ -257,12 +260,12 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
         const StUPCTrack* trk = upcEvt->getTrack(j);
 
        if( !trk->getFlag(StUPCTrack::kPrimary) ) continue; // skip global tracks, analyze only primary
-        // read basic information about the track
-        ++nTpcTrks;     
+        // read basic information about the track    
         TLorentzVector trkMomentum;
         trk->getLorentzVector(trkMomentum, 0.138);
-        const bool matchedWithTof = trk->getFlag(StUPCTrack::kTof);
-        if( matchedWithTof){  
+        if( !trk->getFlag(StUPCTrack::kTof))
+          return;
+ 
           int state = 0;
           for(int tmp =0; tmp<3;++tmp){
             if(tmp == 1 && (i!=IUU && i!=IDD))
@@ -279,12 +282,12 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
             trkInfo[nTofTrks][1] = trkMomentum.P();
             trkInfo[nTofTrks][2] = trk->getCharge();
             trkInfo[nTofTrks][3] = trk->getNSigmasTPCPion();
+            trkInfo[nTofTrks][4] = trk->getVertexId();
           }
           totalCharge += static_cast<int>( trk->getCharge() );
           centralTracksTotalFourMomentum += trkMomentum;
           nSigmaPairPion2 += pow(trk->getNSigmasTPCPion(),2);
           ++nTofTrks;
-        }
 
       }
 
@@ -304,15 +307,14 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           hInvMass[4*tmp+state]->Fill(invMass);
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-        hZvertex[4*tmp+state]->Fill(vertexZ);
+     //   hZvertex[4*tmp+state]->Fill(vertexZ);
       } 
 
-
-      if( nTpcTrks!=2)
+      if( nTofTrks!=2)
         return;
       hAnalysisFlow->Fill(4);
 
-      if( nTofTrks!=2)
+      if( trkInfo[0][4] != trkInfo[1][4])
         return;
       hAnalysisFlow->Fill(5);
 
@@ -334,7 +336,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           hInvMass[4*tmp+state]->Fill(invMass);
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-        hZvertex[4*tmp+state]->Fill(vertexZ);
+    //    hZvertex[4*tmp+state]->Fill(vertexZ);
       }
 
 
@@ -360,7 +362,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           hInvMass[4*tmp+state]->Fill(invMass);
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-        hZvertex[4*tmp+state]->Fill(vertexZ);
+     //   hZvertex[4*tmp+state]->Fill(vertexZ);
       }
 
       if( missingPt > 0.1 )
@@ -387,7 +389,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           hInvMass[4*tmp+state]->Fill(invMass);
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-        hZvertex[4*tmp+state]->Fill(vertexZ);
+       // hZvertex[4*tmp+state]->Fill(vertexZ);
       }
 
     }
@@ -396,11 +398,11 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
 
 void analysis(){
   begin();
-  //for(int iFile = 0; iFile < 6; ++iFile){
-  for(int iFile = 0; iFile < 6; ++iFile){
+  for(int iFile = 0; iFile < 7; ++iFile){
+  //for(int iFile = 0; iFile < 1; ++iFile){
     //open input file
     TString fileName; 
-    fileName.Form("/gpfs01/star/pwg/truhlar/star-upcDst/final/merge_r17/StUPCRP_production_000%d.root",iFile);
+    fileName.Form("/gpfs01/star/pwg/truhlar/star-upcDst/merge_RPprod/StUPCRP_production_000%d.root",iFile);
     //fileName.Form("/gpfs01/star/pwg/truhlar/star-upcDst/final/2D251B7815ED928A46D588DBB2165B4A_7.root",iFile);
     cout<<"Start proccesing file: "<<fileName<<endl;
     TFile *infile = TFile::Open(fileName, "read");
