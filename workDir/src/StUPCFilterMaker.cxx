@@ -20,14 +20,6 @@
 #include "TParticle.h"
 
 //StRoot headers
-#include "StMessMgr.h"
-#include "StMuDSTMaker/COMMON/StMuDstMaker.h"
-#include "StMuDSTMaker/COMMON/StMuDst.h"
-#include "StMuDSTMaker/COMMON/StMuEvent.h"
-#include "StMuDSTMaker/COMMON/StMuPrimaryVertex.h"
-#include "StMuDSTMaker/COMMON/StMuTrack.h"
-#include "StMuDSTMaker/COMMON/StMuMcTrack.h"
-#include "StMuDSTMaker/COMMON/StMuMcVertex.h"
 #include "StEvent/StTriggerData.h"
 #include "StEvent/StRunInfo.h"
 #include "StEvent/StEventSummary.h"
@@ -37,12 +29,7 @@
 #include "StUPCTrack.h"
 #include "StUPCBemcCluster.h"
 #include "StUPCVertex.h"
-
-#include "StUPCFilterTrgUtil.h"
-#include "StUPCFilterBemcUtil.h"
 #include "StUPCFilterMaker.h"
-
-#include "StUPCFilterRPUtil.h"
 #include "StRPEvent.h"
 
 ClassImp(StUPCFilterMaker);
@@ -350,7 +337,6 @@ Int_t StUPCFilterMaker::Make()
       upcTrack->setNSigmasTPC( StUPCTrack::kKaon, track->nSigmaKaon() );
       upcTrack->setNSigmasTPC( StUPCTrack::kProton, track->nSigmaProton() );
       upcTrack->setVertexId( ivtx );
-      upcTrack->setFlag( StUPCTrack::kPrimary );
       if( emcProj ) {
         upcTrack->setFlag( StUPCTrack::kBemcProj );
         upcTrack->setBemcPtEtaPhi(emcPt, emcEta, emcPhi);

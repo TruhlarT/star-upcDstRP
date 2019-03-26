@@ -14,8 +14,8 @@ set (LIB_READER dstreader)
 set (BIN AnalysisTemplate)
 
 #UPC picoDsts library
-set (UPC_LIB /star/u/jaroslav/star-upcDst/build/libstar-upc.so)
-set (UPC_INC /star/u/jaroslav/star-upcDst/include)
+set (UPC_LIB /star/u/truhlar/star-upcDstRP/build/libstar-upc.so)
+set (UPC_INC /star/u/truhlar/star-upcDstRP/include)
 
 #general compiler options
 set (CMAKE_CXX_COMPILER /usr/bin/g++)

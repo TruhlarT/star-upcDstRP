@@ -1,0 +1,12 @@
+*** Float Point Exception is OFF ***
+ *** Start at Date : Mon Mar 25 03:55:24 2019
+QAInfo:You are using STAR_LEVEL : pro, ROOT_LEVEL : 5.34.30 and node : rcas6008.rcf.bnl.gov 
+
+Processing run_test.C...
+Number of events: 3722407
+Number of events: 3745212
+Number of events: 3869631
+Number of events: 3769755
+Number of events: 3772820
+Number of events: 184334
+closing

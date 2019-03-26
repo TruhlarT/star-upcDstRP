@@ -9,13 +9,13 @@ if __name__ == "__main__":
 
     #merge output files by chunks of a given size
 
-    top = "/gpfs01/star/pwg/jaroslav/test/star-upcDst/trees/UPC_main_JpsiB_10_11_14_v2"
-    pattern = "/{r14_prod,r14_low,r14_mid,r14_high}/*.root"
+    top = "/gpfs01/star/pwg/truhlar/star-upcDst/final"
+    pattern = "/*.root"
     #pattern = "/r11/*.root"
 
-    outdir = "merge_r14"
-    outfile = "StUPC_main_JpsiB_14.root"
-    outlist = "StUPC_main_JpsiB_14.list"
+    outdir = "merge_r17"
+    outfile  = "StUPCRP_production.root"
+    outlist = "StUPCRP_production.list"
 
     chunksiz = int(2.5e6)  # approx kB
 
