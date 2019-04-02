@@ -1,0 +1,48 @@
+
+#upcDst production configuration
+
+#main directory for production outputs
+top  /gpfs01/star/pwg/truhlar/star-upcDst
+
+#add_input  quickTest  /direct/star+u/truhlar/star-upcDstRP/workDir/fileQuick.list
+add_input  Production  /direct/star+u/truhlar/star-upcDstRP/workDir/StUPCRP_production.list
+
+
+nfiles  10
+
+#data/MC
+is_mc  0  # 0 - data,  1 - starsim MC,  2 - embedding MC
+
+#set trigger IDs and run range for each ID
+add_trigger   450705  15084051  15167014    # UPCJpsiB, Run14 AuAu, 1st id
+add_trigger   450725  15153036  15167007    # UPCJpsiB, Run14 AuAu, 2nd id
+
+add_trigger   1  18174044  18174055    # RP_CPT2(1), Run17rhicf pp
+add_trigger   590701  18176013  18178017    # RP_CPT2(2), Run17rhicf pp
+add_trigger   2  18174044  18174055    # RP_CPT2noBBCL(1), Run17rhicf pp
+add_trigger   590705  18176013  18178017    # RP_CPT2noBBCL(2), Run17rhicf pp
+add_trigger   5  18174044  18174055    # RP_CPTnoBBCL(1), Run17rhicf pp
+add_trigger   590708  18176013  18178017    # RP_CPTnoBBCL(2), Run17rhicf pp
+
+#BEMC clustering
+bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'
+bemc_size_max             4
+bemc_energy_seed          0.3
+bemc_energy_add           0.001
+bemc_energy_threshold_all 0.1
+
+#directory for merged outputs, relative to top
+outdir   merge_RPprod
+
+#name for merged outputs
+outfile  StUPCRP_production.root
+
+#list of output files
+outlist  StUPCRP_production.list
+
+
+
+
+
+
+

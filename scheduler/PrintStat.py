@@ -21,14 +21,16 @@ if __name__ == "__main__":
     #get outputs directory from config used for production
     parser = argument_parser()
     parser.add_parameter("top")
+    parser.add_parameter("add_input")
     parser.parse(config)
-    basedir = parser.get("top") + "/*"
+    basedir = parser.get("top") + "/" + parser.get("add_input")
+    topdir = parser.get("top")
 
-    print basedir
+    print basedir 
 
     #submitted jobs
     joblist = []
-    for job in glob(basedir + "/sched/*_*.csh"):
+    for job in glob(basedir +"/sched/*_*.csh"):
         joblist.append( job.split("sched/sched")[1].split(".csh")[0] )
 
     print "Submitted:", len(joblist)
@@ -52,7 +54,7 @@ if __name__ == "__main__":
     donelist = []
     totsiz = 0
     #list all root files with size
-    cmd = "ls -s " + basedir + "/*.root"
+    cmd = "ls -s " + topdir + "/*.root"
     out = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE).communicate()[0].split("\n")
     for fline in out:
         if len(fline) == 0: continue
