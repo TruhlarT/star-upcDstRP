@@ -61,20 +61,16 @@ enum RP_CONFIGURATION {EUD, EDU, IUU, IDD, nConfiguration}; // EUD means elastic
 // IDD means inelastic combination from east down to west down
 
 
-// Constants
-const double ADCmin = 100;
-const double TACmin = 100;
-const double TACmax = 2500;
 
 TString armName[nArms] = { TString("EU-WU"), TString("ED-WD") };
 TString branchName[nBranches] = { TString("EU"), TString("ED"), TString("WU"), TString("WD") };
 TString rpName[nRomanPots] = { TString("E1U"), TString("E1D"), TString("E2U"), TString("E2D"),
                     TString("W1U"), TString("W1D"), TString("W2U"), TString("W2D") };
 TString stationName[nStations] = { TString("E1"), TString("E2"), TString("W1"), TString("W2") };
-TString summaryLabels[10] = { TString("After triggers"), TString("Elastic"), TString("Inelastic"), TString("2 TPC prim trks"), TString("2 TOF tracks"), 
+TString summaryLabels[10] = { TString("CPTnoBBCl"), TString("Elastic"), TString("Inelastic"), TString("2 TPC prim trks"), TString("2 TOF tracks"), 
                     TString("Same vertex"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), TString(""), TString("")};
 TString systemID[3] = { TString("Combi"), TString("InEl"), TString("El")};
-TString systemState[4] = { TString("TPCv1"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
+TString systemState[4] = { TString("2TPCtrk"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
 TString configLabels[4] = { TString("EUD"), TString("EDU"), TString("IUU"), TString("IDD")};
 
 
@@ -117,7 +113,7 @@ void begin(){
 
 
 // creating ROOT file which will contain all the histograms created afterwards
-  outfile = new TFile("output4.root", "recreate"); // outfile = TFile::Open("output.root", "recreate");
+  outfile = new TFile("outputBackground.root", "recreate"); // outfile = TFile::Open("output.root", "recreate");
   
 // creating histograms
 // Having defined labels/names it is very easy and fast to create multiple histograms differing only by name
@@ -181,10 +177,13 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
     ++numberOfTracksPerBranch[j];
   // If track is global (made of track-points in 1st and 2nd station)
   // and all 8 planes were used in reconstruction - store its ID
-    if( trk->type()==StUPCRpsTrack::rpsGlobal && trk->planesUsed()==8) rpTrackIdVec_perBranch[j].push_back( k );
+    //if( trk->type()==StUPCRpsTrack::rpsGlobal && trk->planesUsed()==8) rpTrackIdVec_perBranch[j].push_back( k );
   // a bit looser selection
-    if( (trk->trackPoint(0) ? trk->trackPoint(0)->planesUsed()>=3 : true) &&
-      (trk->trackPoint(1) ? trk->trackPoint(1)->planesUsed()>=3 : true) ) rpTrackIdVec_perSide[side].push_back( k );
+    if( (trk->trackPoint(0) ? trk->trackPoint(0)->planesUsed()>=3 : false) &&
+      (trk->trackPoint(1) ? trk->trackPoint(1)->planesUsed()>=3 : false) ){
+      rpTrackIdVec_perSide[side].push_back( k );
+      rpTrackIdVec_perBranch[j].push_back( k );
+    } 
   }
   
   // Fill histograms with number of tracks
@@ -219,9 +218,9 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
 
 // If exactly one good-quality track in each branch in the arm and there is no track in the other RP- do some staff
     if( rpTrackIdVec_perBranch[ branch[E] ].size()==1 
-      && rpTrackIdVec_perBranch[ branch[W] ].size()==1 
-      && rpTrackIdVec_perBranch[ otherBranch[E] ].size()==0 
-      && rpTrackIdVec_perBranch[ otherBranch[W] ].size()==0){
+      && rpTrackIdVec_perBranch[ branch[W] ].size()==1){ // not veto on other RP
+    //  && rpTrackIdVec_perBranch[ otherBranch[E] ].size()==0 
+    //  && rpTrackIdVec_perBranch[ otherBranch[W] ].size()==0){
   // Get pointers to good-quality tracks
       if(i==EUD || i==EDU){
         hAnalysisFlow->Fill(1);
@@ -229,16 +228,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
         hAnalysisFlow->Fill(2);
       }
       hConfiguration->Fill(i);
-/*
-      const unsigned int nTpcVertex = upcEvt->getNumberOfVertices();
-      if(nTpcVertex != 1) 
-        return;
-      hAnalysisFlow->Fill(3);
 
-      const StUPCVertex* vertex = upcEvt->getVertex(0);
-
-      const double vertexZ = vertex->getPosZ();
-*/
       int totalCharge = 0;
       int nTofTrks = 0;
       int nTpcTrks = 0;
@@ -248,6 +238,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
       for(int tr = 0; tr < 2;++tr)
         for(int tc = 0; tc<6;++tc)
           trkInfo[tr][tc]=-1000;
+
       TLorentzVector centralTracksTotalFourMomentum;
 
       if(upcEvt->getNPrimTracks()!=2)
@@ -283,6 +274,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
             trkInfo[nTofTrks][2] = trk->getCharge();
             trkInfo[nTofTrks][3] = trk->getNSigmasTPCPion();
             trkInfo[nTofTrks][4] = trk->getVertexId();
+            trkInfo[nTofTrks][5] = trk->getVertex()->getPosZ();
           }
           totalCharge += static_cast<int>( trk->getCharge() );
           centralTracksTotalFourMomentum += trkMomentum;
@@ -307,7 +299,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           hInvMass[4*tmp+state]->Fill(invMass);
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-     //   hZvertex[4*tmp+state]->Fill(vertexZ);
+        hZvertex[4*tmp+state]->Fill(trkInfo[0][5]);
       } 
 
       if( nTofTrks!=2)
@@ -317,6 +309,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
       if( trkInfo[0][4] != trkInfo[1][4])
         return;
       hAnalysisFlow->Fill(5);
+
 
       state = 1;
       for(int tmp =0; tmp<3;++tmp){
@@ -336,11 +329,12 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           hInvMass[4*tmp+state]->Fill(invMass);
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-    //    hZvertex[4*tmp+state]->Fill(vertexZ);
+        hZvertex[4*tmp+state]->Fill(trkInfo[0][5]);
       }
 
 
-      if(totalCharge != 0) 
+      //if(totalCharge != 0)
+      if(totalCharge == 0) 
         return;
       hAnalysisFlow->Fill(6);
 
@@ -362,7 +356,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           hInvMass[4*tmp+state]->Fill(invMass);
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-     //   hZvertex[4*tmp+state]->Fill(vertexZ);
+        hZvertex[4*tmp+state]->Fill(trkInfo[0][5]);
       }
 
       if( missingPt > 0.1 )
@@ -389,7 +383,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
           hInvMass[4*tmp+state]->Fill(invMass);
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-       // hZvertex[4*tmp+state]->Fill(vertexZ);
+        hZvertex[4*tmp+state]->Fill(trkInfo[0][5]);
       }
 
     }
@@ -398,6 +392,7 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
 
 void analysis(){
   begin();
+  cout<<"version producing background data"<<endl;
   for(int iFile = 0; iFile < 7; ++iFile){
   //for(int iFile = 0; iFile < 1; ++iFile){
     //open input file
@@ -425,7 +420,9 @@ void analysis(){
     for(Long64_t iev=0; iev<nev; iev++) { //get the event
 
       upcTree->GetEntry(iev); 
-      rpTree->GetEntry(iev);  
+      rpTree->GetEntry(iev); 
+     /* if(!upcEvt->isTrigger(590705))
+        continue; */
       hAnalysisFlow->Fill(0);
       porcces(rpEvt,upcEvt);
     }
