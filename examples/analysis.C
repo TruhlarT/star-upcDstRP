@@ -113,7 +113,7 @@ void begin(){
 
 
 // creating ROOT file which will contain all the histograms created afterwards
-  outfile = new TFile("outputBackground.root", "recreate"); // outfile = TFile::Open("output.root", "recreate");
+  outfile = new TFile("output42.root", "recreate"); // outfile = TFile::Open("output.root", "recreate");
   
 // creating histograms
 // Having defined labels/names it is very easy and fast to create multiple histograms differing only by name
@@ -392,12 +392,13 @@ void porcces( StRPEvent *rpEvt, StUPCEvent *upcEvt){
 
 void analysis(){
   begin();
-  cout<<"version producing background data"<<endl;
-  for(int iFile = 0; iFile < 7; ++iFile){
+  //cout<<"version producing background data"<<endl;
+  for(int iFile = 0; iFile < 40; ++iFile){
   //for(int iFile = 0; iFile < 1; ++iFile){
     //open input file
     TString fileName; 
-    fileName.Form("/gpfs01/star/pwg/truhlar/star-upcDst/merge_RPprod/StUPCRP_production_000%d.root",iFile);
+    fileName.Form("/gpfs01/star/pwg/truhlar/star-upcDst/merge_allRP/StUPCRP_production_000%d.root",iFile);
+    //fileName.Form("/gpfs01/star/pwg/truhlar/star-upcDst/merge_RPprod/StUPCRP_production_000%d.root",iFile);
     //fileName.Form("/gpfs01/star/pwg/truhlar/star-upcDst/final/2D251B7815ED928A46D588DBB2165B4A_7.root",iFile);
     cout<<"Start proccesing file: "<<fileName<<endl;
     TFile *infile = TFile::Open(fileName, "read");
