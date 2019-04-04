@@ -126,10 +126,6 @@ TH1D* hZvertex[12];
 
 
 void Begin(){
-
-// creating ROOT file which will contain all the histograms created afterwards
-	outfile = new TFile("analysisOutput.root", "RECREATE"); 
-
 // creating histograms
 // Having defined labels/names it is very easy and fast to create multiple histograms differing only by name
 // (e.g. track multiplicity in single branch, theta angle for each arm and coordinate, etc.)
@@ -415,39 +411,35 @@ void Process(StRPEvent *rpEvt,StUPCEvent *upcEvt){
 
 
 //_____________________________________________________________________________
-void rpAnalysis() {
-  Begin();
-  //cout<<"version producing background data"<<endl;
-  //for(int iFile = 0; iFile < 40; ++iFile){
-  for(int iFile = 9; iFile < 10; ++iFile){
-    //open input file
-    TString fileName; 
-    fileName.Form("/gpfs01/star/pwg/truhlar/star-upcDst/merge_allRP/StUPCRP_production_000%d.root",iFile);
-    cout<<"Start proccesing file: "<<fileName<<endl;
-    TFile *infile = TFile::Open(fileName, "read");
+void rpAnalysis(TString input, TString output) {
+ cout<<"Starting script rpAnalysis.C"<<endl;
+ outfile = new TFile(output, "RECREATE");
+ Begin();
+ //open input file
+ cout<<"Start proccesing file: "<<input<<endl;
+ TFile *infile = TFile::Open(input, "read"); 
 
-    //get picoDst tree in file
-    TTree *rpTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
-    TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
+ //get picoDst tree in file
+ TTree *rpTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
+ TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
 
-    //connect upc event to the tree
-    static StRPEvent *rpEvt = 0x0;
-    rpTree->SetBranchAddress("mRPEvent", &rpEvt);
-    static StUPCEvent *upcEvt = 0x0;
-    upcTree->SetBranchAddress("mUPCEvent", &upcEvt);
+ //connect upc event to the tree
+ static StRPEvent *rpEvt = 0x0;
+ rpTree->SetBranchAddress("mRPEvent", &rpEvt);
+ static StUPCEvent *upcEvt = 0x0;
+ upcTree->SetBranchAddress("mUPCEvent", &upcEvt);
 
-    //ask for number of events
-    Long64_t nev = upcTree->GetEntries();
-    cout << "Number of events: " << nev << endl;
+ //ask for number of events
+ Long64_t nev = upcTree->GetEntries();
+ cout << "Number of events: " << nev << endl;
 
-    //event loop
-    for(Long64_t iev=0; iev<nev; iev++) { //get the event
+ //event loop
+ for(Long64_t iev=0; iev<nev; iev++) { //get the event
 
-      upcTree->GetEntry(iev); 
-      rpTree->GetEntry(iev); 
-      Process(rpEvt,upcEvt);
-    }
-  }
+   upcTree->GetEntry(iev); 
+   rpTree->GetEntry(iev); 
+   Process(rpEvt,upcEvt);
+ }
 
   //close outputs
   outfile->Write();
