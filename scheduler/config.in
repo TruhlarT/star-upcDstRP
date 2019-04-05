@@ -2,10 +2,10 @@
 #upcDst production configuration
 
 #main directory for production outputs
-top  /gpfs01/star/pwg/truhlar/star-upcDst
+top  /gpfs01/star/pwg/truhlar/star-upcDst_clonesArrays
 
-#add_input  MemQuickComp19  /gpfs01/star/pwg/truhlar/star-upcDst/quickTest.list
-add_input  allRPtrigRHICf  /gpfs01/star/pwg/truhlar/star-upcDst/test.list
+#add_input  testing  /gpfs01/star/pwg/truhlar/star-upcDst/quickTest.list
+add_input  test  /gpfs01/star/pwg/truhlar/star-upcDst/test.list
 
 
 nfiles  10

@@ -11,6 +11,7 @@ set (SRCS
   src/StUPCRpsTrackPoint.cxx
   src/StUPCRpsTrack.cxx
   src/StRPEvent.cxx
+  src/StUPCRpsCluster.cxx
   )
 
 #name of shared libarary LIB
@@ -25,6 +26,7 @@ set (SRCS_DICT
   src/StUPCRpsTrackPoint.cxx
   src/StUPCRpsTrack.cxx
   src/StRPEvent.cxx
+  src/StUPCRpsCluster.cxx
   )
 
 #LinkDef file for ROOT dictionary
