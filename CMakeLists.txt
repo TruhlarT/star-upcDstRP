@@ -2,6 +2,7 @@
 project (star-upc)
 cmake_minimum_required (VERSION 2.6)
 
+
 #sources for shared library LIB
 set (SRCS
   src/StUPCEvent.cxx
@@ -12,10 +13,14 @@ set (SRCS
   src/StUPCRpsTrack.cxx
   src/StRPEvent.cxx
   src/StUPCRpsCluster.cxx
+  src/ArgumentParser.cxx
   )
 
 #name of shared libarary LIB
 set (LIB star-upc)
+
+#binary executables
+set (BIN AnalysisTemplate)
 
 #sources for ROOT dictionary
 set (SRCS_DICT
@@ -47,7 +52,7 @@ string(REPLACE "\n" "" ROOT_FLAGS "${ROOT_FLAGS_CMD}")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_FLAGS}")
 
 #libraries
-set(ROOT_DEPS Core EG Hist Physics RIO Tree MathCore)
+set(ROOT_DEPS Core EG Hist Physics RIO Tree MathCore RooFit RooFitCore Minuit)
 
 #include dir
 execute_process(COMMAND root-config --libdir OUTPUT_VARIABLE ROOT_LIBDIR_CMD)
@@ -83,6 +88,11 @@ add_custom_command (
 add_library (${LIB} SHARED ${SRCS} ${DICT})
 target_link_libraries(${LIB} ${ROOT_DEPS} )
 
+#create executables in BIN
+foreach(IBIN ${BIN})
+  add_executable(${IBIN} src/${IBIN}.cxx)
+  target_link_libraries(${IBIN} ${LIB} ${ROOT_DEPS} )
+endforeach(IBIN ${BIN})
 
 
 

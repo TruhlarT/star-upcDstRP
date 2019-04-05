@@ -100,14 +100,14 @@ TString summaryLabels[10] = { TString("CPTnoBBCL"), TString("Elastic"), TString(
 TString systemID[3] = { TString("Combi"), TString("InEl"), TString("El")};
 TString systemState[4] = { TString("TPCv1"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
 TString configLabels[4] = { TString("EUD"), TString("EDU"), TString("IUU"), TString("IDD")};
-
+TString conection[2] = { TString("Good"), TString("Bad") };
 
 // Histograms declarations
 TH1F* hAnalysisFlow; // control plot
 TH1F* hTriggerBits; // control plot
 TH1F* hConfiguration;
-TH1F* hNumberTrack; // number of track in trigger (RP)
 TH1F* hNumberTrackPerBranch[nBranches]; // number of track per each brunch (west up, west down, east up, east down)
+TH1D *hConnection;
 
 // PID
 TH2D* hdEdxVsP[12];
@@ -126,22 +126,26 @@ TFile *outfile;
 StUPCEvent *upcEvt;
 StRPEvent *rpEvt;
 
+TTree *recTree;
+Int_t triggerBits, nTracks;
+Double_t vertexZ;
 
 void Init();
 void Make();
+TFile *CreateOutputTree(const string& out);
 
 //_____________________________________________________________________________
 int main(void) {
 
   //open input file
-  infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst/merge_allRP/StUPCRP_production_0001.root", "read");
+  infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst_clonesArrays/merge_allRP/StUPCRP_production_0001.root", "read");
   if(!infile) {cout << "Can not open input file." << endl; return -1;}
   //get picoDst tree in file
   TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
   TTree *rpTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
 
   //open output file
-  outfile = TFile::Open("test.root", "recreate");
+  outfile = CreateOutputTree("test.root"); 
   if(!outfile) {cout << "Can not open output file." << endl; return -1;}
 
   Init();
@@ -154,13 +158,14 @@ int main(void) {
   Long64_t nev = upcTree->GetEntries();
   cout << "Number of events: " << nev << endl;
 
-  nev = 10000;
+  nev = 20000;
 
   for(Long64_t iev=0; iev<nev; iev++) { //get the event
 
     upcTree->GetEntry(iev); 
     rpTree->GetEntry(iev); 
     Make();
+    recTree->Fill();
   }
 
   //close the outputs
@@ -180,16 +185,17 @@ void Init(){
   hAnalysisFlow = new TH1F("AnalysisFlow", "CutsFlow", 10, -0.5, 9.5);
   for(int tb=0; tb<10; ++tb) hAnalysisFlow->GetXaxis()->SetBinLabel(tb+1, summaryLabels[tb]);
 
-  hTriggerBits = new TH1F("TriggerBits", "TriggerBits", nTriggers, -0.5, 9.5);
-  for(int tb=0; tb<10; ++tb) hTriggerBits->GetXaxis()->SetBinLabel(tb+1, triggerName[tb]);
+  hTriggerBits = new TH1F("TriggerBits", "TriggerBits", nTriggers, -0.5, 20.5);
+  for(int tb=0; tb<nTriggers; ++tb) hTriggerBits->GetXaxis()->SetBinLabel(tb+1, triggerName[tb]);
 
   hConfiguration = new TH1F("Configuration", "Track Configuration", 4, -0.5, 3.5);
   for(int tb=0; tb<4; ++tb) hConfiguration->GetXaxis()->SetBinLabel(tb+1, configLabels[tb]);
 
+  hConnection = new TH1D("hConnection", "Agreement between track brunch and trackPoints RPIds", 2, -0.5, 1.5);
+  for(int tb=0; tb<2; ++tb) hConnection->GetXaxis()->SetBinLabel(tb+1, conection[tb]);
+
   for(int i=0; i<nBranches; ++i)
     hNumberTrackPerBranch[i] = new TH1F("NumberTracksPerBranch,"+branchName[i],"Number of tracks in branch "+branchName[i], 8, -0.5, 7.5);
-  hNumberTrack = new TH1F("NumberTracks", "Number of Tracks in RP, trigger ", 40, -0.5, 39.5);
-
 
   for(int i=0; i<12;++i){
     if(i==0){
@@ -219,9 +225,13 @@ void Init(){
 void Make(){
   hAnalysisFlow->Fill(0);
 
-  for(int var = 0; var < nTriggers; ++var)
-    if(upcEvt->isTrigger(triggerID[var])) hTriggerBits->Fill(var);
-
+  for(int var = 0; var < nTriggers; ++var){
+    if(upcEvt->isTrigger(triggerID[var])){
+      hTriggerBits->Fill(var);
+      triggerBits = (Int_t) var;
+    }
+  }
+  nTracks = (Int_t) rpEvt->getNumberOfTracks();
   // Vector below will be filled with indices of good-quality tracks
   vector<int> rpTrackIdVec_perBranch[nBranches];
   vector<int> rpTrackIdVec_perSide[nSides];
@@ -232,11 +242,39 @@ void Make(){
   for(int k=0; k<rpEvt->getNumberOfTracks(); ++k){
   // Get pointer to k-th track in Roman Pot data collection
     StUPCRpsTrack *trk = rpEvt->getTrack(k);
+
+
   // Get ID of a branch in which this k-th track was reconstructed
     int j = trk->branch();
     int side = j<2 ? E : W;
     ++numberOfTracks;
     ++numberOfTracksPerBranch[j];
+    for(Int_t kj = 0; kj < 2 ; ++kj){
+      if(!trk) break; 
+      StUPCRpsTrackPoint *trkPoint = trk->trackPoint(kj);\
+      if(!trkPoint) continue; 
+      int rpID = trkPoint->rpId();
+      switch (j) {
+        case 0:
+        case 1: 
+          if(rpID == j || rpID == j +2){
+            hConnection->Fill(0);
+          }else{
+            hConnection->Fill(1);
+            cout << rpID << " / "<<j<< endl;
+          }
+        break;
+        case 2: 
+        case 3:  
+          if(rpID == j+2 || rpID == j +4){
+            hConnection->Fill(0);
+          }else{
+            hConnection->Fill(1);
+            cout << rpID << " / "<<j<< endl;
+          }
+        break;
+      };
+    } 
   // If track is global (made of track-points   in 1st and 2nd station)
   // and all 8 planes were used in reconstruction - store its ID
     if( trk->type()==StUPCRpsTrack::rpsGlobal && trk->planesUsed()==8) rpTrackIdVec_perBranch[j].push_back( k );
@@ -245,8 +283,7 @@ void Make(){
       (trk->trackPoint(1) ? trk->trackPoint(1)->planesUsed()>=3 : true) ) rpTrackIdVec_perSide[side].push_back( k );
   }
 
-  // Fill histograms with number of tracks
-  hNumberTrack->Fill(numberOfTracks);
+
   for(int i=0; i<nBranches; i++) hNumberTrackPerBranch[i]->Fill(numberOfTracksPerBranch[i]);
 
 /////////////////////////////////////////////////////////////////////////
@@ -297,7 +334,7 @@ void Make(){
       hAnalysisFlow->Fill(3);
       const StUPCVertex* vertex = upcEvt->getVertex(0);
 
-      const double vertexZ = vertex->getPosZ();
+      vertexZ = (Double_t) vertex->getPosZ();
 
       int totalCharge = 0;
       int nTofTrks = 0;
@@ -453,3 +490,20 @@ void Make(){
   } // end of loop over arms
 
 }
+
+//_____________________________________________________________________________
+TFile *CreateOutputTree(const string& out) {
+
+  TFile *outputFile = TFile::Open(out.c_str(), "recreate");
+  if(!outputFile) return 0x0;
+
+  //standard reconstructed tree
+  recTree = new TTree("recTree", "recTree");
+
+  recTree ->Branch("triggerBits", &triggerBits, "triggerBits/I");
+  recTree ->Branch("vertexZ", &vertexZ, "vertexZ/D");
+  recTree ->Branch("nTracks", &nTracks, "nTracks/I");
+
+  return outputFile;
+
+}//CreateOutputTree
