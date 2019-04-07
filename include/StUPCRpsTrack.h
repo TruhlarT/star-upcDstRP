@@ -59,7 +59,6 @@ public:
 	{
 	    if (station<mNumberOfStationsInBranch)
 	        mTrackPoints[station] = (TObject*)trackPoint;
-	        //mTrackPoints[station] = static_cast<const TObject*>(trackPoint);
 	}
 	void setP(const TVector3& P) { mP = P; }
 	void setBranch(int branch) { mBranch = branch; }
@@ -69,8 +68,8 @@ private:
 
 	TRef mTrackPoints[mNumberOfStationsInBranch]; // pointers to track points (local tracks)
 	TVector3 mP;				// three-vector with reconstructed track momentum
-	Int_t          mBranch;			// detectors branch, EU=0, ED=1, WU=2, WD=3 
 	StRpsTrackType mType;			// type of the track
+	Int_t          mBranch;			// detectors branch, EU=0, ED=1, WU=2, WD=3 
 
 	ClassDef(StUPCRpsTrack, 1)
 };

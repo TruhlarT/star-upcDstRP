@@ -55,10 +55,10 @@ void setNumberPlanes(UInt_t romanPotID, UInt_t val)
   if( romanPotID > mNumberOfRomanPots -1) return;
   mNumberPlanes[romanPotID] = val;
 }
-void setNumberPlanesWithluster(UInt_t romanPotID, UInt_t val) 
+void setNumberPlanesWithcluster(UInt_t romanPotID, UInt_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
-  mNumberPlanesWithluster[romanPotID] = val;
+  mNumberPlanesWithcluster[romanPotID] = val;
 }
 void setAdc(UInt_t romanPotID, UInt_t adc0, UInt_t adc1) 
 {
@@ -73,20 +73,20 @@ void setTac(UInt_t romanPotID, UInt_t tac0, UInt_t tac1)
   mTAC[romanPotID][0] = tac0;
   mTAC[romanPotID][1] = tac1;
 }   
-void setOffset(UInt_t romanPotID, UInt_t planeID, Double_t val) 
+void setOffset(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   if( planeID > mNumberOfPlanesInRP -1) return;
 
   mOffsetPlane[romanPotID][planeID] = val;
 }
-void setZ(UInt_t romanPotID, UInt_t planeID, Double_t val) 
+void setZ(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   if( planeID > mNumberOfPlanesInRP -1) return;
   mzPlane[romanPotID][planeID] = val;
 }
-void setAngle(UInt_t romanPotID, UInt_t planeID, Double_t val) 
+void setAngle(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   if( planeID > mNumberOfPlanesInRP -1) return;
@@ -118,7 +118,7 @@ UInt_t numberOfPlanes(UInt_t romanPotID) const
 UInt_t numberOfPlanesWithClusters(UInt_t romanPotID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
-  return mNumberPlanesWithluster[romanPotID];
+  return mNumberPlanesWithcluster[romanPotID];
 }
 UChar_t status(UInt_t romanPotID) const 
 { 
@@ -137,19 +137,19 @@ UInt_t tac(UInt_t romanPotID, UInt_t pmtID) const  // return tac value from firs
   if( pmtID > mNumberOfPmtsInRp -1) return 0;
   return mTAC[romanPotID][pmtID];
 }
-Double_t offset(UInt_t romanPotID, UInt_t planeID) const 
+Float_t offset(UInt_t romanPotID, UInt_t planeID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( planeID > mNumberOfPlanesInRP -1) return 0;
   return mOffsetPlane[romanPotID][planeID];
 }
-Double_t z(UInt_t romanPotID, UInt_t planeID) const 
+Float_t z(UInt_t romanPotID, UInt_t planeID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( planeID > mNumberOfPlanesInRP -1) return 0;
   return mzPlane[romanPotID][planeID];
 }
-Double_t angle(UInt_t romanPotID, UInt_t planeID) const 
+Float_t angle(UInt_t romanPotID, UInt_t planeID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( planeID > mNumberOfPlanesInRP -1) return 0;
@@ -179,18 +179,21 @@ private:
   static const Int_t mNumberOfPlanesInRP = 4;
   static const Int_t mNumberOfPmtsInRp = 2;
 
-  UChar_t mSiliconBunch;
-  UInt_t  mNumberPlanes[mNumberOfRomanPots]; 
-  UInt_t  mNumberPlanesWithluster[mNumberOfRomanPots]; 
-  UChar_t  mStatusRomanPot[mNumberOfRomanPots];
+  
+  Float_t  mOffsetPlane[mNumberOfRomanPots][mNumberOfPlanesInRP]; //-0.1 to 0.1
+  Float_t  mzPlane[mNumberOfRomanPots][mNumberOfPlanesInRP]; // -20 to 20
+  Float_t  mAnglePlane[mNumberOfRomanPots][mNumberOfPlanesInRP]; // 0
+
+  UInt_t  mNumberPlanes[mNumberOfRomanPots]; // = 4 Can I move it out?
+  UInt_t  mNumberPlanesWithcluster[mNumberOfRomanPots]; // 0-800  co to znamená
   UInt_t  mADC[mNumberOfRomanPots][mNumberOfPmtsInRp]; // ADC in 2 pmt
   UInt_t  mTAC[mNumberOfRomanPots][mNumberOfPmtsInRp]; // TAC in 2 pmt
 
-  Double_t  mOffsetPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  Double_t  mzPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  Double_t  mAnglePlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  Short_t  mOrientationPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  UChar_t  mStatusPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];  
+  Short_t  mOrientationPlane[mNumberOfRomanPots][mNumberOfPlanesInRP]; // -1 to 2
+  
+  UChar_t mSiliconBunch; // values: cca. -50 to 200 // should be 0 to 120
+  UChar_t  mStatusRomanPot[mNumberOfRomanPots]; // from -1 to 155
+  UChar_t  mStatusPlane[mNumberOfRomanPots][mNumberOfPlanesInRP]; // 0
 
 
   static TClonesArray *mgClusters; // array of upc tracks

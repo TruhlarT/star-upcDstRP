@@ -60,10 +60,10 @@ public:
 	}
     
 private:
-    int mRpId;
-    int mClusterId[mNumberOfPlanesInRp];
-    double mTime[mNumberOfPmtsInRp];
-
+    Float_t mTime[mNumberOfPmtsInRp];
+    Int_t mRpId;
+    Int_t mClusterId[mNumberOfPlanesInRp];
+    
     TVector3         mPosition;
     StUPCRpsTrackPointQuality mQuality;
 

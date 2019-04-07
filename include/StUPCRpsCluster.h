@@ -11,11 +11,11 @@
 #include "TObject.h" 
 
 
-class StUPCRpsCluster : public TObject {
+class StUPCRpsCluster{
 public:
     StUPCRpsCluster();
-    StUPCRpsCluster(double pos, double posRMS, short len,
-                 double e, double xy, unsigned char qual);
+    StUPCRpsCluster(Float_t pos, Float_t posRMS, Short_t len,
+                 Float_t e, Float_t xy, UChar_t qual);
     ~StUPCRpsCluster() { /* noop */ };
 
 double position() const { return mPosition; }
@@ -52,18 +52,16 @@ void setRomanPotId(unsigned char val) { mRomanPotId = val; };
 
 
  protected:
-    Double_t       mPosition;
-    Double_t       mPositionRMS;
-    Short_t        mLength;    
-    Double_t       mEnergy;
-    Double_t       mXY;
+    Float_t       mPosition;
+    Float_t       mPositionRMS;    
+    Float_t       mEnergy;
+    Float_t       mXY;
+    Short_t        mLength;
     UChar_t        mQuality;
     UChar_t        mPlaneId;
     UChar_t        mRomanPotId;
 
     ClassDef(StUPCRpsCluster,2)
 };
-
-ostream& operator<<(ostream&, const StUPCRpsCluster&);
 
 #endif
