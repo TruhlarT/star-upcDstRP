@@ -33,11 +33,11 @@ public:
 
 
   //getters
-  Int_t getNumberOfClusters() const;
+  UShort_t getNumberOfClusters() const;
   StUPCRpsCluster *getCluster(Int_t iCluster) const;  
-  Int_t getNumberOfTracks() const;
+  UShort_t getNumberOfTracks() const;
   StUPCRpsTrack *getTrack(Int_t iTrack) const;
-  Int_t getNumberOfTrackPoints() const;
+  UShort_t getNumberOfTrackPoints() const;
   StUPCRpsTrackPoint *getTrackPoint(Int_t iTrackPoint) const;
 
 // Setters, romanPotID == RomanPot ID, planeID == Plane Id, val == value of current setter
@@ -50,49 +50,49 @@ void setStatus(UInt_t romanPotID, UChar_t val)
   if( romanPotID > mNumberOfRomanPots -1) return;
   mStatusRomanPot[romanPotID] = val;
 }
-void setNumberPlanes(UInt_t romanPotID, UInt_t val) 
+void setNumberPlanes(UInt_t romanPotID, UShort_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   mNumberPlanes[romanPotID] = val;
 }
-void setNumberPlanesWithluster(UInt_t romanPotID, UInt_t val) 
+void setNumberPlanesWithluster(UInt_t romanPotID, UShort_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   mNumberPlanesWithluster[romanPotID] = val;
 }
-void setAdc(UInt_t romanPotID, UInt_t adc0, UInt_t adc1) 
+void setAdc(UInt_t romanPotID, UInt_t adc0, UShort_t adc1) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
 
   mADC[romanPotID][0] = adc0;
   mADC[romanPotID][1] = adc1;
 }
-void setTac(UInt_t romanPotID, UInt_t tac0, UInt_t tac1)
+void setTac(UInt_t romanPotID, UInt_t tac0, UShort_t tac1)
 { 
   if( romanPotID > mNumberOfRomanPots -1) return;
   mTAC[romanPotID][0] = tac0;
   mTAC[romanPotID][1] = tac1;
 }   
-void setOffset(UInt_t romanPotID, UInt_t planeID, Double_t val) 
+void setOffset(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   if( planeID > mNumberOfPlanesInRP -1) return;
 
   mOffsetPlane[romanPotID][planeID] = val;
 }
-void setZ(UInt_t romanPotID, UInt_t planeID, Double_t val) 
+void setZ(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   if( planeID > mNumberOfPlanesInRP -1) return;
   mzPlane[romanPotID][planeID] = val;
 }
-void setAngle(UInt_t romanPotID, UInt_t planeID, Double_t val) 
+void setAngle(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   if( planeID > mNumberOfPlanesInRP -1) return;
   mAnglePlane[romanPotID][planeID] = val;
 }
-void setOrientation(UInt_t romanPotID, UInt_t planeID, Short_t val) 
+void setOrientation(UInt_t romanPotID, UInt_t planeID, Char_t val) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
   if( planeID > mNumberOfPlanesInRP -1) return;
@@ -110,52 +110,53 @@ UChar_t siliconBunch() const
 { 
   return mSiliconBunch;
 }
-UInt_t numberOfPlanes(UInt_t romanPotID) const 
+
+UShort_t numberOfPlanes(UInt_t romanPotID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   return mNumberPlanes[romanPotID];
 }
-UInt_t numberOfPlanesWithClusters(UInt_t romanPotID) const 
+UShort_t numberOfPlanesWithClusters(UInt_t romanPotID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   return mNumberPlanesWithluster[romanPotID];
-}
+} 
 UChar_t status(UInt_t romanPotID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   return mStatusRomanPot[romanPotID];
 }
-UInt_t adc(UInt_t romanPotID, UInt_t pmtID) const // return adc value from first or second pmt
+UShort_t adc(UInt_t romanPotID, UInt_t pmtID) const // return adc value from first or second pmt
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( pmtID > mNumberOfPmtsInRp -1) return 0;
   return mADC[romanPotID][pmtID];
 }
-UInt_t tac(UInt_t romanPotID, UInt_t pmtID) const  // return tac value from first or second pmt
+UShort_t tac(UInt_t romanPotID, UInt_t pmtID) const  // return tac value from first or second pmt
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( pmtID > mNumberOfPmtsInRp -1) return 0;
   return mTAC[romanPotID][pmtID];
 }
-Double_t offset(UInt_t romanPotID, UInt_t planeID) const 
+Float_t offset(UInt_t romanPotID, UInt_t planeID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( planeID > mNumberOfPlanesInRP -1) return 0;
   return mOffsetPlane[romanPotID][planeID];
 }
-Double_t z(UInt_t romanPotID, UInt_t planeID) const 
+Float_t z(UInt_t romanPotID, UInt_t planeID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( planeID > mNumberOfPlanesInRP -1) return 0;
   return mzPlane[romanPotID][planeID];
 }
-Double_t angle(UInt_t romanPotID, UInt_t planeID) const 
+Float_t angle(UInt_t romanPotID, UInt_t planeID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( planeID > mNumberOfPlanesInRP -1) return 0;
   return mAnglePlane[romanPotID][planeID];
 }
-Short_t  orientation(UInt_t romanPotID, UInt_t planeID) const 
+Char_t  orientation(UInt_t romanPotID, UInt_t planeID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   if( planeID > mNumberOfPlanesInRP -1) return 0;
@@ -179,31 +180,31 @@ private:
   static const Int_t mNumberOfPlanesInRP = 4;
   static const Int_t mNumberOfPmtsInRp = 2;
 
-  UChar_t mSiliconBunch;
-  UInt_t  mNumberPlanes[mNumberOfRomanPots]; 
-  UInt_t  mNumberPlanesWithluster[mNumberOfRomanPots]; 
-  UChar_t  mStatusRomanPot[mNumberOfRomanPots];
-  UInt_t  mADC[mNumberOfRomanPots][mNumberOfPmtsInRp]; // ADC in 2 pmt
-  UInt_t  mTAC[mNumberOfRomanPots][mNumberOfPmtsInRp]; // TAC in 2 pmt
+  Float_t  mOffsetPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  Float_t  mzPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  Float_t  mAnglePlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
 
-  Double_t  mOffsetPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  Double_t  mzPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  Double_t  mAnglePlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
-  Short_t  mOrientationPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
+  UChar_t  mNumberPlanes[mNumberOfRomanPots]; 
+  UShort_t  mNumberPlanesWithluster[mNumberOfRomanPots]; 
+  UShort_t  mADC[mNumberOfRomanPots][mNumberOfPmtsInRp]; // ADC in 2 pmt
+  UShort_t  mTAC[mNumberOfRomanPots][mNumberOfPmtsInRp]; // TAC in 2 pmt
+
+  Char_t   mOrientationPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
   UChar_t  mStatusPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];  
-
+  UChar_t  mSiliconBunch;
+  UChar_t  mStatusRomanPot[mNumberOfRomanPots];
 
   static TClonesArray *mgClusters; // array of upc tracks
   TClonesArray *mClusters; //-> array of upc tracks
-  Int_t mNClusters; //! number of upc tracks in event, local use when filling
+  UShort_t mNClusters; //! number of upc tracks in event, local use when filling
 
   static TClonesArray *mgTracks; // array of upc tracks
   TClonesArray *mTracks; //-> array of upc tracks
-  Int_t mNTracks; //! number of upc tracks in event, local use when filling
+  UShort_t mNTracks; //! number of upc tracks in event, local use when filling
 
   static TClonesArray *mgTrackPoints; // array of upc tracks
   TClonesArray *mTrackPoints; //-> array of upc tracks
-  Int_t mNTrackPoints; //! number of upc tracks in event, local use when filling
+  UShort_t mNTrackPoints; //! number of upc tracks in event, local use when filling
 
   ClassDef(StRPEvent, 2);
 };

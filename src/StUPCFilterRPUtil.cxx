@@ -60,14 +60,14 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
     rpEvt->setStatus(iRomanPotId, collection->status(iRomanPotId));
     rpEvt->setAdc(iRomanPotId, collection->adc(iRomanPotId, 0), collection->adc(iRomanPotId, 1));
     rpEvt->setTac(iRomanPotId, collection->tac(iRomanPotId, 0), collection->tac(iRomanPotId, 1)); 
-    rpEvt->setNumberPlanes(iRomanPotId, collection->numberOfPlanes());
-    rpEvt->setNumberPlanesWithluster(iRomanPotId, collection->numberOfPlanesWithClusters(iRomanPotId));
+    //rpEvt->setNumberPlanes(iRomanPotId, collection->numberOfPlanes());
+    //rpEvt->setNumberPlanesWithluster(iRomanPotId, collection->numberOfPlanesWithClusters(iRomanPotId));
     for(UInt_t iPlaneId=0; iPlaneId < collection->numberOfPlanes(); ++iPlaneId){
       rpEvt->setOffset(iRomanPotId, iPlaneId, collection->offsetPlane(iRomanPotId, iPlaneId));
       rpEvt->setZ(iRomanPotId, iPlaneId, collection->zPlane(iRomanPotId, iPlaneId));  
       rpEvt->setAngle(iRomanPotId, iPlaneId, collection->anglePlane(iRomanPotId, iPlaneId));  
       rpEvt->setOrientation(iRomanPotId, iPlaneId, collection->orientationPlane(iRomanPotId, iPlaneId));  
-      rpEvt->setStatus(iRomanPotId, iPlaneId, collection->statusPlane(iRomanPotId, iPlaneId));
+      //rpEvt->setStatus(iRomanPotId, iPlaneId, collection->statusPlane(iRomanPotId, iPlaneId));
 
       for(UInt_t iCluster=0; iCluster < collection->numberOfClusters(iRomanPotId, iPlaneId); ++iCluster){
         StUPCRpsCluster *rpCluster = rpEvt->addCluster();
