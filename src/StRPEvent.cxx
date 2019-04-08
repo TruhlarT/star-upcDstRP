@@ -32,8 +32,8 @@ StRPEvent::StRPEvent():
   //default constructor
 
   for (UInt_t iRP = 0; iRP < mNumberOfRomanPots; ++iRP){
-    mNumberPlanes[iRP] = 0;
-    mNumberPlanesWithluster[iRP] = 0;
+   // mNumberPlanes[iRP] = 0;
+   // mNumberPlanesWithluster[iRP] = 0;
     mStatusRomanPot[iRP] = 0;
     for (UInt_t iPMT = 0; iPMT < mNumberOfPmtsInRp; ++iPMT){
       mADC[iRP][iPMT] = 0;
@@ -44,7 +44,7 @@ StRPEvent::StRPEvent():
       mzPlane[iRP][iPlane] = 0;
       mAnglePlane[iRP][iPlane] = 0;
       mOrientationPlane[iRP][iPlane] = 0;
-      mStatusPlane[iRP][iPlane] = 0;  
+      //mStatusPlane[iRP][iPlane] = 0;  
     }
   }
   if(!mgClusters) {
@@ -122,7 +122,7 @@ StUPCRpsTrackPoint *StRPEvent::addTrackPoint()
 }//addTrackPoint
 
 //_____________________________________________________________________________
-Int_t StRPEvent::getNumberOfClusters() const {
+UShort_t StRPEvent::getNumberOfClusters() const {
 
   //number of RP clusters in event
 
@@ -142,7 +142,7 @@ StUPCRpsCluster *StRPEvent::getCluster(Int_t iCluster) const
 }//getCluster
 
 //_____________________________________________________________________________
-Int_t StRPEvent::getNumberOfTracks() const {
+UShort_t StRPEvent::getNumberOfTracks() const {
 
   //number of RP tracks in event
 
@@ -162,7 +162,7 @@ StUPCRpsTrack *StRPEvent::getTrack(Int_t iTrack) const
 }//getTrack
 
 //_____________________________________________________________________________
-Int_t StRPEvent::getNumberOfTrackPoints() const {
+UShort_t StRPEvent::getNumberOfTrackPoints() const {
 
   //number of RP trackPoints in event
 

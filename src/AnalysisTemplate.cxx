@@ -160,12 +160,15 @@ int main(void) {
   Long64_t nev = upcTree->GetEntries();
   cout << "Number of events: " << nev << endl;
 
-  nev = 20000;
+  nev = 1000;
 
   for(Long64_t iev=0; iev<nev; iev++) { //get the event
 
     upcTree->GetEntry(iev); 
     rpTree->GetEntry(iev); 
+    for(int rp = 0; rp < 8; ++rp)
+      for(int plane = 0; plane <4; ++plane)
+        cout<<rpEvt->status(rp,plane)<<endl;
     Make();
     recTree->Fill();
   }
