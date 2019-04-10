@@ -18,37 +18,37 @@ public:
                  Float_t e, Float_t xy, UChar_t qual);
     ~StUPCRpsCluster() { /* noop */ };
 
-double position() const { return mPosition; }
+Float_t position() const { return mPosition; }
 
-double positionRMS() const { return mPositionRMS; }
+Float_t positionRMS() const { return mPositionRMS; }
 
-short  length() const { return mLength; }
+Short_t  length() const { return mLength; }
 
-double energy() const { return mEnergy; }
+Float_t energy() const { return mEnergy; }
 
-double xy() const { return mXY; }
+Float_t xy() const { return mXY; }
 
-unsigned char quality() const { return mQuality; }
+UChar_t quality() const { return mQuality; }
 
 unsigned int romanPotId() const { return mRomanPotId; }
 
 unsigned int planeId() const { return mPlaneId; }
 
-void setPosition(double val) { mPosition = val; }
+void setPosition(Float_t val) { mPosition = val; }
 
-void setPositionRMS(double val) { mPositionRMS = val; }
+void setPositionRMS(Float_t val) { mPositionRMS = val; }
 
-void setLength(short val) { mLength = val; }
+void setLength(Short_t val) { mLength = val; }
 
-void setEnergy(double val) { mEnergy = val; }
+void setEnergy(Float_t val) { mEnergy = val; }
 
-void setXY(double val) { mXY = val; }
+void setXY(Float_t val) { mXY = val; }
 
-void setQuality(unsigned char val) { mQuality = val; }
+void setQuality(UChar_t val) { mQuality = val; }
 
-void setPlaneId(unsigned char val) { mPlaneId = val; }
+void setPlaneId(UChar_t val) { mPlaneId = val; }
 
-void setRomanPotId(unsigned char val) { mRomanPotId = val; };
+void setRomanPotId(UChar_t val) { mRomanPotId = val; };
 
 
  protected:

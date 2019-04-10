@@ -55,15 +55,13 @@ void setNumberPlanes(UInt_t romanPotID, UShort_t val)
   if( romanPotID > mNumberOfRomanPots -1) return;
   mNumberPlanes[romanPotID] = val;
 }
-<<<<<<< HEAD
+/*
 void setNumberPlanesWithcluster(UInt_t romanPotID, UInt_t val) 
-=======
-void setNumberPlanesWithluster(UInt_t romanPotID, UShort_t val) 
->>>>>>> merging
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
-  mNumberPlanesWithcluster[romanPotID] = val;
+  mNumberPlanesWithCluster[romanPotID] = val;
 }
+*/
 void setAdc(UInt_t romanPotID, UInt_t adc0, UShort_t adc1) 
 {
   if( romanPotID > mNumberOfRomanPots -1) return;
@@ -120,16 +118,13 @@ UShort_t numberOfPlanes(UInt_t romanPotID) const
   if( romanPotID > mNumberOfRomanPots -1) return 0;
   return mNumberPlanes[romanPotID];
 }
+/*
 UShort_t numberOfPlanesWithClusters(UInt_t romanPotID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
-<<<<<<< HEAD
-  return mNumberPlanesWithcluster[romanPotID];
+  return mNumberPlanesWithCluster[romanPotID];
 }
-=======
-  return mNumberPlanesWithluster[romanPotID];
-} 
->>>>>>> merging
+*/
 UChar_t status(UInt_t romanPotID) const 
 { 
   if( romanPotID > mNumberOfRomanPots -1) return 0;
@@ -194,7 +189,7 @@ private:
   Float_t  mzPlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
   Float_t  mAnglePlane[mNumberOfRomanPots][mNumberOfPlanesInRP];
 
-  UShort_t  mNumberPlanesWithluster[mNumberOfRomanPots]; 
+  //UShort_t  mNumberPlanesWithCluster[mNumberOfRomanPots]; 
   UShort_t  mADC[mNumberOfRomanPots][mNumberOfPmtsInRp]; // ADC in 2 pmt
   UShort_t  mTAC[mNumberOfRomanPots][mNumberOfPmtsInRp]; // TAC in 2 pmt
 

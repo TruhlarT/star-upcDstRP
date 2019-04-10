@@ -32,8 +32,8 @@ StRPEvent::StRPEvent():
   //default constructor
 
   for (UInt_t iRP = 0; iRP < mNumberOfRomanPots; ++iRP){
-   // mNumberPlanes[iRP] = 0;
-   // mNumberPlanesWithluster[iRP] = 0;
+    mNumberPlanes[iRP] = 0;
+    //mNumberPlanesWithCluster[iRP] = 0;
     mStatusRomanPot[iRP] = 0;
     for (UInt_t iPMT = 0; iPMT < mNumberOfPmtsInRp; ++iPMT){
       mADC[iRP][iPMT] = 0;
@@ -44,7 +44,7 @@ StRPEvent::StRPEvent():
       mzPlane[iRP][iPlane] = 0;
       mAnglePlane[iRP][iPlane] = 0;
       mOrientationPlane[iRP][iPlane] = 0;
-      //mStatusPlane[iRP][iPlane] = 0;  
+      mStatusPlane[iRP][iPlane] = 0;  
     }
   }
   if(!mgClusters) {

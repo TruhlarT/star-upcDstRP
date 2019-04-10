@@ -26,7 +26,7 @@ public:
 	static const Int_t mNumberOfPlanesInRp = 4;
 
 	TVector3 positionVec() const { return mPosition; }
-	int rpId() const { return mRpId; }
+	UChar_t rpId() const { return mRpId; }
 	int clusterId(unsigned int planeId ) const
 	{
 	    return planeId<mNumberOfPlanesInRp ? mClusterId[planeId] : -1;
@@ -44,7 +44,7 @@ public:
 	{
 	    mPosition = position;
 	}
-	void setRpId(int rpId) { mRpId = rpId; }
+	void setRpId(UChar_t rpId) { mRpId = rpId; }
 	void setClusterId(int clusterId, unsigned int planeId)
 	{
 	    if( planeId<mNumberOfPlanesInRp )
@@ -61,7 +61,7 @@ public:
     
 private:
     Float_t mTime[mNumberOfPmtsInRp];
-    Int_t mRpId;
+    UChar_t mRpId;
     Int_t mClusterId[mNumberOfPlanesInRp];
     
     TVector3         mPosition;
