@@ -4,7 +4,7 @@
 #main directory for production outputs
 top  /gpfs01/star/pwg/truhlar/sizeOpimized
 
-add_input  test  /gpfs01/star/pwg/truhlar/quickTest.list
+add_input  notCompressed  /gpfs01/star/pwg/truhlar/quickTest.list
 #add_input  test  /gpfs01/star/pwg/truhlar/star-upcDst/test.list
 
 

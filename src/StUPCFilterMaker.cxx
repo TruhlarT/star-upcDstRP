@@ -116,6 +116,7 @@ Int_t StUPCFilterMaker::Init() {
 
   //create the output file
   mOutFile = new TFile(mOutName.c_str(), "recreate");
+  mOutFile->SetCompressionLevel(0);
 
   //output UPC event and tree
   mUPCEvent = new StUPCEvent();

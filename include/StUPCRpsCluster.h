@@ -11,7 +11,7 @@
 #include "TObject.h" 
 
 
-class StUPCRpsCluster{
+class StUPCRpsCluster : public TObject {
 public:
     StUPCRpsCluster();
     StUPCRpsCluster(Float_t pos, Float_t posRMS, Short_t len,
