@@ -12,7 +12,6 @@ set (SRCS
   src/StUPCRpsTrackPoint.cxx
   src/StUPCRpsTrack.cxx
   src/StRPEvent.cxx
-  src/StUPCRpsCluster.cxx
   src/ArgumentParser.cxx
   )
 
@@ -31,7 +30,6 @@ set (SRCS_DICT
   src/StUPCRpsTrackPoint.cxx
   src/StUPCRpsTrack.cxx
   src/StRPEvent.cxx
-  src/StUPCRpsCluster.cxx
   )
 
 #LinkDef file for ROOT dictionary
