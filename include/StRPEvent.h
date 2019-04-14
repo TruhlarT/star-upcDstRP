@@ -6,7 +6,6 @@
 //    Author: Truhlar Tomas
 //_____________________________________________________________________________
 
-class StUPCRpsCluster;
 class StUPCRpsTrack;
 class StUPCRpsTrackPoint;
 
@@ -15,6 +14,10 @@ class TIterator;
 class TParticle;
 
 #include "TArrayI.h"
+#include "TObject.h"
+#include <vector>
+
+using namespace std;
 
 class StRPEvent
 {
@@ -44,106 +47,106 @@ void setSiliconBunch(UChar_t val)
 }
 void setStatus(UInt_t romanPotID, UChar_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
+  if( romanPotID >= mNumberOfRomanPots) return;
   mStatusRomanPot[romanPotID] = val;
 }
 void setNumberPlanes(UInt_t romanPotID, UShort_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
   mNumberPlanes[romanPotID] = val;
 }
 
 void setNumberPlanesWithCluster(UInt_t romanPotID, UShort_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
   mNumberPlanesWithCluster[romanPotID] = val;
 }
 
 void setAdc(UInt_t romanPotID, UInt_t adc0, UShort_t adc1) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
 
   mADC[romanPotID][0] = adc0;
   mADC[romanPotID][1] = adc1;
 }
 void setTac(UInt_t romanPotID, UInt_t tac0, UShort_t tac1)
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
   mTAC[romanPotID][0] = tac0;
   mTAC[romanPotID][1] = tac1;
 }   
 void setOffset(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
 
   mOffsetPlane[romanPotID][planeID] = val;
 }
 void setZ(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mzPlane[romanPotID][planeID] = val;
 }
 void setAngle(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mAnglePlane[romanPotID][planeID] = val;
 }
 void setOrientation(UInt_t romanPotID, UInt_t planeID, Short_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mOrientationPlane[romanPotID][planeID] = val;
 }
 void setStatus(UInt_t romanPotID, UInt_t planeID, UChar_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mStatusPlane[romanPotID][planeID] = val;
 }
 
 void setNumberOfClusters(UInt_t romanPotID, UInt_t planeID, UShort_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mNumberOfClusters[romanPotID][planeID] = val;
 }
 void setPosition(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mPositionCluster[romanPotID][planeID].push_back(val);
 }
 void setPositionRMS(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mPositionRMSCluster[romanPotID][planeID].push_back(val);
 }
 void setLength(UInt_t romanPotID, UInt_t planeID, Short_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mLengthCluster[romanPotID][planeID].push_back(val);
 }
 void setEnergy(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mEnergyCluster[romanPotID][planeID].push_back(val);
 }
 void setXY(UInt_t romanPotID, UInt_t planeID, Float_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mXYCluster[romanPotID][planeID].push_back(val);
 }
 void setQuality(UInt_t romanPotID, UInt_t planeID, UChar_t val) 
 {
-  if( romanPotID > mNumberOfRomanPots -1) return;
-  if( planeID > mNumberOfPlanesInRP -1) return;
+  if( romanPotID >= mNumberOfRomanPots ) return;
+  if( planeID >= mNumberOfPlanesInRP ) return;
   mQualityCluster[romanPotID][planeID].push_back(val);
 }
 
@@ -155,111 +158,111 @@ UChar_t siliconBunch() const
 
 UShort_t numberOfPlanes(UInt_t romanPotID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
   return mNumberPlanes[romanPotID];
 }
 
 UShort_t numberOfPlanesWithClusters(UInt_t romanPotID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
   return mNumberPlanesWithCluster[romanPotID];
 }
 
 UChar_t status(UInt_t romanPotID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
   return mStatusRomanPot[romanPotID];
 }
 UShort_t adc(UInt_t romanPotID, UInt_t pmtID) const // return adc value from first or second pmt
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( pmtID > mNumberOfPmtsInRp -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( pmtID >= mNumberOfPmtsInRp ) return 0;
   return mADC[romanPotID][pmtID];
 }
 UShort_t tac(UInt_t romanPotID, UInt_t pmtID) const  // return tac value from first or second pmt
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( pmtID > mNumberOfPmtsInRp -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( pmtID >= mNumberOfPmtsInRp ) return 0;
   return mTAC[romanPotID][pmtID];
 }
 Float_t offset(UInt_t romanPotID, UInt_t planeID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
   return mOffsetPlane[romanPotID][planeID];
 }
 Float_t z(UInt_t romanPotID, UInt_t planeID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
   return mzPlane[romanPotID][planeID];
 }
 Float_t angle(UInt_t romanPotID, UInt_t planeID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
   return mAnglePlane[romanPotID][planeID];
 }
 Short_t  orientation(UInt_t romanPotID, UInt_t planeID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
   return mOrientationPlane[romanPotID][planeID];
 }
 
 UChar_t status(UInt_t romanPotID, UInt_t planeID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
   return mStatusPlane[romanPotID][planeID];
 }
 
 UInt_t  numberOfClusters(UInt_t romanPotID, UInt_t planeID) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
   return mNumberOfClusters[romanPotID][planeID];
 }
 Float_t position(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
+  if( cluster >= mNumberOfClusters[romanPotID][planeID] ) return 0;
   return mPositionCluster[romanPotID][planeID][cluster];
 }
 Float_t positionRMS(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
+  if( cluster >= mNumberOfClusters[romanPotID][planeID] ) return 0;
   return mPositionRMSCluster[romanPotID][planeID][cluster];
 }
 Short_t  length(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
+  if( cluster >= mNumberOfClusters[romanPotID][planeID] ) return 0;
   return mLengthCluster[romanPotID][planeID][cluster];
 }
 Float_t energy(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
+  if( cluster >= mNumberOfClusters[romanPotID][planeID] ) return 0;
   return mEnergyCluster[romanPotID][planeID][cluster];
 }
 Float_t xy(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
+  if( cluster >= mNumberOfClusters[romanPotID][planeID] ) return 0;
   return mXYCluster[romanPotID][planeID][cluster];
 }
 UChar_t quality(UInt_t romanPotID, UInt_t planeID, UInt_t cluster) const 
 { 
-  if( romanPotID > mNumberOfRomanPots -1) return 0;
-  if( planeID > mNumberOfPlanesInRP -1) return 0;
-  if( cluster > mNumberOfClusters[romanPotID][planeID] -1) return 0;
+  if( romanPotID >= mNumberOfRomanPots ) return 0;
+  if( planeID >= mNumberOfPlanesInRP ) return 0;
+  if( cluster >= mNumberOfClusters[romanPotID][planeID] ) return 0;
   return mQualityCluster[romanPotID][planeID][cluster];
 }
 

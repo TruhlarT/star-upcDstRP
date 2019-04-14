@@ -139,48 +139,62 @@ TFile *CreateOutputTree(const string& out);
 //_____________________________________________________________________________
 int main(void) {
 
-  //open input file
-  infile = TFile::Open("/gpfs01/star/pwg/truhlar/star-upcDst_clonesArrays/merge_allRP/StUPCRP_production_0001.root", "read");
-  if(!infile) {cout << "Can not open input file." << endl; return -1;}
   //get picoDst tree in file
-  TTree *upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
-  TTree *rpTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
+  TTree *upcTree;
+  TTree *rpTree;
 
   //open output file
   outfile = CreateOutputTree("test.root"); 
   if(!outfile) {cout << "Can not open output file." << endl; return -1;}
 
   Init();
+  Long64_t total =0;
+  Long64_t counter1 =0;
+  Long64_t counter2 =0;
+  Long64_t counter3 =0;
+  for(int iFile = 0; iFile < 6; ++iFile){
+  //for(int iFile = 0; iFile < 1; ++iFile){
+    //open input file
+    TString fileName; 
+    fileName.Form("/gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig/merge_files/StUPCRP_production_000%d.root",iFile);
+    cout<<"Start proccesing file: "<<fileName<<endl;
+    infile = TFile::Open(fileName, "read");
+    if(!infile) {cout << "Can not open input file." << endl; return -1;}
 
-  //connect upc event to the tree
-  upcTree->SetBranchAddress("mUPCEvent", &upcEvt);
-  rpTree->SetBranchAddress("mRPEvent", &rpEvt);
+    //get picoDst tree in file
+    rpTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
+    upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
 
-  //ask for number of events
-  Long64_t nev = upcTree->GetEntries();
-  cout << "Number of events: " << nev << endl;
+    //connect upc event to the tree
+    rpTree->SetBranchAddress("mRPEvent", &rpEvt);
+    upcTree->SetBranchAddress("mUPCEvent", &upcEvt);
 
-  nev = 1000;
+    //ask for number of events
+    Long64_t nev = upcTree->GetEntries();
+    cout << "Number of UPC events: " << nev <<" RP: "<<rpTree->GetEntries() <<endl;
+    total +=nev;
+    //event loop
+    for(Long64_t iev=0; iev<nev; ++iev) { //get the event
+      counter1++;
+      upcTree->GetEntry(iev); 
+      rpTree->GetEntry(iev); 
+      counter2++;
+      Make();
+      recTree->Fill();
+      counter3++;
+    } 
 
-  for(Long64_t iev=0; iev<nev; iev++) { //get the event
-
-    upcTree->GetEntry(iev); 
-    rpTree->GetEntry(iev); 
-    for(int rp = 0; rp < 8; ++rp)
-      for(int plane = 0; plane <4; ++plane)
-        cout<<rpEvt->status(rp,plane)<<endl;
-    Make();
-    recTree->Fill();
+    infile->Close();
   }
+
 
   //close the outputs
   outfile->Write();
   outfile->Close();
-  if(infile) infile->Close();
-
+  cout<<"Total number of events: "<<total<<endl;
+  cout<<"Counter 1,2 and 3: "<<counter1<<" "<<counter2<<" "<<counter3<<endl;
+  cout<<"Ending Analysis... GOOD BYE!"<<endl;
   return 0;
-
-
 }//main
 
 void Init(){

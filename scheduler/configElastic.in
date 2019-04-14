@@ -2,7 +2,7 @@
 #upcDst production configuration
 
 #main directory for production outputs
-top  /gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig
+top  /gpfs01/star/pwg/truhlar/NewBaseLine/ELtrig
 
 %add_input  test  /gpfs01/star/pwg/truhlar/quickTest.list
 add_input  AllDataSet  /gpfs01/star/pwg/truhlar/test.list
@@ -30,11 +30,11 @@ is_mc  0  # 0 - data,  1 - starsim MC,  2 - embedding MC
 #add_trigger   570711	18083026	18149030 # RP_CPT2	rp
 #add_trigger   570712	18083026	18149030 # RP_UPC	rp
 #add_trigger   570719	18083026	18149030 # RP_ET	rp
-add_trigger   590701	18176013	18178017 # RP_CPT2	rp
-#add_trigger   590703	18176013	18178017 # RP_SDT	rp
-add_trigger   590705	18176013	18178017 # RP_CPT2noBBCL	rp
-add_trigger   590708	18176013	18178017 # RP_CPTnoBBCL	rp
-#add_trigger   590709	18176013	18178017 # RP_ET	rp
+#add_trigger   590701	18176013	18178017 # RP_CPT2	rp
+add_trigger   590703	18176013	18178017 # RP_SDT	rp
+#add_trigger   590705	18176013	18178017 # RP_CPT2noBBCL	rp
+#add_trigger   590708	18176013	18178017 # RP_CPTnoBBCL	rp
+add_trigger   590709	18176013	18178017 # RP_ET	rp
 
 #BEMC clustering
 bemc_cluster_param        1  #  use BEMC cluster conditions below if set to '1'

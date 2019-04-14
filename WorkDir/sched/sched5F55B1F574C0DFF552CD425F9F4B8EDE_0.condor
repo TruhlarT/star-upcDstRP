@@ -1,0 +1,16 @@
+Universe         = vanilla
+Notification     = never
+Executable       = /bin/sh
+Arguments        = "-c 'exec /star/u/truhlar/star-upcDstRP/WorkDir/sched/sched5F55B1F574C0DFF552CD425F9F4B8EDE_0.csh'"
+Output           = ./log/sched5F55B1F574C0DFF552CD425F9F4B8EDE_0.out
+Error            = ./log/sched5F55B1F574C0DFF552CD425F9F4B8EDE_0.err
+request_memory   = 2000
+Log              = /star/u/truhlar/star-upcDstRP/WorkDir/sched/sched5F55B1F574C0DFF552CD425F9F4B8EDE.condor.log
+Initialdir       = /star/u/truhlar/star-upcDstRP/WorkDir
++Job_Type        = "cas" 
+kill_sig         = SIGINT
+accounting_group = group_star.cas
+PeriodicRemove   = (NumJobStarts >=1 && JobStatus==1) || (JobStatus == 2 && (CurrentTime - JobCurrentStartDate > (54000)) && ((RemoteUserCpu+RemoteSysCpu)/(CurrentTime-JobCurrentStartDate) < 0.10)) || (((CurrentTime - EnteredCurrentStatus) > (2*24*3600)) && JobStatus == 5) || (JobRunCount >= 1 && JobStatus == 1)
+Priority         = +10
+Queue
+

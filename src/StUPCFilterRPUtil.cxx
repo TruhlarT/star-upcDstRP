@@ -23,7 +23,6 @@
 
 //local headers
 #include "StRPEvent.h"
-#include "StUPCRpsCluster.h"
 #include "StUPCRpsTrackPoint.h"
 #include "StUPCRpsTrack.h"
 #include "StUPCFilterRPUtil.h"

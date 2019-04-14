@@ -9,7 +9,6 @@
 #include "TParticle.h"
 
 //local headers
-#include "StUPCRpsCluster.h"
 #include "StUPCRpsTrack.h"
 #include "StUPCRpsTrackPoint.h"
 #include "StRPEvent.h"
