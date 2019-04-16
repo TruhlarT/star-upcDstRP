@@ -97,7 +97,7 @@ void StRPEvent::clearEvent()
 //_____________________________________________________________________________
 StUPCRpsTrack *StRPEvent::addTrack()
 {
-  // construct new upc RP track
+  // construct new RP track
 
   return dynamic_cast<StUPCRpsTrack*>( mTracks->ConstructedAt(mNTracks++) );
 
@@ -107,7 +107,7 @@ StUPCRpsTrack *StRPEvent::addTrack()
 //_____________________________________________________________________________
 StUPCRpsTrackPoint *StRPEvent::addTrackPoint()
 {
-  // construct new upc RP trackPoint
+  // construct new RP trackPoint
 
   return dynamic_cast<StUPCRpsTrackPoint*>( mTrackPoints->ConstructedAt(mNTrackPoints++) );
 

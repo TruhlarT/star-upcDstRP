@@ -3,13 +3,13 @@
 	<command>
     echo "Starting the job"
     ./Analysis
-    mv test.root ${JOBINDEX}.output.root
+    mv AnalysisOutput.root ${JOBINDEX}.AnalysisOutput.root
     ls
 	</command>
 	<stdout URL="file:./log/sched$JOBID.out" />
 	<stderr URL="file:./log/sched$JOBID.err"/>
 
-	<output fromScratch="*.output.root" toURL="file:/star/u/truhlar/star-upcDstRP/WorkDir/" />
+	<output fromScratch="*.AnalysisOutput.root" toURL="file:/star/u/truhlar/star-upcDstRP/WorkDir/" />
 
 	<Generator>
     <Location>./sched</Location>

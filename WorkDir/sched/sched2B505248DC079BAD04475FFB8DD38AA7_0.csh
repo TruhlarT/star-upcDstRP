@@ -1,7 +1,7 @@
 #!/bin/csh
 # -------------------------------------- 
-# Script generated on Sun Apr 14 00:01:49 EDT 2019 by the STAR Unified Meta Scheduler 1.10.31 and submitted with:
-# cd /star/u/truhlar/star-upcDstRP/WorkDir; condor_submit -verbose /star/u/truhlar/star-upcDstRP/WorkDir/sched/sched5F55B1F574C0DFF552CD425F9F4B8EDE_0.condor
+# Script generated on Mon Apr 15 22:56:46 EDT 2019 by the STAR Unified Meta Scheduler 1.10.31 and submitted with:
+# cd /star/u/truhlar/star-upcDstRP/WorkDir; condor_submit -verbose /star/u/truhlar/star-upcDstRP/WorkDir/sched/sched2B505248DC079BAD04475FFB8DD38AA7_0.condor
 # --------------------------------------
 
 
@@ -21,17 +21,17 @@ endif
 ENVSETUPSECTION:
 
 setenv FILEBASENAME "no_name"
-setenv FILELIST "/star/u/truhlar/star-upcDstRP/WorkDir/sched/sched5F55B1F574C0DFF552CD425F9F4B8EDE_0.list"
-setenv FILELIST_ALL "/star/u/truhlar/star-upcDstRP/WorkDir/sched/sched5F55B1F574C0DFF552CD425F9F4B8EDE.list"
+setenv FILELIST "/star/u/truhlar/star-upcDstRP/WorkDir/sched/sched2B505248DC079BAD04475FFB8DD38AA7_0.list"
+setenv FILELIST_ALL "/star/u/truhlar/star-upcDstRP/WorkDir/sched/sched2B505248DC079BAD04475FFB8DD38AA7.list"
 setenv INPUTFILECOUNT "0"
-setenv JOBID "5F55B1F574C0DFF552CD425F9F4B8EDE_0"
+setenv JOBID "2B505248DC079BAD04475FFB8DD38AA7_0"
 setenv JOBINDEX "0"
 setenv LOGGING "STD"
-setenv REQUESTID "5F55B1F574C0DFF552CD425F9F4B8EDE"
+setenv REQUESTID "2B505248DC079BAD04475FFB8DD38AA7"
 setenv SUBMITATTEMPT "1"
 setenv SUBMITTINGDIRECTORY "/star/u/truhlar/star-upcDstRP/WorkDir"
-setenv SUBMITTINGNODE "rcas6007.rcf.bnl.gov"
-setenv SUBMIT_TIME "2019-04-14 04:01:49"
+setenv SUBMITTINGNODE "rcas6008.rcf.bnl.gov"
+setenv SUBMIT_TIME "2019-04-16 02:56:46"
 setenv SUMS_AUTHENTICATED_USER "truhlar@rhic.bnl.gov"
 setenv SUMS_USER "truhlar"
 setenv SUMS_nProcesses "1"
@@ -267,7 +267,7 @@ echo "--------------------------------"
 
     echo "Starting the job"
     ./Analysis
-    mv test.root ${JOBINDEX}.output.root
+    mv AnalysisOutput.root ${JOBINDEX}.AnalysisOutput.root
     ls
 	
 # <------------------------------User command END
@@ -284,7 +284,7 @@ end
     
     ########### Copy Command Block ########### 
     echo "Starting copy block"
-    foreach file ( $SCRATCH/*.output.root )
+    foreach file ( $SCRATCH/*.AnalysisOutput.root )
          set i=0
          
          if ( -d $file ) then

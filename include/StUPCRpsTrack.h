@@ -66,7 +66,7 @@ public:
 
 private:	
 
-	TRef mTrackPoints[mNumberOfStationsInBranch]; // pointers to track points (local tracks)
+	TRef mTrackPoints[mNumberOfStationsInBranch]; // pointers to trackPoints (local tracks)
 	TVector3 mP;				// three-vector with reconstructed track momentum
 	StRpsTrackType mType;			// type of the track
 	Int_t          mBranch;			// detectors branch, EU=0, ED=1, WU=2, WD=3 

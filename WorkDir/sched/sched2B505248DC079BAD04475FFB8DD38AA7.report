@@ -1,13 +1,13 @@
 STAR Unified Meta Scheduler 1.10.31
-File generated at : Sun Apr 14 00:01:52 EDT 2019
-This file is a detailed report of SUMS meta job 5F55B1F574C0DFF552CD425F9F4B8EDE and its 1 processes.
+File generated at : Mon Apr 15 22:56:49 EDT 2019
+This file is a detailed report of SUMS meta job 2B505248DC079BAD04475FFB8DD38AA7 and its 1 processes.
 
 Jobs table :
-+-------------------------------------------------------------Jobs Of Request 5F55B1F574C0DFF552CD425F9F4B8EDE---------------------------------------------------------------+
++-------------------------------------------------------------Jobs Of Request 2B505248DC079BAD04475FFB8DD38AA7---------------------------------------------------------------+
 +------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
 | Job_ID                             | Queue                  | Files | Events | estRunTime | Target | SubmitTime            | Dispatcher           | Success | DispatchTime |
 +------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
-| 5F55B1F574C0DFF552CD425F9F4B8EDE_0 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 14/04/2019 12:01:52AM | CondorFastDispatcher | YES     | 1ms          |
+| 2B505248DC079BAD04475FFB8DD38AA7_0 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 15/04/2019 10:56:48PM | CondorFastDispatcher | YES     | 1ms          |
 +------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
 Request object report :
  
@@ -30,9 +30,9 @@ Request object report :
 
 
 
-Job object 5F55B1F574C0DFF552CD425F9F4B8EDE_0 report :
- 5F55B1F574C0DFF552CD425F9F4B8EDE_0 trying (bnl_condor_short_quick)
-5F55B1F574C0DFF552CD425F9F4B8EDE_0 assigned to (bnl_condor_short_quick)
+Job object 2B505248DC079BAD04475FFB8DD38AA7_0 report :
+ 2B505248DC079BAD04475FFB8DD38AA7_0 trying (bnl_condor_short_quick)
+2B505248DC079BAD04475FFB8DD38AA7_0 assigned to (bnl_condor_short_quick)
  
 
 End of Report

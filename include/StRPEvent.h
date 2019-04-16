@@ -298,13 +298,13 @@ private:
   vector<Float_t>  mXYCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
   vector<UChar_t>  mQualityCluster[mNumberOfRomanPots][mNumberOfPlanesInRP];
 
-  static TClonesArray *mgTracks; // array of upc tracks
-  TClonesArray *mTracks; //-> array of upc tracks
-  UShort_t mNTracks; //! number of upc tracks in event, local use when filling
+  static TClonesArray *mgTracks; // array of rp tracks
+  TClonesArray *mTracks; //-> array of rp tracks
+  UShort_t mNTracks; //! number of rp tracks in event, local use when filling
 
-  static TClonesArray *mgTrackPoints; // array of upc tracks
-  TClonesArray *mTrackPoints; //-> array of upc tracks
-  UShort_t mNTrackPoints; //! number of upc tracks in event, local use when filling
+  static TClonesArray *mgTrackPoints; // array of rp trackPoints
+  TClonesArray *mTrackPoints; //-> array of rp trackPoints
+  UShort_t mNTrackPoints; //! number of rp trackPoints in event, local use when filling
 
   ClassDef(StRPEvent, 2);
 };

@@ -12,6 +12,7 @@
 // ROOT headers
 #include "TFile.h"
 #include "TTree.h"
+#include "TChain.h"
 #include "TH1D.h"
 #include <TH2.h> 
 #include <TF1.h> 
@@ -46,10 +47,9 @@
 
 using namespace std;
 
-// Enumerations - very helpful and convenient !
+enum {kCPtrig=1, kEl, kInEl, kTPC1v, kTPC2t, kTOF2t, kTotCH0, kMissPt, kPions, kMaxCount};
 enum SIDE {E=0, East=0, W=1, West=1, nSides};
 enum XY_COORDINATE {X, Y, nCoordinates};
-//enum TRIGGER_ID {SD, CPT2, SDT, RPZMU, RP2MU, ET, CP, CPT, RP2E, Zerobias, CPX, SDZ, CPEI, ZE, CPTnoBBCL, CPT2noBBCL, nTriggers};
 enum RP_ID {E1U, E1D, E2U, E2D, W1U, W1D, W2U, W2D, nRomanPots};
 enum BRANCH_ID { EU, ED, WU, WD, nBranches };
 enum ARM_ID { EU_WU, ED_WD, nArms };
@@ -96,14 +96,14 @@ TString rpName[nRomanPots] = { TString("E1U"), TString("E1D"), TString("E2U"), T
                     TString("W1U"), TString("W1D"), TString("W2U"), TString("W2D") };
 TString stationName[nStations] = { TString("E1"), TString("E2"), TString("W1"), TString("W2") };
 TString summaryLabels[10] = { TString("CPTnoBBCL"), TString("Elastic"), TString("Inelastic"), TString("1 TPCvertex"), TString("2 TPC tracks"), 
-                    TString("2 TOF tracks"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), TString(""), TString("")};
+                    TString("2 TOF tracks"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), TString("Golden"), TString("")};
 TString systemID[3] = { TString("Combi"), TString("InEl"), TString("El")};
 TString systemState[4] = { TString("TPCv1"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
 TString configLabels[4] = { TString("EUD"), TString("EDU"), TString("IUU"), TString("IDD")};
 TString conection[2] = { TString("Good"), TString("Bad") };
 
 // Histograms declarations
-TH1F* hAnalysisFlow; // control plot
+TH1I* hAnalysisFlow; // control plot
 TH1F* hTriggerBits; // control plot
 TH1F* hConfiguration;
 TH1F* hNumberTrackPerBranch[nBranches]; // number of track per each brunch (west up, west down, east up, east down)
@@ -123,8 +123,13 @@ TH1D* hZvertex[12];
 
 TFile *infile;
 TFile *outfile;
+TChain *upcChain;
+TChain *rpChain;
 StUPCEvent *upcEvt;
 StRPEvent *rpEvt;
+
+TTree *upcTree;
+TTree *rpTree;
 
 TTree *recTree;
 Int_t triggerBits, nTracks;
@@ -135,64 +140,40 @@ Double_t vertexZ;
 void Init();
 void Make();
 TFile *CreateOutputTree(const string& out);
+bool ConnectInput(const string& in);
 
 //_____________________________________________________________________________
 int main(void) {
-
-  //get picoDst tree in file
-  TTree *upcTree;
-  TTree *rpTree;
-
   //open output file
-  outfile = CreateOutputTree("test.root"); 
+  outfile = CreateOutputTree("AnalysisOutput.root"); 
   if(!outfile) {cout << "Can not open output file." << endl; return -1;}
 
   Init();
   Long64_t total =0;
-  Long64_t counter1 =0;
-  Long64_t counter2 =0;
-  Long64_t counter3 =0;
-  for(int iFile = 0; iFile < 6; ++iFile){
-  //for(int iFile = 0; iFile < 1; ++iFile){
-    //open input file
-    TString fileName; 
-    fileName.Form("/gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig/merge_files/StUPCRP_production_000%d.root",iFile);
-    cout<<"Start proccesing file: "<<fileName<<endl;
-    infile = TFile::Open(fileName, "read");
-    if(!infile) {cout << "Can not open input file." << endl; return -1;}
 
-    //get picoDst tree in file
-    rpTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
-    upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
-
-    //connect upc event to the tree
-    rpTree->SetBranchAddress("mRPEvent", &rpEvt);
-    upcTree->SetBranchAddress("mUPCEvent", &upcEvt);
-
-    //ask for number of events
-    Long64_t nev = upcTree->GetEntries();
-    cout << "Number of UPC events: " << nev <<" RP: "<<rpTree->GetEntries() <<endl;
-    total +=nev;
-    //event loop
-    for(Long64_t iev=0; iev<nev; ++iev) { //get the event
-      counter1++;
-      upcTree->GetEntry(iev); 
-      rpTree->GetEntry(iev); 
-      counter2++;
-      Make();
-      recTree->Fill();
-      counter3++;
-    } 
-
-    infile->Close();
+  if(!ConnectInput("/gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig/merge_files/StUPCRP_production.list")){
+  //if(!ConnectInput("/gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig/merge_files/StUPCRP_production_0000.root")){
+    cout << "No input." << endl; 
+    return 1;
   }
+
+  //ask for number of events
+  Long64_t nev = upcTree->GetEntries();
+  cout << "Number of UPC events: " << nev <<" RP: "<<rpTree->GetEntries() <<endl;
+  total +=nev;
+  //event loop
+  for(Long64_t iev=0; iev<nev; ++iev) { //get the event
+    upcTree->GetEntry(iev); 
+    rpTree->GetEntry(iev); 
+    Make();
+    recTree->Fill();
+  } 
 
 
   //close the outputs
   outfile->Write();
   outfile->Close();
   cout<<"Total number of events: "<<total<<endl;
-  cout<<"Counter 1,2 and 3: "<<counter1<<" "<<counter2<<" "<<counter3<<endl;
   cout<<"Ending Analysis... GOOD BYE!"<<endl;
   return 0;
 }//main
@@ -201,8 +182,8 @@ void Init(){
 // creating histograms
 // Having defined labels/names it is very easy and fast to create multiple histograms differing only by name
 // (e.g. track multiplicity in single branch, theta angle for each arm and coordinate, etc.)
-  hAnalysisFlow = new TH1F("AnalysisFlow", "CutsFlow", 10, -0.5, 9.5);
-  for(int tb=0; tb<10; ++tb) hAnalysisFlow->GetXaxis()->SetBinLabel(tb+1, summaryLabels[tb]);
+  hAnalysisFlow = new TH1I("AnalysisFlow", "CutsFlow", kMaxCount-1, 1, kMaxCount);
+  for(int tb=1; tb<kMaxCount; ++tb) hAnalysisFlow->GetXaxis()->SetBinLabel(tb, summaryLabels[tb-1]);
 
   hTriggerBits = new TH1F("TriggerBits", "TriggerBits", nTriggers, -0.5, 20.5);
   for(int tb=0; tb<nTriggers; ++tb) hTriggerBits->GetXaxis()->SetBinLabel(tb+1, triggerName[tb]);
@@ -242,7 +223,7 @@ void Init(){
 }
 
 void Make(){
-  hAnalysisFlow->Fill(0);
+  hAnalysisFlow->Fill(kCPtrig);
 
   for(int var = 0; var < nTriggers; ++var){
     if(upcEvt->isTrigger(triggerID[var])){
@@ -341,16 +322,16 @@ void Make(){
       && rpTrackIdVec_perBranch[ otherBranch[W] ].size()==0){
   // Get pointers to good-quality tracks
       if(i==EUD || i==EDU){
-        hAnalysisFlow->Fill(1);
+        hAnalysisFlow->Fill(kEl);
       }else{
-        hAnalysisFlow->Fill(2);
+        hAnalysisFlow->Fill(kInEl);
       }
       hConfiguration->Fill(i);
 
       const unsigned int nTpcVertex = upcEvt->getNumberOfVertices();
       if(nTpcVertex != 1) 
         return;
-      hAnalysisFlow->Fill(3);
+      hAnalysisFlow->Fill(kTPC1v);
       const StUPCVertex* vertex = upcEvt->getVertex(0);
 
       vertexZ = (Double_t) vertex->getPosZ();
@@ -368,7 +349,7 @@ void Make(){
 
       if( upcEvt->getNPrimTracks() !=2)
         return;
-      hAnalysisFlow->Fill(4);
+      hAnalysisFlow->Fill(kTPC2t);
 
     // loop over all TPC tracks
       for(int j=0; j<upcEvt->getNumberOfTracks(); ++j){
@@ -429,7 +410,7 @@ void Make(){
 
       if( nTofTrks!=2)
         return;
-      hAnalysisFlow->Fill(5);
+      hAnalysisFlow->Fill(kTOF2t);
 
       state = 1;
       for(int tmp =0; tmp<3;++tmp){
@@ -455,7 +436,7 @@ void Make(){
 
       if(totalCharge != 0) 
         return;
-      hAnalysisFlow->Fill(6);
+      hAnalysisFlow->Fill(kTotCH0);
 
       state = 2;
       for(int tmp =0; tmp<3;++tmp){
@@ -480,7 +461,7 @@ void Make(){
 
       if( missingPt > 0.1 )
         return;
-      hAnalysisFlow->Fill(7);
+      hAnalysisFlow->Fill(kMissPt);
 
 
       state = 3;
@@ -498,8 +479,10 @@ void Make(){
         hNSigmaPionPair[4*tmp+state]->Fill(nSigPPion);
 
         hMissingPt[4*tmp+state]->Fill(missingPt);
-        if(nSigPPion < 3 )
+        if(nSigPPion < 3 ){
           hInvMass[4*tmp+state]->Fill(invMass);
+          hAnalysisFlow->Fill(kPions);
+        }
         for(int j = 0; j < nSides;++j)
           hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
         hZvertex[4*tmp+state]->Fill(vertexZ);
@@ -527,3 +510,38 @@ TFile *CreateOutputTree(const string& out) {
   return outputFile;
 
 }//CreateOutputTree
+
+bool ConnectInput(const string& in) {
+  //input from file or chain
+  upcTree = 0x0;
+  rpTree = 0x0;
+  if( in.find(".root") != string::npos ) {
+    cout << "Input from root file" << endl;
+    infile = TFile::Open(in.c_str(), "read");
+    if(!infile) return false;
+    upcTree = dynamic_cast<TTree*>( infile->Get("mUPCTree") );
+    rpTree = dynamic_cast<TTree*>( infile->Get("mRPTree") );
+  } else {
+    cout << "Input from chain" << endl;
+    upcChain = new TChain("mUPCTree");
+    rpChain = new TChain("mRPTree");
+    ifstream instr(in.c_str());
+    string line;
+    while(getline(instr, line)) {
+      upcChain->AddFile(line.c_str());
+      rpChain->AddFile(line.c_str());
+    }
+    instr.close();
+    upcTree = dynamic_cast<TTree*>( upcChain );
+    rpTree = dynamic_cast<TTree*>( rpChain );
+  }
+
+  if(!upcTree) return false;
+  if(!rpTree) return false;
+
+  rpTree->SetBranchAddress("mRPEvent", &rpEvt);
+  upcTree->SetBranchAddress("mUPCEvent", &upcEvt);
+
+  return true;
+
+}//ConnectInput

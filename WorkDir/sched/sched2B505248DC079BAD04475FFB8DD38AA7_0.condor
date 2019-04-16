@@ -1,11 +1,11 @@
 Universe         = vanilla
 Notification     = never
 Executable       = /bin/sh
-Arguments        = "-c 'exec /star/u/truhlar/star-upcDstRP/WorkDir/sched/sched5F55B1F574C0DFF552CD425F9F4B8EDE_0.csh'"
-Output           = ./log/sched5F55B1F574C0DFF552CD425F9F4B8EDE_0.out
-Error            = ./log/sched5F55B1F574C0DFF552CD425F9F4B8EDE_0.err
+Arguments        = "-c 'exec /star/u/truhlar/star-upcDstRP/WorkDir/sched/sched2B505248DC079BAD04475FFB8DD38AA7_0.csh'"
+Output           = ./log/sched2B505248DC079BAD04475FFB8DD38AA7_0.out
+Error            = ./log/sched2B505248DC079BAD04475FFB8DD38AA7_0.err
 request_memory   = 2000
-Log              = /star/u/truhlar/star-upcDstRP/WorkDir/sched/sched5F55B1F574C0DFF552CD425F9F4B8EDE.condor.log
+Log              = /star/u/truhlar/star-upcDstRP/WorkDir/sched/sched2B505248DC079BAD04475FFB8DD38AA7.condor.log
 Initialdir       = /star/u/truhlar/star-upcDstRP/WorkDir
 +Job_Type        = "cas" 
 kill_sig         = SIGINT
