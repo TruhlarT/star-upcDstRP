@@ -23,6 +23,7 @@
 
 //local headers
 #include "StRPEvent.h"
+#include "StUPCRpsCluster.h"
 #include "StUPCRpsTrackPoint.h"
 #include "StUPCRpsTrack.h"
 #include "StUPCFilterRPUtil.h"
@@ -67,15 +68,16 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
       rpEvt->setAngle(iRomanPotId, iPlaneId, collection->anglePlane(iRomanPotId, iPlaneId));  
       rpEvt->setOrientation(iRomanPotId, iPlaneId, collection->orientationPlane(iRomanPotId, iPlaneId));  
       rpEvt->setStatus(iRomanPotId, iPlaneId, collection->statusPlane(iRomanPotId, iPlaneId));
-
-      rpEvt->setNumberOfClusters(iRomanPotId, iPlaneId, collection->numberOfClusters(iRomanPotId, iPlaneId));
       for(UInt_t iCluster=0; iCluster < collection->numberOfClusters(iRomanPotId, iPlaneId); ++iCluster){
-        rpEvt->setPosition(iRomanPotId, iPlaneId, collection->positionCluster(iRomanPotId, iPlaneId, iCluster));
-        rpEvt->setPositionRMS(iRomanPotId, iPlaneId, collection->positionRMSCluster(iRomanPotId, iPlaneId, iCluster)); 
-        rpEvt->setLength(iRomanPotId, iPlaneId, collection->lengthCluster(iRomanPotId, iPlaneId, iCluster)); 
-        rpEvt->setEnergy(iRomanPotId, iPlaneId, collection->energyCluster(iRomanPotId, iPlaneId, iCluster)); 
-        rpEvt->setXY(iRomanPotId, iPlaneId, collection->xyCluster(iRomanPotId, iPlaneId, iCluster)); 
-        rpEvt->setQuality(iRomanPotId, iPlaneId, collection->qualityCluster(iRomanPotId, iPlaneId, iCluster));
+        StUPCRpsCluster *rpCluster = rpEvt->addCluster();
+        rpCluster->setPosition(collection->positionCluster(iRomanPotId, iPlaneId, iCluster));
+        rpCluster->setPositionRMS(collection->positionRMSCluster(iRomanPotId, iPlaneId, iCluster));
+        rpCluster->setLength(collection->lengthCluster(iRomanPotId, iPlaneId, iCluster)); 
+        rpCluster->setEnergy(collection->energyCluster(iRomanPotId, iPlaneId, iCluster)); 
+        rpCluster->setXY(collection->xyCluster(iRomanPotId, iPlaneId, iCluster)); 
+        rpCluster->setQuality(collection->qualityCluster(iRomanPotId, iPlaneId, iCluster));
+        rpCluster->setPlaneId(iPlaneId);
+        rpCluster->setRomanPotId(iRomanPotId);
       }
     }
   }
@@ -113,7 +115,7 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
         rpTrack->setTrackPoint(nullptr, iStation);
         continue;
       }
-      for(UInt_t i = 0; i < collection->numberOfTrackPoints(); ++i){
+      for(Int_t i = 0; i < collection->numberOfTrackPoints(); ++i){
         if(trackPoint == mMuTrackPoints[i]){
           rpTrack->setTrackPoint(mTrackPoints[i], iStation);
           break;

@@ -12,6 +12,7 @@ set (SRCS
   src/StUPCRpsTrackPoint.cxx
   src/StUPCRpsTrack.cxx
   src/StRPEvent.cxx
+  src/StUPCRpsCluster.cxx
   src/ArgumentParser.cxx
   )
 
@@ -19,7 +20,7 @@ set (SRCS
 set (LIB star-upc)
 
 #binary executables
-set (BIN AnalysisTemplate)
+set (BIN AnalysisOld Analysis)
 
 #sources for ROOT dictionary
 set (SRCS_DICT
@@ -30,6 +31,7 @@ set (SRCS_DICT
   src/StUPCRpsTrackPoint.cxx
   src/StUPCRpsTrack.cxx
   src/StRPEvent.cxx
+  src/StUPCRpsCluster.cxx
   )
 
 #LinkDef file for ROOT dictionary
