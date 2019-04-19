@@ -1,0 +1,3 @@
+/star/u/truhlar/star-upcDstRP/build/CMakeFiles/Analysis.dir
+/star/u/truhlar/star-upcDstRP/build/CMakeFiles/AnalysisOld.dir
+/star/u/truhlar/star-upcDstRP/build/CMakeFiles/star-upc.dir

@@ -1,3 +1,8 @@
+// Run: ./Analysis input
+// e.g. ./Analysis /gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list
+
+
+
 // c++ headers
 #include <iostream>
 #include <utility>
@@ -8,6 +13,7 @@
 #include <vector> 
 #include <fstream> 
 #include <cmath> 
+#include <cstdlib>
 
 // ROOT headers
 #include "TFile.h"
@@ -153,17 +159,20 @@ void Init();
 void Make();
 void FillPlots(int state, int configuration );
 TFile *CreateOutputTree(const string& out);
-bool ConnectInput(const string& in);
+bool ConnectInput(const string& in, int fileId);
 
 //_____________________________________________________________________________
-int main(void) {
+int main(int argc, char** argv) {
   //open output file
   outfile = CreateOutputTree("AnalysisOutput.root"); 
   if(!outfile) {cout << "Can not open output file." << endl; return -1;}
 
   Init();
 
-  if(!ConnectInput("/gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list")){
+
+  int fileId = atoi(argv[2]);
+  cout<<fileId<<" / "<<argv[2]<<endl;
+  if(!ConnectInput(argv[1], fileId)){
   //if(!ConnectInput("/gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production_0000.root")){
     cout << "No input." << endl; 
     return 1;
@@ -231,19 +240,17 @@ void Init(){
 
 void Make(){
   hAnalysisFlow->Fill(kCPtrig);
-
   for(int var = 0; var < nTriggers; ++var){
     if(upcEvt->isTrigger(triggerID[var])){
-      if(var==18) cout<<"kuk"<<endl;
       hTriggerBits->Fill(var);
-      triggerBits = (Int_t) var;
+      triggerBits = var; // not 100% correct, some events have more than 1 trigger
     }
   }
   nTracks = (Int_t) rpEvt->getNumberOfTracks();
   // Vector below will be filled with indices of good-quality tracks
   vector<int> rpTrackIdVec_perBranch[nBranches];
   vector<int> rpTrackIdVec_perSide[nSides];
-  int numberOfTracks = 0;SL16d
+  int numberOfTracks = 0;
   int numberOfTracksPerBranch[nBranches] = {0, 0, 0, 0};
 
   // Loop over all tracks reconstructed in Roman Pots  
@@ -449,7 +456,7 @@ TFile *CreateOutputTree(const string& out) {
 
 }//CreateOutputTree
 
-bool ConnectInput(const string& in) {
+bool ConnectInput(const string& in, int fileId) {
   //input from file or chain
   upcTree = 0x0;
   rpTree = 0x0;
@@ -465,9 +472,13 @@ bool ConnectInput(const string& in) {
     rpChain = new TChain("mRPTree");
     ifstream instr(in.c_str());
     string line;
+    int lineId=0;
     while(getline(instr, line)) {
-      upcChain->AddFile(line.c_str());
-      rpChain->AddFile(line.c_str());
+    	if(fileId==lineId || fileId== -1){
+    		upcChain->AddFile(line.c_str());
+      	rpChain->AddFile(line.c_str());
+    	}
+      lineId++;
     }
     instr.close();
     upcTree = dynamic_cast<TTree*>( upcChain );

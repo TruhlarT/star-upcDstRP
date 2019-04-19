@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job filesPerHour="1" simulateSubmission="false">
+<job nProcesses="4" filesPerHour="1" simulateSubmission="false">
 	<command>
     echo "Starting the job"
-    ./Analysis
-    mv AnalysisOutput.root ${JOBINDEX}.AnalysisOutput.root
+    ./Analysis /gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
+    mv AnalysisOutput.root ${JOBID}.AnalysisOutput.root
     ls
 	</command>
 	<stdout URL="file:./log/sched$JOBID.out" />
 	<stderr URL="file:./log/sched$JOBID.err"/>
 
-	<output fromScratch="*.AnalysisOutput.root" toURL="file:/star/u/truhlar/star-upcDstRP/WorkDir/" />
+	<output fromScratch="*.AnalysisOutput.root" toURL="file:/star/u/truhlar/star-upcDstRP/build/outputs/" />
 
 	<Generator>
     <Location>./sched</Location>

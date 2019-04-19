@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job nProcesses="4" filesPerHour="1" simulateSubmission="false">
+	<command>
+    echo "Starting the job"
+    ./Analysis /gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
+    mv AnalysisOutput.root ${JOBINDEX}.AnalysisOutput.root
+    ls
+	</command>
+	<stdout URL="file:./log/sched$JOBID.out" />
+	<stderr URL="file:./log/sched$JOBID.err"/>
+
+	<output fromScratch="*.AnalysisOutput.root" toURL="file:/star/u/truhlar/star-upcDstRP/WorkDir/output$JOBID/" />
+
+	<Generator>
+    <Location>./sched</Location>
+  </Generator>
+
+	<SandBox installer="ZIP">
+		<Package name="Package">
+			<File>file:./Analysis</File>
+			<File>file:./libstar-upc.so</File>
+		</Package>
+	</SandBox>
+</job>

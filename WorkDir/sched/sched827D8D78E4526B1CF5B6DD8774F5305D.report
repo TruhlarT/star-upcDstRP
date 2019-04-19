@@ -1,0 +1,57 @@
+STAR Unified Meta Scheduler 1.10.31
+File generated at : Fri Apr 19 14:17:19 EDT 2019
+This file is a detailed report of SUMS meta job 827D8D78E4526B1CF5B6DD8774F5305D and its 4 processes.
+
+Jobs table :
++-------------------------------------------------------------Jobs Of Request 827D8D78E4526B1CF5B6DD8774F5305D---------------------------------------------------------------+
++------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
+| Job_ID                             | Queue                  | Files | Events | estRunTime | Target | SubmitTime            | Dispatcher           | Success | DispatchTime |
++------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
+| 827D8D78E4526B1CF5B6DD8774F5305D_0 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 02:17:18PM | CondorFastDispatcher | YES     | 1ms          |
+| 827D8D78E4526B1CF5B6DD8774F5305D_1 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 02:17:18PM | CondorFastDispatcher | YES     | 1ms          |
+| 827D8D78E4526B1CF5B6DD8774F5305D_2 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 02:17:18PM | CondorFastDispatcher | YES     | 1ms          |
+| 827D8D78E4526B1CF5B6DD8774F5305D_3 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 02:17:18PM | CondorFastDispatcher | YES     | 1ms          |
++------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
+Request object report :
+ 
++---------------------------------------------Queues-----------------------------------------------+
++------------------------+------+--------+-----------+---------+-------+--------+------------------+
+| ID                     | Name | Type   | TimeLimit | MaxMem  | Local | S.O.P. | Cluster          |
++------------------------+------+--------+-----------+---------+-------+--------+------------------+
+| bnl_condor_short_quick |      | CONDOR | 360min    | 3000MB  | N     | 10     | rcrs.rcf.bnl.gov |
+| bnl_condor_long_quick  |      | CONDOR | 7200min   | 10000MB | N     | 100    | rcrs.rcf.bnl.gov |
++------------------------+------+--------+-----------+---------+-------+--------+------------------+
+
+*************************************************************************
+
+*   This is a history of Job assignments.                               *
+
+*   If your Jobs are going to the wrong queue, this may tell you why.   *
+
+*************************************************************************
+
+
+
+
+Job object 827D8D78E4526B1CF5B6DD8774F5305D_0 report :
+ 827D8D78E4526B1CF5B6DD8774F5305D_0 trying (bnl_condor_short_quick)
+827D8D78E4526B1CF5B6DD8774F5305D_0 assigned to (bnl_condor_short_quick)
+ 
+
+Job object 827D8D78E4526B1CF5B6DD8774F5305D_1 report :
+ 827D8D78E4526B1CF5B6DD8774F5305D_1 trying (bnl_condor_short_quick)
+827D8D78E4526B1CF5B6DD8774F5305D_1 assigned to (bnl_condor_short_quick)
+ 
+
+Job object 827D8D78E4526B1CF5B6DD8774F5305D_2 report :
+ 827D8D78E4526B1CF5B6DD8774F5305D_2 trying (bnl_condor_short_quick)
+827D8D78E4526B1CF5B6DD8774F5305D_2 assigned to (bnl_condor_short_quick)
+ 
+
+Job object 827D8D78E4526B1CF5B6DD8774F5305D_3 report :
+ 827D8D78E4526B1CF5B6DD8774F5305D_3 trying (bnl_condor_short_quick)
+827D8D78E4526B1CF5B6DD8774F5305D_3 assigned to (bnl_condor_short_quick)
+ 
+
+End of Report
+

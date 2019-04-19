@@ -1,0 +1,39 @@
+STAR Unified Meta Scheduler 1.10.31
+File generated at : Fri Apr 19 12:23:30 EDT 2019
+This file is a detailed report of SUMS meta job BEB797FB92B1A8C5E4DB4D516F09F3C5 and its 1 processes.
+
+Jobs table :
++-------------------------------------------------------------Jobs Of Request BEB797FB92B1A8C5E4DB4D516F09F3C5---------------------------------------------------------------+
++------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
+| Job_ID                             | Queue                  | Files | Events | estRunTime | Target | SubmitTime            | Dispatcher           | Success | DispatchTime |
++------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
+| BEB797FB92B1A8C5E4DB4D516F09F3C5_0 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 12:23:30PM | CondorFastDispatcher | YES     | 1ms          |
++------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
+Request object report :
+ 
++---------------------------------------------Queues-----------------------------------------------+
++------------------------+------+--------+-----------+---------+-------+--------+------------------+
+| ID                     | Name | Type   | TimeLimit | MaxMem  | Local | S.O.P. | Cluster          |
++------------------------+------+--------+-----------+---------+-------+--------+------------------+
+| bnl_condor_short_quick |      | CONDOR | 360min    | 3000MB  | N     | 10     | rcrs.rcf.bnl.gov |
+| bnl_condor_long_quick  |      | CONDOR | 7200min   | 10000MB | N     | 100    | rcrs.rcf.bnl.gov |
++------------------------+------+--------+-----------+---------+-------+--------+------------------+
+
+*************************************************************************
+
+*   This is a history of Job assignments.                               *
+
+*   If your Jobs are going to the wrong queue, this may tell you why.   *
+
+*************************************************************************
+
+
+
+
+Job object BEB797FB92B1A8C5E4DB4D516F09F3C5_0 report :
+ BEB797FB92B1A8C5E4DB4D516F09F3C5_0 trying (bnl_condor_short_quick)
+BEB797FB92B1A8C5E4DB4D516F09F3C5_0 assigned to (bnl_condor_short_quick)
+ 
+
+End of Report
+
