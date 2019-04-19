@@ -162,10 +162,9 @@ int main(void) {
   if(!outfile) {cout << "Can not open output file." << endl; return -1;}
 
   Init();
-  Long64_t total =0;
 
-  if(!ConnectInput("/gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig/merge_files/StUPCRP_production.list")){
-  //if(!ConnectInput("/gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig/merge_files/StUPCRP_production_0000.root")){
+  if(!ConnectInput("/gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list")){
+  //if(!ConnectInput("/gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production_0000.root")){
     cout << "No input." << endl; 
     return 1;
   }
@@ -173,7 +172,6 @@ int main(void) {
   //ask for number of events
   Long64_t nev = upcTree->GetEntries();
   cout << "Number of UPC events: " << nev <<" RP: "<<rpTree->GetEntries() <<endl;
-  total +=nev;
   //event loop
   nev = 1000;
   for(Long64_t iev=0; iev<nev; ++iev) { //get the event
@@ -183,19 +181,14 @@ int main(void) {
     recTree->Fill();
   } 
 
-
   //close the outputs
   outfile->Write();
   outfile->Close();
-  cout<<"Total number of events: "<<total<<endl;
   cout<<"Ending Analysis... GOOD BYE!"<<endl;
   return 0;
 }//main
 
 void Init(){
-// creating histograms
-// Having defined labels/names it is very easy and fast to create multiple histograms differing only by name
-// (e.g. track multiplicity in single branch, theta angle for each arm and coordinate, etc.)
   hAnalysisFlow = new TH1I("AnalysisFlow", "CutsFlow", kMaxCount-1, 1, kMaxCount);
   for(int tb=1; tb<kMaxCount; ++tb) hAnalysisFlow->GetXaxis()->SetBinLabel(tb, summaryLabels[tb-1]);
 
@@ -241,6 +234,7 @@ void Make(){
 
   for(int var = 0; var < nTriggers; ++var){
     if(upcEvt->isTrigger(triggerID[var])){
+      if(var==18) cout<<"kuk"<<endl;
       hTriggerBits->Fill(var);
       triggerBits = (Int_t) var;
     }
@@ -249,7 +243,7 @@ void Make(){
   // Vector below will be filled with indices of good-quality tracks
   vector<int> rpTrackIdVec_perBranch[nBranches];
   vector<int> rpTrackIdVec_perSide[nSides];
-  int numberOfTracks = 0;
+  int numberOfTracks = 0;SL16d
   int numberOfTracksPerBranch[nBranches] = {0, 0, 0, 0};
 
   // Loop over all tracks reconstructed in Roman Pots  
@@ -257,13 +251,14 @@ void Make(){
   // Get pointer to k-th track in Roman Pot data collection
     StUPCRpsTrack *trk = rpEvt->getTrack(k);
 
-
   // Get ID of a branch in which this k-th track was reconstructed
     int j = trk->branch();
     int side = j<2 ? E : W;
+
     ++numberOfTracks;
     ++numberOfTracksPerBranch[j];
-    for(Int_t kj = 0; kj < 2 ; ++kj){
+
+    for(Int_t kj = 0; kj < 2 ; ++kj){ // Testing connection between tracks and tracksPoint
       if(!trk) break; 
       StUPCRpsTrackPoint *trkPoint = trk->trackPoint(kj);\
       if(!trkPoint) continue; 
@@ -297,7 +292,8 @@ void Make(){
       (trk->trackPoint(1) ? trk->trackPoint(1)->planesUsed()>=3 : true) ) rpTrackIdVec_perSide[side].push_back( k );
   }
 
-  for(int i=0; i<nBranches; i++) hNumberTrackPerBranch[i]->Fill(numberOfTracksPerBranch[i]);
+  for(int i=0; i<nBranches; ++i) 
+    hNumberTrackPerBranch[i]->Fill(numberOfTracksPerBranch[i]);
 
 // Loop over arms - check if have good-quality tracks, selecting branch combination
   for(int i=0; i<nConfiguration; ++i){ 
@@ -343,10 +339,8 @@ void Make(){
         yCorrelations[j] = rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y();
       }
 
-      totalCharge = 0;
-      nTofTrks = 0;
-      nTpcTrks = 0;
-      nSigPPion = 0;
+      totalCharge = missingPt = invMass = 0;
+      nTofTrks = nTpcTrks = nSigPPion = 0;
       dEdx.clear();
       momentum.clear();
       charge.clear();
@@ -354,7 +348,6 @@ void Make(){
       vexterId.clear();
       vertexZ.clear();
       double nSigmaPairPion2 = 0;
-      nSigPPion = 0;
       TLorentzVector centralTracksTotalFourMomentum;
 
       if( upcEvt->getNPrimTracks() !=2)

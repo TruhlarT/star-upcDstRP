@@ -49,7 +49,7 @@ void setPlaneId(UChar_t val) { mPlaneId = val; }
 void setRomanPotId(UChar_t val) { mRomanPotId = val; };
 
 
- protected:
+ private:
     Float_t       mPosition;
     Float_t       mPositionRMS;    
     Float_t       mEnergy;
