@@ -1,7 +1,7 @@
 #!/bin/csh
 # -------------------------------------- 
-# Script generated on Fri Apr 19 13:39:57 EDT 2019 by the STAR Unified Meta Scheduler 1.10.31 and submitted with:
-# cd /star/u/truhlar/star-upcDstRP/WorkDir; condor_submit -verbose /star/u/truhlar/star-upcDstRP/WorkDir/sched/schedDDC885C467FFB5B9E453CFFF28796824_0.condor
+# Script generated on Sat Apr 20 02:30:27 EDT 2019 by the STAR Unified Meta Scheduler 1.10.31 and submitted with:
+# cd /star/u/truhlar/star-upcDstRP/build; condor_submit -verbose /star/u/truhlar/star-upcDstRP/build/sched/sched9CA9915F855D7FB293CC43690F332728_0_3.condor
 # --------------------------------------
 
 
@@ -21,20 +21,20 @@ endif
 ENVSETUPSECTION:
 
 setenv FILEBASENAME "no_name"
-setenv FILELIST "/star/u/truhlar/star-upcDstRP/WorkDir/sched/schedDDC885C467FFB5B9E453CFFF28796824_0.list"
-setenv FILELIST_ALL "/star/u/truhlar/star-upcDstRP/WorkDir/sched/schedDDC885C467FFB5B9E453CFFF28796824.list"
+setenv FILELIST "/star/u/truhlar/star-upcDstRP/build/sched/sched9CA9915F855D7FB293CC43690F332728_0.list"
+setenv FILELIST_ALL "/star/u/truhlar/star-upcDstRP/build/sched/sched9CA9915F855D7FB293CC43690F332728.list"
 setenv INPUTFILECOUNT "0"
-setenv JOBID "DDC885C467FFB5B9E453CFFF28796824_0"
+setenv JOBID "9CA9915F855D7FB293CC43690F332728_0"
 setenv JOBINDEX "0"
 setenv LOGGING "STD"
-setenv REQUESTID "DDC885C467FFB5B9E453CFFF28796824"
+setenv REQUESTID "9CA9915F855D7FB293CC43690F332728"
 setenv SUBMITATTEMPT "1"
-setenv SUBMITTINGDIRECTORY "/star/u/truhlar/star-upcDstRP/WorkDir"
+setenv SUBMITTINGDIRECTORY "/star/u/truhlar/star-upcDstRP/build"
 setenv SUBMITTINGNODE "rcas6008.rcf.bnl.gov"
-setenv SUBMIT_TIME "2019-04-19 17:39:57"
+setenv SUBMIT_TIME "2019-04-20 06:30:27"
 setenv SUMS_AUTHENTICATED_USER "truhlar@rhic.bnl.gov"
 setenv SUMS_USER "truhlar"
-setenv SUMS_nProcesses "1"
+setenv SUMS_nProcesses "4"
 setenv SUMS_name "null"
 setenv USEXROOTD "1"
 
@@ -206,7 +206,7 @@ echo "$$ Stepping into the main SUMS wrapper program with [$*]"
 
 
 #import packages 
-/usr/bin/unzip /star/u/truhlar/star-upcDstRP/WorkDir/Package.zip -d $SCRATCH
+/usr/bin/unzip /star/u/truhlar/star-upcDstRP/build/Package.zip -d $SCRATCH
 
 
 # Used for cleanning up the sandbox later
@@ -266,8 +266,8 @@ echo "--------------------------------"
 # User command BEGIN ----------------------------->
 
     echo "Starting the job"
-    ./Analysis
-    mv AnalysisOutput.root ${JOBINDEX}.AnalysisOutput.root
+    ./AnalysisOld /gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
+    mv AnalysisOutput.root ${JOBID}.AnalysisOutput.root
     ls
 	
 # <------------------------------User command END
@@ -288,9 +288,9 @@ end
          set i=0
          
          if ( -d $file ) then
-            set cpCommand="/bin/cp -r $file /star/u/truhlar/star-upcDstRP/WorkDir/"
+            set cpCommand="/bin/cp -r $file /star/u/truhlar/star-upcDstRP/build/outputs/"
          else
-            set cpCommand="/bin/cp -fp $file /star/u/truhlar/star-upcDstRP/WorkDir/"
+            set cpCommand="/bin/cp -fp $file /star/u/truhlar/star-upcDstRP/build/outputs/"
          endif
          
          RETRY_CP:

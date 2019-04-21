@@ -1,3 +1,8 @@
+// Run: ./Analysis input
+// e.g. ./Analysis /gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list
+
+
+
 // c++ headers
 #include <iostream>
 #include <utility>
@@ -8,6 +13,7 @@
 #include <vector> 
 #include <fstream> 
 #include <cmath> 
+#include <cstdlib>
 
 // ROOT headers
 #include "TFile.h"
@@ -98,7 +104,7 @@ TString stationName[nStations] = { TString("E1"), TString("E2"), TString("W1"), 
 TString summaryLabels[10] = { TString("CPTnoBBCL"), TString("Elastic"), TString("Inelastic"), TString("1 TPCvertex"), TString("2 TPC tracks"), 
                     TString("2 TOF tracks"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), TString("Golden"), TString("")};
 TString systemID[3] = { TString("Combi"), TString("InEl"), TString("El")};
-TString systemState[4] = { TString("TPCv1"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
+TString systemState[4] = { TString("TPC2t"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
 TString configLabels[4] = { TString("EUD"), TString("EDU"), TString("IUU"), TString("IDD")};
 TString conection[2] = { TString("Good"), TString("Bad") };
 
@@ -133,26 +139,41 @@ TTree *rpTree;
 
 TTree *recTree;
 Int_t triggerBits, nTracks;
-Double_t vertexZ;
-
+Int_t totalCharge;
+Int_t nTofTrks;
+Int_t nTpcTrks;
+Double_t nSigPPion;
+Double_t missingPt; 
+Double_t invMass;
+vector<Double_t> dEdx;
+vector<Double_t> momentum;
+vector<Double_t> charge;
+vector<Double_t> nSigmaTPCPion;
+vector<Double_t> vexterId;
+vector<Double_t> vertexZ;
+Double_t xCorrelations[nSides];
+Double_t yCorrelations[nSides];
 
 
 void Init();
 void Make();
+void FillPlots(int state, int configuration );
 TFile *CreateOutputTree(const string& out);
-bool ConnectInput(const string& in);
+bool ConnectInput(const string& in, int fileId);
 
 //_____________________________________________________________________________
-int main(void) {
+int main(int argc, char** argv) {
   //open output file
   outfile = CreateOutputTree("AnalysisOutput.root"); 
   if(!outfile) {cout << "Can not open output file." << endl; return -1;}
 
   Init();
-  Long64_t total =0;
 
-  if(!ConnectInput("/gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig/merge_files/StUPCRP_production.list")){
-  //if(!ConnectInput("/gpfs01/star/pwg/truhlar/NewBaseLine/CPtrig/merge_files/StUPCRP_production_0000.root")){
+
+  int fileId = atoi(argv[2]);
+  cout<<fileId<<" / "<<argv[2]<<endl;
+  if(!ConnectInput(argv[1], fileId)){
+  //if(!ConnectInput("/gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production_0000.root")){
     cout << "No input." << endl; 
     return 1;
   }
@@ -160,8 +181,8 @@ int main(void) {
   //ask for number of events
   Long64_t nev = upcTree->GetEntries();
   cout << "Number of UPC events: " << nev <<" RP: "<<rpTree->GetEntries() <<endl;
-  total +=nev;
   //event loop
+  //nev = 1000;
   for(Long64_t iev=0; iev<nev; ++iev) { //get the event
     upcTree->GetEntry(iev); 
     rpTree->GetEntry(iev); 
@@ -169,19 +190,14 @@ int main(void) {
     recTree->Fill();
   } 
 
-
   //close the outputs
   outfile->Write();
   outfile->Close();
-  cout<<"Total number of events: "<<total<<endl;
   cout<<"Ending Analysis... GOOD BYE!"<<endl;
   return 0;
 }//main
 
 void Init(){
-// creating histograms
-// Having defined labels/names it is very easy and fast to create multiple histograms differing only by name
-// (e.g. track multiplicity in single branch, theta angle for each arm and coordinate, etc.)
   hAnalysisFlow = new TH1I("AnalysisFlow", "CutsFlow", kMaxCount-1, 1, kMaxCount);
   for(int tb=1; tb<kMaxCount; ++tb) hAnalysisFlow->GetXaxis()->SetBinLabel(tb, summaryLabels[tb-1]);
 
@@ -224,11 +240,10 @@ void Init(){
 
 void Make(){
   hAnalysisFlow->Fill(kCPtrig);
-
   for(int var = 0; var < nTriggers; ++var){
     if(upcEvt->isTrigger(triggerID[var])){
       hTriggerBits->Fill(var);
-      triggerBits = (Int_t) var;
+      triggerBits = var; // not 100% correct, some events have more than 1 trigger
     }
   }
   nTracks = (Int_t) rpEvt->getNumberOfTracks();
@@ -243,13 +258,14 @@ void Make(){
   // Get pointer to k-th track in Roman Pot data collection
     StUPCRpsTrack *trk = rpEvt->getTrack(k);
 
-
   // Get ID of a branch in which this k-th track was reconstructed
     int j = trk->branch();
     int side = j<2 ? E : W;
+
     ++numberOfTracks;
     ++numberOfTracksPerBranch[j];
-    for(Int_t kj = 0; kj < 2 ; ++kj){
+
+    for(Int_t kj = 0; kj < 2 ; ++kj){ // Testing connection between tracks and tracksPoint
       if(!trk) break; 
       StUPCRpsTrackPoint *trkPoint = trk->trackPoint(kj);\
       if(!trkPoint) continue; 
@@ -283,12 +299,9 @@ void Make(){
       (trk->trackPoint(1) ? trk->trackPoint(1)->planesUsed()>=3 : true) ) rpTrackIdVec_perSide[side].push_back( k );
   }
 
+  for(int i=0; i<nBranches; ++i) 
+    hNumberTrackPerBranch[i]->Fill(numberOfTracksPerBranch[i]);
 
-  for(int i=0; i<nBranches; i++) hNumberTrackPerBranch[i]->Fill(numberOfTracksPerBranch[i]);
-
-/////////////////////////////////////////////////////////////////////////
-//              START OF THE ANALYSIS FLOW                  //
-/////////////////////////////////////////////////////////////////////////
 // Loop over arms - check if have good-quality tracks, selecting branch combination
   for(int i=0; i<nConfiguration; ++i){ 
 // Define IDs of branches based on known ID of the arm
@@ -332,19 +345,21 @@ void Make(){
       if(nTpcVertex != 1) 
         return;
       hAnalysisFlow->Fill(kTPC1v);
-      const StUPCVertex* vertex = upcEvt->getVertex(0);
 
-      vertexZ = (Double_t) vertex->getPosZ();
+      for(int j = 0; j < nSides;++j){
+        xCorrelations[j] = rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X();
+        yCorrelations[j] = rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y();
+      }
 
-      int totalCharge = 0;
-      int nTofTrks = 0;
-      int nTpcTrks = 0;
+      totalCharge = missingPt = invMass = 0;
+      nTofTrks = nTpcTrks = nSigPPion = 0;
+      dEdx.clear();
+      momentum.clear();
+      charge.clear();
+      nSigmaTPCPion.clear();
+      vexterId.clear();
+      vertexZ.clear();
       double nSigmaPairPion2 = 0;
-      double nSigPPion;
-      double trkInfo[2][6];
-      for(int tr = 0; tr < 2;++tr)
-        for(int tc = 0; tc<6;++tc)
-          trkInfo[tr][tc]=-1000;
       TLorentzVector centralTracksTotalFourMomentum;
 
       if( upcEvt->getNPrimTracks() !=2)
@@ -363,23 +378,12 @@ void Make(){
         ++nTpcTrks;     
 
         if( trk->getFlag(StUPCTrack::kTof)){  
-          int state = 0;
-          for(int tmp =0; tmp<3;++tmp){
-            if(tmp == 1 && (i!=IUU && i!=IDD))
-              continue;
-            if(tmp == 2 && (i!=EUD && i!=EDU))
-              continue;
-            hdEdxVsP[4*tmp +state]->Fill(trkLVector.P(),trk->getDEdxSignal()*1000000);
-            hdEdxVsqP[4*tmp+state]->Fill(trkLVector.P()*trk->getCharge(),trk->getDEdxSignal()*1000000);
-            hNSigmaPion[4*tmp+state]->Fill(trk->getNSigmasTPCPion());
-          } 
-
-          if(nTofTrks < 2){
-            trkInfo[nTofTrks][0] = trk->getDEdxSignal()*1000000;
-            trkInfo[nTofTrks][1] = trkLVector.P();
-            trkInfo[nTofTrks][2] = trk->getCharge();
-            trkInfo[nTofTrks][3] = trk->getNSigmasTPCPion();
-          }
+          dEdx.push_back(trk->getDEdxSignal()*1000000);
+          momentum.push_back(trkLVector.P());
+          charge.push_back(trk->getCharge());
+          nSigmaTPCPion.push_back(trk->getNSigmasTPCPion());
+          vexterId.push_back(trk->getVertexId());
+          vertexZ.push_back(trk->getVertex()->getPosZ());
           totalCharge += static_cast<int>( trk->getCharge() );
           centralTracksTotalFourMomentum += trkLVector;
           nSigmaPairPion2 += pow(trk->getNSigmasTPCPion(),2);
@@ -388,105 +392,33 @@ void Make(){
 
       }
 
-      const double missingPt = (centralTracksTotalFourMomentum.Vect() + rpEvt->getTrack( rpTrackIdVec_perSide[E][0] )->pVec() + rpEvt->getTrack( rpTrackIdVec_perSide[W][0] )->pVec() ).Pt();
-      const double invMass = centralTracksTotalFourMomentum.M();
-
+      missingPt = (centralTracksTotalFourMomentum.Vect() + rpEvt->getTrack( rpTrackIdVec_perSide[E][0] )->pVec() + rpEvt->getTrack( rpTrackIdVec_perSide[W][0] )->pVec() ).Pt();
+      invMass = centralTracksTotalFourMomentum.M();
       nSigPPion = sqrt(nSigmaPairPion2);
 
-      int state = 0;
-      for(int tmp =0; tmp<3;++tmp){
-        if(tmp == 1 && (i!=IUU && i!=IDD))
-          continue;
-        if(tmp == 2 && (i!=EUD && i!=EDU))
-          continue;
-        hMissingPt[4*tmp+state]->Fill(missingPt); 
-        if(nSigPPion < 3 )
-          hInvMass[4*tmp+state]->Fill(invMass);
-        for(int j = 0; j < nSides;++j)
-          hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-        hZvertex[4*tmp+state]->Fill(vertexZ);
-      } 
 
-
+      FillPlots(0,i);
       if( nTofTrks!=2)
         return;
       hAnalysisFlow->Fill(kTOF2t);
 
-      state = 1;
-      for(int tmp =0; tmp<3;++tmp){
-        if(tmp == 1 && (i!=IUU && i!=IDD))
-          continue;
-        if(tmp == 2 && (i!=EUD && i!=EDU))
-          continue;
-        for(int var=0;var<2;++var){
-          hdEdxVsP[4*tmp +state]->Fill(trkInfo[var][1],trkInfo[var][0]);
-          hdEdxVsqP[4*tmp+state]->Fill(trkInfo[var][1]*trkInfo[var][2],trkInfo[var][0]);
-          hNSigmaPion[4*tmp+state]->Fill(trkInfo[var][3]);
-        }
-
-
-        hMissingPt[4*tmp+state]->Fill(missingPt); 
-        if(nSigPPion < 3 )
-          hInvMass[4*tmp+state]->Fill(invMass);
-        for(int j = 0; j < nSides;++j)
-          hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-        hZvertex[4*tmp+state]->Fill(vertexZ);
-      }
-
+      FillPlots(2,i);
 
       if(totalCharge != 0) 
         return;
       hAnalysisFlow->Fill(kTotCH0);
 
-      state = 2;
-      for(int tmp =0; tmp<3;++tmp){
-        if(tmp == 1 && (i!=IUU && i!=IDD))
-          continue;
-        if(tmp == 2 && (i!=EUD && i!=EDU))
-          continue;
-        for(int var=0;var<2;++var){
-          hdEdxVsP[4*tmp +state]->Fill(trkInfo[var][1],trkInfo[var][0]);
-          hdEdxVsqP[4*tmp+state]->Fill(trkInfo[var][1]*trkInfo[var][2],trkInfo[var][0]);
-          hNSigmaPion[4*tmp+state]->Fill(trkInfo[var][3]);
-        }
-
-
-        hMissingPt[4*tmp+state]->Fill(missingPt);
-        if(nSigPPion < 3 )
-          hInvMass[4*tmp+state]->Fill(invMass);
-        for(int j = 0; j < nSides;++j)
-          hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-        hZvertex[4*tmp+state]->Fill(vertexZ);
-      }
+      FillPlots(2,i);
 
       if( missingPt > 0.1 )
         return;
       hAnalysisFlow->Fill(kMissPt);
 
+      FillPlots(3,i);
 
-      state = 3;
-      for(int tmp =0; tmp<3;++tmp){
-        if(tmp == 1 && (i!=IUU && i!=IDD))
-          continue;
-        if(tmp == 2 && (i!=EUD && i!=EDU))
-          continue;
-        for(int var=0;var<2;++var){
-          hdEdxVsP[4*tmp +state]->Fill(trkInfo[var][1],trkInfo[var][0]);
-          hdEdxVsqP[4*tmp+state]->Fill(trkInfo[var][1]*trkInfo[var][2],trkInfo[var][0]);
-          hNSigmaPion[4*tmp+state]->Fill(trkInfo[var][3]);
-        }
+      if(nSigPPion < 3)
+        hAnalysisFlow->Fill(kPions);
 
-        hNSigmaPionPair[4*tmp+state]->Fill(nSigPPion);
-
-        hMissingPt[4*tmp+state]->Fill(missingPt);
-        if(nSigPPion < 3 ){
-          hInvMass[4*tmp+state]->Fill(invMass);
-          hAnalysisFlow->Fill(kPions);
-        }
-        for(int j = 0; j < nSides;++j)
-          hXYCorrelations[4*tmp+state]->Fill(rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X(),rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y());
-        hZvertex[4*tmp+state]->Fill(vertexZ);
-      }
 
     }
   } // end of loop over arms
@@ -503,15 +435,29 @@ TFile *CreateOutputTree(const string& out) {
   recTree = new TTree("recTree", "recTree");
 
   recTree ->Branch("triggerBits", &triggerBits, "triggerBits/I");
-  recTree ->Branch("vertexZ", &vertexZ, "vertexZ/D");
   recTree ->Branch("nTracks", &nTracks, "nTracks/I");
+  recTree ->Branch("nTpcTrks", &nTpcTrks, "nTpcTrks/I");
+  recTree ->Branch("nTofTrks", &nTofTrks, "nTofTrks/I");
+  recTree ->Branch("totalCharge", &totalCharge, "totalCharge/I");
+  recTree ->Branch("nSigPPion", &nSigPPion, "nSigPPion/D");
+  recTree ->Branch("missingPt", &missingPt, "missingPt/D");
+  recTree ->Branch("invMass", &invMass, "invMass/D");
+//  recTree ->Branch("", &, "/");
+//  vector<Double_t> dEdx;
+//  vector<Double_t> momentum;
+//  vector<Double_t> charge;
+//  vector<Double_t> nSigmaTPCPion;
+//  vector<Double_t> vexterId;
+//  vector<Double_t> vertexZ;
+//  Double_t xCorrelations[nSides];
+//  Double_t yCorrelations[nSides];
 
 
   return outputFile;
 
 }//CreateOutputTree
 
-bool ConnectInput(const string& in) {
+bool ConnectInput(const string& in, int fileId) {
   //input from file or chain
   upcTree = 0x0;
   rpTree = 0x0;
@@ -527,9 +473,13 @@ bool ConnectInput(const string& in) {
     rpChain = new TChain("mRPTree");
     ifstream instr(in.c_str());
     string line;
+    int lineId=0;
     while(getline(instr, line)) {
-      upcChain->AddFile(line.c_str());
-      rpChain->AddFile(line.c_str());
+    	if(fileId==lineId || fileId== -1){
+    		upcChain->AddFile(line.c_str());
+      	rpChain->AddFile(line.c_str());
+    	}
+      lineId++;
     }
     instr.close();
     upcTree = dynamic_cast<TTree*>( upcChain );
@@ -545,3 +495,26 @@ bool ConnectInput(const string& in) {
   return true;
 
 }//ConnectInput
+
+void FillPlots(int state, int configuration){
+  for(int tmp =0; tmp<3;++tmp){
+    if(tmp == 1 && (configuration!=IUU && configuration!=IDD))
+      continue;
+    if(tmp == 2 && (configuration!=EUD && configuration!=EDU))
+      continue;
+    for(int trackId=0;trackId<nTofTrks;++trackId){
+      hdEdxVsP[4*tmp +state]->Fill(momentum[trackId],dEdx[trackId]);
+      hdEdxVsqP[4*tmp+state]->Fill(momentum[trackId]*charge[trackId],dEdx[trackId]);
+      hNSigmaPion[4*tmp+state]->Fill(nSigmaTPCPion[trackId]);
+      hZvertex[4*tmp+state]->Fill(vertexZ[trackId]);
+    }
+    hNSigmaPionPair[4*tmp+state]->Fill(nSigPPion);
+
+    hMissingPt[4*tmp+state]->Fill(missingPt); 
+    if(nSigPPion < 3 )
+      hInvMass[4*tmp+state]->Fill(invMass);
+    for(int j = 0; j < nSides;++j)
+      hXYCorrelations[4*tmp+state]->Fill(xCorrelations[j],yCorrelations[j]);
+    
+  }
+}

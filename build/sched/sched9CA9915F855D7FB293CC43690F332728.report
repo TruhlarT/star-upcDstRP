@@ -1,16 +1,16 @@
 STAR Unified Meta Scheduler 1.10.31
-File generated at : Fri Apr 19 14:17:19 EDT 2019
-This file is a detailed report of SUMS meta job 827D8D78E4526B1CF5B6DD8774F5305D and its 4 processes.
+File generated at : Sat Apr 20 02:30:30 EDT 2019
+This file is a detailed report of SUMS meta job 9CA9915F855D7FB293CC43690F332728 and its 4 processes.
 
 Jobs table :
-+-------------------------------------------------------------Jobs Of Request 827D8D78E4526B1CF5B6DD8774F5305D---------------------------------------------------------------+
++-------------------------------------------------------------Jobs Of Request 9CA9915F855D7FB293CC43690F332728---------------------------------------------------------------+
 +------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
 | Job_ID                             | Queue                  | Files | Events | estRunTime | Target | SubmitTime            | Dispatcher           | Success | DispatchTime |
 +------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
-| 827D8D78E4526B1CF5B6DD8774F5305D_0 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 02:17:18PM | CondorFastDispatcher | YES     | 1ms          |
-| 827D8D78E4526B1CF5B6DD8774F5305D_1 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 02:17:18PM | CondorFastDispatcher | YES     | 1ms          |
-| 827D8D78E4526B1CF5B6DD8774F5305D_2 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 02:17:18PM | CondorFastDispatcher | YES     | 1ms          |
-| 827D8D78E4526B1CF5B6DD8774F5305D_3 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 19/04/2019 02:17:18PM | CondorFastDispatcher | YES     | 1ms          |
+| 9CA9915F855D7FB293CC43690F332728_0 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 20/04/2019 02:30:29AM | CondorFastDispatcher | YES     | 1ms          |
+| 9CA9915F855D7FB293CC43690F332728_1 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 20/04/2019 02:30:29AM | CondorFastDispatcher | YES     | 1ms          |
+| 9CA9915F855D7FB293CC43690F332728_2 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 20/04/2019 02:30:29AM | CondorFastDispatcher | YES     | 1ms          |
+| 9CA9915F855D7FB293CC43690F332728_3 | bnl_condor_short_quick | 0     | 0      | 60min      | Any    | 20/04/2019 02:30:29AM | CondorFastDispatcher | YES     | 1ms          |
 +------------------------------------+------------------------+-------+--------+------------+--------+-----------------------+----------------------+---------+--------------+
 Request object report :
  
@@ -33,24 +33,24 @@ Request object report :
 
 
 
-Job object 827D8D78E4526B1CF5B6DD8774F5305D_0 report :
- 827D8D78E4526B1CF5B6DD8774F5305D_0 trying (bnl_condor_short_quick)
-827D8D78E4526B1CF5B6DD8774F5305D_0 assigned to (bnl_condor_short_quick)
+Job object 9CA9915F855D7FB293CC43690F332728_0 report :
+ 9CA9915F855D7FB293CC43690F332728_0 trying (bnl_condor_short_quick)
+9CA9915F855D7FB293CC43690F332728_0 assigned to (bnl_condor_short_quick)
  
 
-Job object 827D8D78E4526B1CF5B6DD8774F5305D_1 report :
- 827D8D78E4526B1CF5B6DD8774F5305D_1 trying (bnl_condor_short_quick)
-827D8D78E4526B1CF5B6DD8774F5305D_1 assigned to (bnl_condor_short_quick)
+Job object 9CA9915F855D7FB293CC43690F332728_1 report :
+ 9CA9915F855D7FB293CC43690F332728_1 trying (bnl_condor_short_quick)
+9CA9915F855D7FB293CC43690F332728_1 assigned to (bnl_condor_short_quick)
  
 
-Job object 827D8D78E4526B1CF5B6DD8774F5305D_2 report :
- 827D8D78E4526B1CF5B6DD8774F5305D_2 trying (bnl_condor_short_quick)
-827D8D78E4526B1CF5B6DD8774F5305D_2 assigned to (bnl_condor_short_quick)
+Job object 9CA9915F855D7FB293CC43690F332728_2 report :
+ 9CA9915F855D7FB293CC43690F332728_2 trying (bnl_condor_short_quick)
+9CA9915F855D7FB293CC43690F332728_2 assigned to (bnl_condor_short_quick)
  
 
-Job object 827D8D78E4526B1CF5B6DD8774F5305D_3 report :
- 827D8D78E4526B1CF5B6DD8774F5305D_3 trying (bnl_condor_short_quick)
-827D8D78E4526B1CF5B6DD8774F5305D_3 assigned to (bnl_condor_short_quick)
+Job object 9CA9915F855D7FB293CC43690F332728_3 report :
+ 9CA9915F855D7FB293CC43690F332728_3 trying (bnl_condor_short_quick)
+9CA9915F855D7FB293CC43690F332728_3 assigned to (bnl_condor_short_quick)
  
 
 End of Report

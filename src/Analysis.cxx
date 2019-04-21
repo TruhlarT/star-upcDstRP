@@ -182,7 +182,7 @@ int main(int argc, char** argv) {
   Long64_t nev = upcTree->GetEntries();
   cout << "Number of UPC events: " << nev <<" RP: "<<rpTree->GetEntries() <<endl;
   //event loop
-  nev = 1000;
+  //nev = 1000;
   for(Long64_t iev=0; iev<nev; ++iev) { //get the event
     upcTree->GetEntry(iev); 
     rpTree->GetEntry(iev); 
@@ -303,6 +303,7 @@ void Make(){
     hNumberTrackPerBranch[i]->Fill(numberOfTracksPerBranch[i]);
 
 // Loop over arms - check if have good-quality tracks, selecting branch combination
+  int nConfig = 0;
   for(int i=0; i<nConfiguration; ++i){ 
 // Define IDs of branches based on known ID of the arm
     int branch[nSides];
@@ -324,16 +325,14 @@ void Make(){
           branch[W] = WD;
         }break;        
     }
-    int otherBranch[nSides];
-    otherBranch[E] = branch[E]==EU ? ED : EU;
-    otherBranch[W] = branch[W]==WU ? WD : WU;
 
 // If exactly one good-quality track in each branch in the arm and there is no track in the other RP- do some staff
     if( rpTrackIdVec_perBranch[ branch[E] ].size()==1 
-      && rpTrackIdVec_perBranch[ branch[W] ].size()==1 
-      && rpTrackIdVec_perBranch[ otherBranch[E] ].size()==0 
-      && rpTrackIdVec_perBranch[ otherBranch[W] ].size()==0){
+      && rpTrackIdVec_perBranch[ branch[W] ].size()==1
+      && rpTrackIdVec_perSide[E].size()==1 && rpTrackIdVec_perSide[W].size()==1){
   // Get pointers to good-quality tracks
+      nConfig++;
+      if(nConfig>1) cout<<"NConfig: "<<nConfig<<endl;
       if(i==EUD || i==EDU){
         hAnalysisFlow->Fill(kEl);
       }else{

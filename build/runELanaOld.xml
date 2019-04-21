@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job nProcesses="4" filesPerHour="1" simulateSubmission="false">
+<job nProcesses="25" filesPerHour="1" simulateSubmission="false">
 	<command>
     echo "Starting the job"
-    ./Analysis /gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
+    ./AnalysisOld /gpfs01/star/pwg/truhlar/Final/ELtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
     mv AnalysisOutput.root ${JOBID}.AnalysisOutput.root
     ls
 	</command>
@@ -17,7 +17,7 @@
 
 	<SandBox installer="ZIP">
 		<Package name="Package">
-			<File>file:./Analysis</File>
+			<File>file:./AnalysisOld</File>
 			<File>file:./libstar-upc.so</File>
 		</Package>
 	</SandBox>
