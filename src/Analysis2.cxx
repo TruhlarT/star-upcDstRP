@@ -66,8 +66,6 @@ enum RP_CONFIGURATION {EUD, EDU, IUU, IDD, nConfiguration};
 // IUU means inelastic combination from east up to west up
 // IDD means inelastic combination from east down to west down
 
-// Labels, names etc. (defined as TString to gain higher functionality than const char*, e.g. defined "+" operator)
-
 const double pionMass = 0.138;
 const int nTriggers = 21;
 const int triggerID[] = {1,2,3,4,5,8,9,570701,570702,570703,
@@ -95,37 +93,8 @@ TString triggerName[nTriggers] = {  TString("CPT2_test"), // 1
                         TString("CPTnoBBCL"), // 590708
                         TString("ET")}; // 590709
 
-
-TString armName[nArms] = { TString("EU-WU"), TString("ED-WD") };
-TString branchName[nBranches] = { TString("EU"), TString("ED"), TString("WU"), TString("WD") };
-TString rpName[nRomanPots] = { TString("E1U"), TString("E1D"), TString("E2U"), TString("E2D"),
-                    TString("W1U"), TString("W1D"), TString("W2U"), TString("W2D") };
-TString stationName[nStations] = { TString("E1"), TString("E2"), TString("W1"), TString("W2") };
-TString summaryLabels[10] = { TString("CPTnoBBCL"), TString("Elastic"), TString("Inelastic"), TString("2 TPC tracks"), 
-                    TString("2 TOF tracks"), TString("Same vertex"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), TString(""), TString("")};
-TString systemID[3] = { TString("Combi"), TString("InEl"), TString("El")};
-TString systemState[4] = { TString("TPC2t"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
-TString configLabels[4] = { TString("EUD"), TString("EDU"), TString("IUU"), TString("IDD")};
-TString conection[2] = { TString("Good"), TString("Bad") };
-
 // Histograms declarations
-TH1I* hAnalysisFlow; // control plot
 TH1F* hTriggerBits; // control plot
-TH1F* hConfiguration;
-TH1F* hNumberTrackPerBranch[nBranches]; // number of track per each brunch (west up, west down, east up, east down)
-TH1D *hConnection;
-
-// PID
-TH2D* hdEdxVsP[12];
-TH2D* hdEdxVsqP[12];
-TH1D* hNSigmaPion[12];
-TH1D* hNSigmaPionPair[12];
-
-TH1F* hMissingPt[12]; 
-TH1F* hInvMass[12];
-
-TH2F* hXYCorrelations[12];
-TH1D* hZvertex[12];
 
 TFile *infile;
 TFile *outfile;
@@ -138,21 +107,23 @@ TTree *upcTree;
 TTree *rpTree;
 
 TTree *recTree;
-Int_t triggerBits, nTracks;
+Int_t nTracks;
+Int_t nTracksEU, nTracksED, nTracksWU, nTracksWD;
+Int_t iConfiguration;
 Int_t totalCharge;
 Int_t nTofTrks;
 Int_t nTpcTrks;
-Double_t nSigPPion;
 Double_t missingPt; 
 Double_t invMass;
-vector<Double_t> dEdx;
-vector<Double_t> momentum;
-vector<Double_t> charge;
-vector<Double_t> nSigmaTPCPion;
-vector<Double_t> vexterId;
-vector<Double_t> vertexZ;
-Double_t xCorrelations[nSides];
-Double_t yCorrelations[nSides];
+Double_t dEdx0,dEdx1;
+Double_t momentum0,momentum1;
+Double_t charge0,charge1;
+Double_t nSigmaTPCPion0,nSigmaTPCPion1;
+Double_t vexterId0,vexterId1;
+Double_t nSigPPion;
+Double_t vertexZ;
+Double_t xCorrelationsE,xCorrelationsW;
+Double_t yCorrelationsE,yCorrelationsW;
 
 
 void Init();
@@ -171,6 +142,7 @@ int main(int argc, char** argv) {
 
 
   int fileId = atoi(argv[2]);
+  cout<<fileId<<" / "<<argv[2]<<endl;
   if(!ConnectInput(argv[1], fileId)){
   //if(!ConnectInput("/gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production_0000.root")){
     cout << "No input." << endl; 
@@ -197,59 +169,21 @@ int main(int argc, char** argv) {
 }//main
 
 void Init(){
-  hAnalysisFlow = new TH1I("AnalysisFlow", "CutsFlow", kMaxCount-1, 1, kMaxCount);
-  for(int tb=1; tb<kMaxCount; ++tb) hAnalysisFlow->GetXaxis()->SetBinLabel(tb, summaryLabels[tb-1]);
-
   hTriggerBits = new TH1F("TriggerBits", "TriggerBits", nTriggers, -0.5, 20.5);
   for(int tb=0; tb<nTriggers; ++tb) hTriggerBits->GetXaxis()->SetBinLabel(tb+1, triggerName[tb]);
-
-  hConfiguration = new TH1F("Configuration", "Track Configuration", 4, -0.5, 3.5);
-  for(int tb=0; tb<4; ++tb) hConfiguration->GetXaxis()->SetBinLabel(tb+1, configLabels[tb]);
-
-  hConnection = new TH1D("hConnection", "Agreement between track brunch and trackPoints RPIds", 2, -0.5, 1.5);
-  for(int tb=0; tb<2; ++tb) hConnection->GetXaxis()->SetBinLabel(tb+1, conection[tb]);
-
-  for(int i=0; i<nBranches; ++i)
-    hNumberTrackPerBranch[i] = new TH1F("NumberTracksPerBranch,"+branchName[i],"Number of tracks in branch "+branchName[i], 8, -0.5, 7.5);
-
-  for(int i=0; i<12;++i){
-    if(i==0){
-      outfile->mkdir("All")->cd();
-    }else if(i==4){
-      outfile->cd();
-      outfile->mkdir("Inelastic")->cd();
-    }else if(i==8){
-      outfile->cd();
-      outfile->mkdir("Elastic")->cd();
-    }
-    
-    hdEdxVsP[i] = new TH2D("dEdxVsP_"+systemState[i%4]+"_"+systemID[i/4],"dE/dx Vs P",100,0,2,100,0,20 );
-    hdEdxVsqP[i] = new TH2D("dEdxVsqP_"+systemState[i%4]+"_"+systemID[i/4],"dE/dx Vs #frac{q}{e} P",200,-2,2,100,0,20);
-
-    hNSigmaPion[i] = new TH1D("NSigmaPion_"+systemState[i%4]+"_"+systemID[i/4],"NSigmaPion",100,-10,10);
-    hNSigmaPionPair[i] = new TH1D("NSigmaPionPair_"+systemState[i%4]+"_"+systemID[i/4],"NSigmaPionPair",100,0,100);
-
-    hMissingPt[i] = new TH1F( "MissingPt_"+systemState[i%4]+"_"+systemID[i/4], "p^{miss}_{T} [GeV/c]", 200, 0, 2 );
-    hInvMass[i] = new TH1F( "InvMass_"+systemState[i%4]+"_"+systemID[i/4],"M_{#pi#pi} [GeV/c^{2}]", 100, 0, 5 );
-    hXYCorrelations[i] = new TH2F("Py_vs_Px_"+systemState[i%4]+"_"+systemID[i/4], "Y coordinate vs. X coordinate of proton momentum", 250, -3, 3, 250, -3, 3);
-    hZvertex[i] = new TH1D("Zvertex_"+systemState[i%4]+"_"+systemID[i/4],"Z coordinate of vertex in TPC",100,-200,200);
-  }
-  outfile->cd();
 }
 
 void Make(){
-  hAnalysisFlow->Fill(kCPtrig);
   for(int var = 0; var < nTriggers; ++var){
     if(upcEvt->isTrigger(triggerID[var])){
       hTriggerBits->Fill(var);
-      triggerBits = var; // not 100% correct, some events have more than 1 trigger
     }
   }
   nTracks = (Int_t) rpEvt->getNumberOfTracks();
   // Vector below will be filled with indices of good-quality tracks
   vector<int> rpTrackIdVec_perBranch[nBranches];
   vector<int> rpTrackIdVec_perSide[nSides];
-  int numberOfTracks = 0;
+
   int numberOfTracksPerBranch[nBranches] = {0, 0, 0, 0};
 
   // Loop over all tracks reconstructed in Roman Pots  
@@ -261,35 +195,8 @@ void Make(){
     int j = trk->branch();
     int side = j<2 ? E : W;
 
-    ++numberOfTracks;
     ++numberOfTracksPerBranch[j];
 
-    for(Int_t kj = 0; kj < 2 ; ++kj){ // Testing connection between tracks and tracksPoint
-      if(!trk) break; 
-      StUPCRpsTrackPoint *trkPoint = trk->trackPoint(kj);\
-      if(!trkPoint) continue; 
-      int rpID = trkPoint->rpId();
-      switch (j) {
-        case 0:
-        case 1: 
-          if(rpID == j || rpID == j +2){
-            hConnection->Fill(0);
-          }else{
-            hConnection->Fill(1);
-            cout << rpID << " / "<<j<< endl;
-          }
-        break;
-        case 2: 
-        case 3:  
-          if(rpID == j+2 || rpID == j +4){
-            hConnection->Fill(0);
-          }else{
-            hConnection->Fill(1);
-            cout << rpID << " / "<<j<< endl;
-          }
-        break;
-      };
-    } 
   // If track is global (made of track-points   in 1st and 2nd station)
   // and all 8 planes were used in reconstruction - store its ID
     if( trk->type()==StUPCRpsTrack::rpsGlobal && trk->planesUsed()==8) rpTrackIdVec_perBranch[j].push_back( k );
@@ -298,11 +205,12 @@ void Make(){
       (trk->trackPoint(1) ? trk->trackPoint(1)->planesUsed()>=3 : true) ) rpTrackIdVec_perSide[side].push_back( k );
   }
 
-  for(int i=0; i<nBranches; ++i) 
-    hNumberTrackPerBranch[i]->Fill(numberOfTracksPerBranch[i]);
+  nTracksEU = numberOfTracksPerBranch[0];
+  nTracksED = numberOfTracksPerBranch[1];
+  nTracksWU = numberOfTracksPerBranch[2];
+  nTracksWD = numberOfTracksPerBranch[3];
 
 // Loop over arms - check if have good-quality tracks, selecting branch combination
-  int nConfig = 0;
   for(int i=0; i<nConfiguration; ++i){ 
 // Define IDs of branches based on known ID of the arm
     int branch[nSides];
@@ -330,19 +238,12 @@ void Make(){
       && rpTrackIdVec_perBranch[ branch[W] ].size()==1
       && rpTrackIdVec_perSide[E].size()==1 && rpTrackIdVec_perSide[W].size()==1){
   // Get pointers to good-quality tracks
-      nConfig++;
-      if(nConfig>1) cout<<"NConfig: "<<nConfig<<endl;
-      if(i==EUD || i==EDU){
-        hAnalysisFlow->Fill(kEl);
-      }else{
-        hAnalysisFlow->Fill(kInEl);
-      }
-      hConfiguration->Fill(i);
+      iConfiguration = i;
 
-      for(int j = 0; j < nSides;++j){
-        xCorrelations[j] = rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().X();
-        yCorrelations[j] = rpEvt->getTrack(rpTrackIdVec_perSide[j][0])->pVec().Y();
-      }
+      xCorrelationsE = rpEvt->getTrack(rpTrackIdVec_perSide[0][0])->pVec().X();
+      yCorrelationsE = rpEvt->getTrack(rpTrackIdVec_perSide[0][0])->pVec().Y();
+      xCorrelationsW = rpEvt->getTrack(rpTrackIdVec_perSide[1][0])->pVec().X();
+      yCorrelationsW = rpEvt->getTrack(rpTrackIdVec_perSide[1][0])->pVec().Y();
 
       totalCharge = missingPt = invMass = 0;
       nTofTrks = nTpcTrks = nSigPPion = 0;
@@ -357,7 +258,7 @@ void Make(){
 
       if( upcEvt->getNPrimTracks() !=2)
         return;
-      hAnalysisFlow->Fill(kTPC2t);
+
 
     // loop over all TPC tracks
       for(int j=0; j<upcEvt->getNumberOfTracks(); ++j){
@@ -389,29 +290,18 @@ void Make(){
       invMass = centralTracksTotalFourMomentum.M();
       nSigPPion = sqrt(nSigmaPairPion2);
 
-
-      FillPlots(0,i);
       if( nTofTrks!=2)
         return;
-      hAnalysisFlow->Fill(kTOF2t);
 
       if( vexterId[0] != vexterId[1])
         return;
-      hAnalysisFlow->Fill(kSameVrtx);
-
-      FillPlots(2,i);
 
       if(totalCharge != 0) 
         return;
-      hAnalysisFlow->Fill(kTotCH0);
-
-      FillPlots(2,i);
 
       if( missingPt > 0.1 )
         return;
-      hAnalysisFlow->Fill(kMissPt);
 
-      FillPlots(3,i);
 
 
     }
@@ -489,26 +379,3 @@ bool ConnectInput(const string& in, int fileId) {
   return true;
 
 }//ConnectInput
-
-void FillPlots(int state, int configuration){
-  for(int tmp =0; tmp<3;++tmp){
-    if(tmp == 1 && (configuration!=IUU && configuration!=IDD))
-      continue;
-    if(tmp == 2 && (configuration!=EUD && configuration!=EDU))
-      continue;
-    for(int trackId=0;trackId<nTofTrks;++trackId){
-      hdEdxVsP[4*tmp +state]->Fill(momentum[trackId],dEdx[trackId]);
-      hdEdxVsqP[4*tmp+state]->Fill(momentum[trackId]*charge[trackId],dEdx[trackId]);
-      hNSigmaPion[4*tmp+state]->Fill(nSigmaTPCPion[trackId]);
-      hZvertex[4*tmp+state]->Fill(vertexZ[trackId]);
-    }
-    hNSigmaPionPair[4*tmp+state]->Fill(nSigPPion);
-
-    hMissingPt[4*tmp+state]->Fill(missingPt); 
-    //if(nSigPPion < 3 )
-    hInvMass[4*tmp+state]->Fill(invMass);
-    for(int j = 0; j < nSides;++j)
-      hXYCorrelations[4*tmp+state]->Fill(xCorrelations[j],yCorrelations[j]);
-    
-  }
-}
