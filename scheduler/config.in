@@ -2,10 +2,10 @@
 #upcDst production configuration
 
 #main directory for production outputs
-top  /gpfs01/star/pwg/truhlar/Final/CPtrig
+top  /gpfs01/star/pwg/truhlar/Test/CPtrig
 
 %add_input  test  /gpfs01/star/pwg/truhlar/quickTest.list
-add_input  AllDataSet  /gpfs01/star/pwg/truhlar/muDst.list
+add_input  test  /gpfs01/star/pwg/truhlar/muDst.list
 
 
 nfiles  10
