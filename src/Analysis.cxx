@@ -68,10 +68,14 @@ enum RP_CONFIGURATION {EUD, EDU, IUU, IDD, nConfiguration};
 
 // Labels, names etc. (defined as TString to gain higher functionality than const char*, e.g. defined "+" operator)
 
-const double pionMass = 0.138;
+const double pionMass = 0.13957; // GeV /c^2
+const double speedOfLight = 299792458; // m/s
 const int nTriggers = 21;
 const int triggerID[] = {1,2,3,4,5,8,9,570701,570702,570703,
 570704,570705,570709,570711,570712,570719,590701,590703,590705,590708,590709};
+
+//bool PID = true;
+bool PID = false;
 
 TString triggerName[nTriggers] = {  TString("CPT2_test"), // 1
                         TString("CPT2noBBCL_test"), // 2
@@ -147,6 +151,8 @@ Double_t missingPt;
 Double_t invMass;
 vector<Double_t> dEdx;
 vector<Double_t> momentum;
+vector<Double_t> TOFtime;
+vector<Double_t> TOFlength;
 vector<Double_t> charge;
 vector<Double_t> nSigmaTPCPion;
 vector<Double_t> vexterId;
@@ -348,6 +354,8 @@ void Make(){
       nTofTrks = nTpcTrks = nSigPPion = 0;
       dEdx.clear();
       momentum.clear();
+      TOFtime.clear();
+      TOFlength.clear();
       charge.clear();
       nSigmaTPCPion.clear();
       vexterId.clear();
@@ -374,6 +382,8 @@ void Make(){
           dEdx.push_back(trk->getDEdxSignal()*1000000);
           momentum.push_back(trkLVector.P());
           charge.push_back(trk->getCharge());
+          TOFtime.push_back(trk->getTofTime());
+          TOFlength.push_back(trk->getTofPathLength());
           nSigmaTPCPion.push_back(trk->getNSigmasTPCPion());
           vexterId.push_back(trk->getVertexId());
           vertexZ.push_back(trk->getVertex()->getPosZ());
@@ -388,6 +398,30 @@ void Make(){
       missingPt = (centralTracksTotalFourMomentum.Vect() + rpEvt->getTrack( rpTrackIdVec_perSide[E][0] )->pVec() + rpEvt->getTrack( rpTrackIdVec_perSide[W][0] )->pVec() ).Pt();
       invMass = centralTracksTotalFourMomentum.M();
       nSigPPion = sqrt(nSigmaPairPion2);
+
+      if(PID){
+        // DeltaDeltaTOF - Daniel
+        double expectedTime1 = (TOFlength[0] / speedOfLight) * sqrt(1 + (pionMass * speedOfLight / momentum[0])*(pionMass * speedOfLight / momentum[0]));
+        double expectedTime2 = (TOFlength[1] / speedOfLight) * sqrt(1 + (pionMass * speedOfLight / momentum[1])*(pionMass * speedOfLight / momentum[1]));
+        double deltaTOF = TOFtime[1] - TOFtime[0];
+        double deltaTOFexpected = expectedTime2 - expectedTime1;
+        double deltaDeltaTOF = deltaTOF - deltaTOFexpected;
+        // m2 - Rafal
+
+  		  double length1Squared = TOFlength[0]*TOFlength[0];
+  		  double length2Squared = TOFlength[1]*TOFlength[1];
+        double speedOfLight2 = speedOfLight*speedOfLight;
+        double speedOfLight4 = speedOfLight2*speedOfLight2;
+        double deltaTime2 = (TOFtime[1] - TOFtime[0])*(TOFtime[1] - TOFtime[0]);
+        double deltaTime4 = deltaTime2*deltaTime2;
+        double oneOverMomentum1sq = 1/(momentum[0]*momentum[0]);
+        double oneOverMomentum2sq = 1/(momentum[1]*momentum[1]);
+  		  double cEq = -2*length1Squared*length2Squared + speedOfLight4*deltaTime4 + length2Squared*length2Squared + length1Squared*length1Squared -2*speedOfLight2*deltaTime2*(length2Squared + length1Squared);
+        double bEq = -2*length1Squared*length2Squared*speedOfLight2*(oneOverMomentum1sq + oneOverMomentum2sq) + 2*length1Squared*length1Squared*speedOfLight2*oneOverMomentum1sq + 2*length2Squared*length2Squared*speedOfLight2*oneOverMomentum2sq -2*speedOfLight4*deltaTime2*(length1Squared*oneOverMomentum1sq + length2Squared*oneOverMomentum2sq);
+        double aEq = -2*length1Squared*length2Squared*speedOfLight4*oneOverMomentum1sq*oneOverMomentum2sq + speedOfLight4*(length1Squared*length1Squared*oneOverMomentum1sq*oneOverMomentum1sq + length2Squared*length2Squared*oneOverMomentum2sq*oneOverMomentum2sq);
+        double mSquared = (-bEq + sqrt(bEq*bEq-4*aEq*cEq)) / (2*aEq);
+      }
+       
 
 
       FillPlots(0,i);
@@ -512,3 +546,4 @@ void FillPlots(int state, int configuration){
     
   }
 }
+

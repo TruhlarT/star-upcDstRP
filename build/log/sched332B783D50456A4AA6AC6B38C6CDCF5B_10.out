@@ -1,0 +1,46 @@
+We are starting on node: rcas2768.rcf.bnl.gov
+HOME is not defined
+Using getent method
+HOME is now /star/u/truhlar
+11613 We will spawn ourselves (/star/u/truhlar/star-upcDstRP/build/sched/sched332B783D50456A4AA6AC6B38C6CDCF5B_10.csh )
+11613 We BEGIN on [Tue Apr 23 13:04:56 EDT 2019]
+[1] 11776
+11613 We are waiting for 11776 
+11613 Grandchild PID is 11816 - found in 10 x 1 seconds
+11613 Establishing first watcher   on    Tue Apr 23 13:05:06 EDT 2019
+11613 Process tree is 11613 (main) -> 11776 (child) -> 11816 (grandchild)
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY        TIME CMD
+0 R 11859 11816 11776 78  80   0 - 95313 -      ?          0:07 ./Analysis /gpfs01/star/pwg/truhlar/Test/ELtrig/merge_files/StUPCRP_production.list 10
+11776 Stepping into the main SUMS wrapper program with []
+Archive:  /star/u/truhlar/star-upcDstRP/build/Package.zip
+  inflating: /tmp/truhlar/332B783D50456A4AA6AC6B38C6CDCF5B_10/Analysis  
+  inflating: /tmp/truhlar/332B783D50456A4AA6AC6B38C6CDCF5B_10/libstar-upc.so  
+Swapping $FILELIST with: /tmp/truhlar/332B783D50456A4AA6AC6B38C6CDCF5B_10/INPUTFILES/332B783D50456A4AA6AC6B38C6CDCF5B_10.local.list
+--------------------------------
+STAR Unified Meta Scheduler 1.10.31 we are starting in $SCRATCH : /home/tmp/truhlar/332B783D50456A4AA6AC6B38C6CDCF5B_10
+--------------------------------
+total 1144
+-rwxr-xr-x 1 truhlar rhstar 174068 Apr 21 05:31 Analysis
+drwxr-xr-x 2 truhlar rhstar   4096 Apr 23 13:04 INPUTFILES
+-rwxr-xr-x 1 truhlar rhstar 990060 Apr 19 12:21 libstar-upc.so
+Starting the job
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+10 / 10
+Input from chain
+Number of UPC events: 2597212 RP: 2597212
+Ending Analysis... GOOD BYE!
+332B783D50456A4AA6AC6B38C6CDCF5B_10.AnalysisOutput.root
+Analysis*
+INPUTFILES/
+libstar-upc.so*
+Cleaning up sandbox file:  /tmp/truhlar/332B783D50456A4AA6AC6B38C6CDCF5B_10/Analysis
+Cleaning up sandbox file:  /tmp/truhlar/332B783D50456A4AA6AC6B38C6CDCF5B_10/libstar-upc.so
+Cleaning up sandbox file:  /tmp/truhlar/332B783D50456A4AA6AC6B38C6CDCF5B_10/.sandboxFiles
+Starting copy block
+Running copy command:  /bin/cp -fp /tmp/truhlar/332B783D50456A4AA6AC6B38C6CDCF5B_10/332B783D50456A4AA6AC6B38C6CDCF5B_10.AnalysisOutput.root /star/u/truhlar/star-upcDstRP/build/outputs/
+11613 Execution of (/star/u/truhlar/star-upcDstRP/build/sched/sched332B783D50456A4AA6AC6B38C6CDCF5B_10.csh ) has ended, exiting normally
+11613 We END on [Tue Apr 23 13:13:20 EDT 2019]

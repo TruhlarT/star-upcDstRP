@@ -1,0 +1,80 @@
+Universe         = vanilla
+Notification     = never
+Executable       = /bin/sh
+Arguments        = "-c 'exec /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB_4.csh'"
+Output           = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_4.out
+Error            = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_4.err
+request_memory   = 2000
+Log              = /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB.condor.log
+Initialdir       = /star/u/truhlar/star-upcDstRP/build
++Job_Type        = "cas" 
+kill_sig         = SIGINT
+accounting_group = group_star.cas
+PeriodicRemove   = (NumJobStarts >=1 && JobStatus==1) || (JobStatus == 2 && (CurrentTime - JobCurrentStartDate > (54000)) && ((RemoteUserCpu+RemoteSysCpu)/(CurrentTime-JobCurrentStartDate) < 0.10)) || (((CurrentTime - EnteredCurrentStatus) > (2*24*3600)) && JobStatus == 5) || (JobRunCount >= 1 && JobStatus == 1)
+Priority         = +10
+Queue
+
+Universe         = vanilla
+Notification     = never
+Executable       = /bin/sh
+Arguments        = "-c 'exec /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB_3.csh'"
+Output           = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_3.out
+Error            = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_3.err
+request_memory   = 2000
+Log              = /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB.condor.log
+Initialdir       = /star/u/truhlar/star-upcDstRP/build
++Job_Type        = "cas" 
+kill_sig         = SIGINT
+accounting_group = group_star.cas
+PeriodicRemove   = (NumJobStarts >=1 && JobStatus==1) || (JobStatus == 2 && (CurrentTime - JobCurrentStartDate > (54000)) && ((RemoteUserCpu+RemoteSysCpu)/(CurrentTime-JobCurrentStartDate) < 0.10)) || (((CurrentTime - EnteredCurrentStatus) > (2*24*3600)) && JobStatus == 5) || (JobRunCount >= 1 && JobStatus == 1)
+Priority         = +10
+Queue
+
+Universe         = vanilla
+Notification     = never
+Executable       = /bin/sh
+Arguments        = "-c 'exec /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB_2.csh'"
+Output           = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_2.out
+Error            = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_2.err
+request_memory   = 2000
+Log              = /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB.condor.log
+Initialdir       = /star/u/truhlar/star-upcDstRP/build
++Job_Type        = "cas" 
+kill_sig         = SIGINT
+accounting_group = group_star.cas
+PeriodicRemove   = (NumJobStarts >=1 && JobStatus==1) || (JobStatus == 2 && (CurrentTime - JobCurrentStartDate > (54000)) && ((RemoteUserCpu+RemoteSysCpu)/(CurrentTime-JobCurrentStartDate) < 0.10)) || (((CurrentTime - EnteredCurrentStatus) > (2*24*3600)) && JobStatus == 5) || (JobRunCount >= 1 && JobStatus == 1)
+Priority         = +10
+Queue
+
+Universe         = vanilla
+Notification     = never
+Executable       = /bin/sh
+Arguments        = "-c 'exec /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB_1.csh'"
+Output           = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_1.out
+Error            = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_1.err
+request_memory   = 2000
+Log              = /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB.condor.log
+Initialdir       = /star/u/truhlar/star-upcDstRP/build
++Job_Type        = "cas" 
+kill_sig         = SIGINT
+accounting_group = group_star.cas
+PeriodicRemove   = (NumJobStarts >=1 && JobStatus==1) || (JobStatus == 2 && (CurrentTime - JobCurrentStartDate > (54000)) && ((RemoteUserCpu+RemoteSysCpu)/(CurrentTime-JobCurrentStartDate) < 0.10)) || (((CurrentTime - EnteredCurrentStatus) > (2*24*3600)) && JobStatus == 5) || (JobRunCount >= 1 && JobStatus == 1)
+Priority         = +10
+Queue
+
+Universe         = vanilla
+Notification     = never
+Executable       = /bin/sh
+Arguments        = "-c 'exec /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB_0.csh'"
+Output           = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_0.out
+Error            = ./log/schedE8FEF418B51EA642EBBC9BE0936C3DCB_0.err
+request_memory   = 2000
+Log              = /star/u/truhlar/star-upcDstRP/build/sched/schedE8FEF418B51EA642EBBC9BE0936C3DCB.condor.log
+Initialdir       = /star/u/truhlar/star-upcDstRP/build
++Job_Type        = "cas" 
+kill_sig         = SIGINT
+accounting_group = group_star.cas
+PeriodicRemove   = (NumJobStarts >=1 && JobStatus==1) || (JobStatus == 2 && (CurrentTime - JobCurrentStartDate > (54000)) && ((RemoteUserCpu+RemoteSysCpu)/(CurrentTime-JobCurrentStartDate) < 0.10)) || (((CurrentTime - EnteredCurrentStatus) > (2*24*3600)) && JobStatus == 5) || (JobRunCount >= 1 && JobStatus == 1)
+Priority         = +10
+Queue
+

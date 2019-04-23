@@ -122,19 +122,19 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
             case 0:
             case 1: 
               if(rpID == branchId || rpID == branchId +2){
-                mCounter->Fill(0);
+                mCounter->Fill(kGood);
               }else{
-                mCounter->Fill(1);
-                cout << rpID << " / "<< trackPoint->rpId() << " / "<< branchId << endl;
+                mCounter->Fill(kBad);
+                cout <<"Connection Error: " << rpID << " / "<< trackPoint->rpId() << " / "<< branchId << endl;
               }
             break;
             case 2: 
             case 3:  
               if(rpID == branchId+2 || rpID == branchId +4){
-                mCounter->Fill(0);
+                mCounter->Fill(kGood);
               }else{
-                mCounter->Fill(1);
-                cout << rpID << " / "<< trackPoint->rpId() << " / "<<branchId<< endl;
+                mCounter->Fill(kBad);
+                cout <<"Connection Error: " << rpID << " / "<< trackPoint->rpId() << " / "<<branchId<< endl;
               }
             break;
           };

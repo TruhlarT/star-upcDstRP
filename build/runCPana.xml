@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<job nProcesses="4" filesPerHour="1" simulateSubmission="false">
+<job nProcesses="5" filesPerHour="1" simulateSubmission="false">
 	<command>
     echo "Starting the job"
-    ./Analysis /gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
+    ./Analysis /gpfs01/star/pwg/truhlar/Test/CPtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
     mv AnalysisOutput.root ${JOBID}.AnalysisOutput.root
     ls
 	</command>

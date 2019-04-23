@@ -47,10 +47,10 @@ private:
 
   TList *mHistList; // list of output histograms
 
-  TH1I *mRPCounter; // analysis RP counter
-
   TH1I *mCounter; // analysis counter
   enum EvtCount{ kAna=1, kTrg, kTrgDat, kBemc, kWritten, kMaxCnt };
+  TH1I *mRPCounter; // analysis RP counter
+  enum RPCount{ kGood=1, kBad, kMaxRPCnt };
   TH1I *mErrCounter; // error counter
   enum ErrCount{ kErrNoEvt=1, kErrFillMsc, kNoTrgDat, kNoMC, kMaxErrCnt };
 

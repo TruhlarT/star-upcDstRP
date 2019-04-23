@@ -142,7 +142,7 @@ Int_t StUPCFilterMaker::Init() {
   //counter of processed events
   mCounter = new TH1I("mCounter", "mCounter", kMaxCnt-1, 1, kMaxCnt);
   mHistList->Add(mCounter);
-  mRPCounter = new TH1I("mRPCounter", "mRPCounter", kMaxCnt-1, 1, kMaxCnt);
+  mRPCounter = new TH1I("mRPCounter", "mRPCounter", kMaxRPCnt-1, 1, kMaxRPCnt);
   mHistList->Add(mRPCounter);
 
   //counter for errors encountered during the analysis
