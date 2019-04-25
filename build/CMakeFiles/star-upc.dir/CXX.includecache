@@ -128,15 +128,17 @@ StUPCRpsTrackPoint.h
 StRPEvent.h
 /star/u/truhlar/star-upcDstRP/src/StRPEvent.h
 
-/star/u/truhlar/star-upcDstRP/src/StUPCRpsCluster.cxx
-StUPCRpsCluster.h
-/star/u/truhlar/star-upcDstRP/src/StUPCRpsCluster.h
-
 /star/u/truhlar/star-upcDstRP/src/StUPCRpsTrack.cxx
 StUPCRpsTrackPoint.h
 /star/u/truhlar/star-upcDstRP/src/StUPCRpsTrackPoint.h
 StUPCRpsTrack.h
 /star/u/truhlar/star-upcDstRP/src/StUPCRpsTrack.h
+StRPEvent.h
+/star/u/truhlar/star-upcDstRP/src/StRPEvent.h
 cmath
 -
+
+/star/u/truhlar/star-upcDstRP/src/StUPCRpsTrackPoint.cxx
+StUPCRpsTrackPoint.h
+/star/u/truhlar/star-upcDstRP/src/StUPCRpsTrackPoint.h
 

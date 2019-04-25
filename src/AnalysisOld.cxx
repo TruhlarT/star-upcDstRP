@@ -267,7 +267,7 @@ void Make(){
 
     for(Int_t kj = 0; kj < 2 ; ++kj){ // Testing connection between tracks and tracksPoint
       if(!trk) break; 
-      StUPCRpsTrackPoint *trkPoint = trk->trackPoint(kj);\
+      StUPCRpsTrackPoint *trkPoint = trk->getTrackPoint(kj);
       if(!trkPoint) continue; 
       int rpID = trkPoint->rpId();
       switch (j) {
@@ -295,8 +295,8 @@ void Make(){
   // and all 8 planes were used in reconstruction - store its ID
     if( trk->type()==StUPCRpsTrack::rpsGlobal && trk->planesUsed()==8) rpTrackIdVec_perBranch[j].push_back( k );
   // a bit looser selection
-    if( (trk->trackPoint(0) ? trk->trackPoint(0)->planesUsed()>=3 : true) &&
-      (trk->trackPoint(1) ? trk->trackPoint(1)->planesUsed()>=3 : true) ) rpTrackIdVec_perSide[side].push_back( k );
+    if( (trk->getTrackPoint(0) ? trk->getTrackPoint(0)->planesUsed()>=3 : true) &&
+      (trk->getTrackPoint(1) ? trk->getTrackPoint(1)->planesUsed()>=3 : true) ) rpTrackIdVec_perSide[side].push_back( k );
   }
 
   for(int i=0; i<nBranches; ++i) 

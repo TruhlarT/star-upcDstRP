@@ -27,6 +27,7 @@
 #include "StUPCRpsTrackPoint.h"
 #include "StUPCRpsTrack.h"
 #include "StUPCFilterRPUtil.h"
+#include "StUPCFilterMaker.h"
 
 
 //_____________________________________________________________________________
@@ -40,7 +41,6 @@ void StUPCFilterRPUtil::clear() {
 
   //clear hits and clusters vectors
   mMuTrackPoints.clear();
-  mTrackPoints.clear();
 
 }//clear
 
@@ -68,7 +68,7 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
       rpEvt->setAngle(iRomanPotId, iPlaneId, collection->anglePlane(iRomanPotId, iPlaneId));  
       rpEvt->setOrientation(iRomanPotId, iPlaneId, collection->orientationPlane(iRomanPotId, iPlaneId));  
       rpEvt->setStatus(iRomanPotId, iPlaneId, collection->statusPlane(iRomanPotId, iPlaneId));
-      for(UInt_t iCluster=0; iCluster < collection->numberOfClusters(iRomanPotId, iPlaneId); ++iCluster){
+      for(Int_t iCluster=0; iCluster < collection->numberOfClusters(iRomanPotId, iPlaneId); ++iCluster){
         StUPCRpsCluster *rpCluster = rpEvt->addCluster();
         rpCluster->setPosition(collection->positionCluster(iRomanPotId, iPlaneId, iCluster));
         rpCluster->setPositionRMS(collection->positionRMSCluster(iRomanPotId, iPlaneId, iCluster));
@@ -87,7 +87,7 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
     StUPCRpsTrackPoint *rpTrackPoint = rpEvt->addTrackPoint();
     rpTrackPoint->setPosition(trackPoint->positionVec());
     rpTrackPoint->setRpId(trackPoint->rpId());
-    for(Int_t iPlane=0; iPlane < collection->numberOfPlanes(); ++iPlane)
+    for(UInt_t iPlane=0; iPlane < collection->numberOfPlanes(); ++iPlane)
       rpTrackPoint->setClusterId(trackPoint->clusterId(iPlane), iPlane);
     rpTrackPoint->setTime(trackPoint->time(0), 0); // pmtId = 0
     rpTrackPoint->setTime(trackPoint->time(1), 1); // pmtId = 1
@@ -100,7 +100,6 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
       break; 
     }
     mMuTrackPoints.push_back(trackPoint);
-    mTrackPoints.push_back(rpTrackPoint);
   }
 
   for(Int_t iTrack=0; iTrack < collection->numberOfTracks(); ++iTrack){
@@ -108,38 +107,17 @@ void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mC
     StUPCRpsTrack *rpTrack = rpEvt->addTrack();
     for(Int_t iStation = 0; iStation < 2; ++iStation){ // Number Of Stations In Branch = 2, one trackpoint in each station
       const StMuRpsTrackPoint *trackPoint = track->trackPoint(iStation);
-      if(!trackPoint){
-        rpTrack->setTrackPoint(nullptr, iStation);
+      if(!trackPoint)
         continue;
-      }
       for(Int_t i = 0; i < collection->numberOfTrackPoints(); ++i){
-        if(trackPoint == mMuTrackPoints[i]){
-          rpTrack->setTrackPoint(mTrackPoints[i], iStation);
-          if(!mTrackPoints[i]) break; 
-          int rpID = mTrackPoints[i]->rpId();
-          int branchId = track->branch();
-          switch (branchId) {
-            case 0:
-            case 1: 
-              if(rpID == branchId || rpID == branchId +2){
-                mCounter->Fill(kGood);
-              }else{
-                mCounter->Fill(kBad);
-                cout <<"Connection Error: " << rpID << " / "<< trackPoint->rpId() << " / "<< branchId << endl;
-              }
-            break;
-            case 2: 
-            case 3:  
-              if(rpID == branchId+2 || rpID == branchId +4){
-                mCounter->Fill(kGood);
-              }else{
-                mCounter->Fill(kBad);
-                cout <<"Connection Error: " << rpID << " / "<< trackPoint->rpId() << " / "<<branchId<< endl;
-              }
-            break;
-          };
-          break;
-        } 
+			if(trackPoint == mMuTrackPoints[i]){
+				if(iStation==0){
+					rpTrack->setFirstTrackPointId(i);
+				}else{
+					rpTrack->setSecondTrackPointId(i);
+				}
+				break;
+			} 
       }
     }     
     rpTrack->setP(track->pVec()); 

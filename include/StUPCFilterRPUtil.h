@@ -9,7 +9,6 @@
 class StRPEvent;
 class StMuDst;
 class StMuRpsTrackPoint;
-class StUPCRpsTrackPoint;
 
 class StUPCFilterRPUtil {
 
@@ -25,7 +24,6 @@ public:
 private:
 
 	vector<const StMuRpsTrackPoint*>  mMuTrackPoints;
-	vector<StUPCRpsTrackPoint*>  mTrackPoints;
 
    StUPCFilterRPUtil(const StUPCFilterRPUtil &o); // not implemented
    StUPCFilterRPUtil &operator=(const StUPCFilterRPUtil &o); // not implemented

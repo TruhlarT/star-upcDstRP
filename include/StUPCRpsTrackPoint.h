@@ -16,10 +16,10 @@ public:
 	StUPCRpsTrackPoint();
 	virtual ~StUPCRpsTrackPoint();
 
-	StUPCRpsTrackPoint& operator=(const StUPCRpsTrackPoint&);
 	enum StUPCRpsTrackPointQuality {rpsNormal, rpsGolden, rpsNotSet}; 
 
-	unsigned int planesUsed() const;
+	void Clear(Option_t * /*option*/ ="");
+	Int_t planesUsed() const;
 
 
 	static const Int_t mNumberOfPmtsInRp = 2;
@@ -27,30 +27,30 @@ public:
 
 	TVector3 positionVec() const { return mPosition; }
 	UChar_t rpId() const { return mRpId; }
-	int clusterId(unsigned int planeId ) const
+	Int_t clusterId(Int_t planeId ) const
 	{
 	    return planeId<mNumberOfPlanesInRp ? mClusterId[planeId] : -1;
 	}
-	double time(unsigned int pmtId) const
+	Float_t time(Int_t pmtId) const
 	{
 	    return pmtId<mNumberOfPmtsInRp ? mTime[pmtId] : -1;
 	}
 	StUPCRpsTrackPointQuality quality() const { return mQuality; }
-	double x() const { return mPosition.x(); }
-	double y() const { return mPosition.y(); }
-	double z() const { return mPosition.z(); }
+	Float_t x() const { return mPosition.x(); }
+	Float_t y() const { return mPosition.y(); }
+	Float_t z() const { return mPosition.z(); }
 
 	void setPosition(const TVector3& position)
 	{
 	    mPosition = position;
 	}
 	void setRpId(UChar_t rpId) { mRpId = rpId; }
-	void setClusterId(int clusterId, unsigned int planeId)
+	void setClusterId(Int_t clusterId, Int_t planeId)
 	{
 	    if( planeId<mNumberOfPlanesInRp )
 	        mClusterId[planeId] = clusterId;
 	}
-	void setTime(double timeVal, unsigned int pmtId)
+	void setTime(Float_t timeVal, UInt_t pmtId)
 	{
 	    if( pmtId<mNumberOfPmtsInRp ) mTime[pmtId] = timeVal;
 	}
@@ -60,14 +60,17 @@ public:
 	}
     
 private:
-    Float_t mTime[mNumberOfPmtsInRp];
-    UChar_t mRpId;
-    Int_t mClusterId[mNumberOfPlanesInRp];
-    
-    TVector3         mPosition;
-    StUPCRpsTrackPointQuality mQuality;
+	StUPCRpsTrackPoint(const StUPCRpsTrackPoint &o); //not implemented
+	StUPCRpsTrackPoint& operator=(const StUPCRpsTrackPoint&); 
+	
+	Float_t mTime[mNumberOfPmtsInRp];
+	UChar_t mRpId; // Id of Roman Pot, E1U = 0, E1D = 1, E2U = 2, E2D, W1U, W1D, W2U, W2D = 7
+	Int_t mClusterId[mNumberOfPlanesInRp];
 
-    ClassDef( StUPCRpsTrackPoint, 1 )
+	TVector3         mPosition;
+	StUPCRpsTrackPointQuality mQuality;
+
+	ClassDef( StUPCRpsTrackPoint, 1 )
 };
 
 #endif

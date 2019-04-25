@@ -14,16 +14,18 @@
 using namespace std;
 
 class StUPCRpsTrackPoint;
+class StRPEvent;
 
 class StUPCRpsTrack : public TObject {
 public:
 	StUPCRpsTrack();
 	virtual ~StUPCRpsTrack();
+	void Clear(Option_t * /*option*/ ="");
 
-	StUPCRpsTrack& operator=(const StUPCRpsTrack&);
 	enum StRpsTrackType { rpsLocal, rpsGlobal, rpsUndefined };
 	enum StRpsAngles { rpsAngleThetaX, rpsAngleThetaY, rpsAngleTheta, mNumberOfAngleTypes };
 
+	//getters
 	unsigned int planesUsed() const;
 
 	double theta(unsigned int = rpsAngleTheta) const;
@@ -34,41 +36,47 @@ public:
 
 	static const Int_t mNumberOfStationsInBranch = 2;
 
-	StUPCRpsTrackPoint* trackPoint(unsigned int station) const
-	{
-	    return station < mNumberOfStationsInBranch ? (StUPCRpsTrackPoint*)mTrackPoints[station].GetObject() : nullptr;
-	}
+	UShort_t getFirstTrackPointId() { return mFirstTrackPointId; }
+	UShort_t getSecondTrackPointId() { return mSecondTrackPointId; }
 	TVector3 pVec() const { return mP; }
-	int branch() const { return mBranch; }
+	Int_t branch() const { return mBranch; }
 	StRpsTrackType type() const { return mType; }
 	double phi() const { return mP.Phi(); } 
-	double t(double beamMomentum) const
+	double t(Float_t beamMomentum) const
 	{
 	  return -2*beamMomentum*beamMomentum*(1-xi(beamMomentum))*(1-cos(theta(rpsAngleTheta)));
 	}
-	double xi(double beamMomentum) const
+	double xi(Float_t beamMomentum) const
 	{
 	    return (beamMomentum - mP.Mag())/beamMomentum; 
 	}
 	double p() const { return mP.Mag(); }
 	double pt() const { return mP.Perp(); } 
 	double eta() const { return mP.PseudoRapidity(); } 
+	StRPEvent *getEvent() const { return mEvt; }
+	StUPCRpsTrackPoint* getTrackPoint(UInt_t  station) const;
 
-	void setTrackPoint(StUPCRpsTrackPoint* trackPoint, unsigned int station)
-	{
-	    if (station<mNumberOfStationsInBranch)
-	        mTrackPoints[station] = (TObject*)trackPoint;
-	}
+	// setters
+	void setFirstTrackPointId(UShort_t Id) { mFirstTrackPointId = Id; }
+	void setSecondTrackPointId(UShort_t Id) { mSecondTrackPointId = Id; }
 	void setP(const TVector3& P) { mP = P; }
-	void setBranch(int branch) { mBranch = branch; }
+	void setBranch(Int_t branch) { mBranch = branch; }
 	void setType(StRpsTrackType type) { mType = type; }
+	void setEvent(StRPEvent *evt) { mEvt = evt; }
 
 private:	
+	StUPCRpsTrack(const StUPCRpsTrack &o); //not implemented
+	StUPCRpsTrack& operator=(const StUPCRpsTrack&); 
 
-	TRef mTrackPoints[mNumberOfStationsInBranch]; // pointers to trackPoints (local tracks)
+	// pointers to trackPoints (local tracks)
+	UShort_t mFirstTrackPointId;
+	UShort_t mSecondTrackPointId;
+	
 	TVector3 mP;				// three-vector with reconstructed track momentum
 	StRpsTrackType mType;			// type of the track
 	Int_t          mBranch;			// detectors branch, EU=0, ED=1, WU=2, WD=3 
+
+	StRPEvent *mEvt; //! pointer to current event, local use only
 
 	ClassDef(StUPCRpsTrack, 1)
 };

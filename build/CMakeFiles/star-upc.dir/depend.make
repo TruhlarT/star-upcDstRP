@@ -33,6 +33,7 @@ CMakeFiles/star-upc.dir/src/StUPCEvent.cxx.o: ../src/StUPCEvent.cxx
 CMakeFiles/star-upc.dir/src/StUPCRpsCluster.cxx.o: ../include/StUPCRpsCluster.h
 CMakeFiles/star-upc.dir/src/StUPCRpsCluster.cxx.o: ../src/StUPCRpsCluster.cxx
 
+CMakeFiles/star-upc.dir/src/StUPCRpsTrack.cxx.o: ../include/StRPEvent.h
 CMakeFiles/star-upc.dir/src/StUPCRpsTrack.cxx.o: ../include/StUPCRpsTrack.h
 CMakeFiles/star-upc.dir/src/StUPCRpsTrack.cxx.o: ../include/StUPCRpsTrackPoint.h
 CMakeFiles/star-upc.dir/src/StUPCRpsTrack.cxx.o: ../src/StUPCRpsTrack.cxx

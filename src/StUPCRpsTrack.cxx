@@ -5,46 +5,71 @@
 
 #include "StUPCRpsTrackPoint.h"
 #include "StUPCRpsTrack.h"
+#include "StRPEvent.h"
 #include <cmath>
 
 ClassImp(StUPCRpsTrack)
 
-StUPCRpsTrack::StUPCRpsTrack(){
-    for(unsigned int i=0; i<mNumberOfStationsInBranch; ++i)
-        mTrackPoints[i] = nullptr;
+StUPCRpsTrack::StUPCRpsTrack(): TObject(),
+  mEvt(0x0)
+{
+    mFirstTrackPointId = -1;
+    mSecondTrackPointId = -1;
     mBranch = -1;
     mType = rpsUndefined;
 }
 
 StUPCRpsTrack::~StUPCRpsTrack() { /* no op */ }
 
+void StUPCRpsTrack::Clear(Option_t *)
+{
+  //clear rp track object, overridden from TObject
+  //for use in TClonesArray
+
+    mFirstTrackPointId = -1;
+    mSecondTrackPointId = -1;
+    mBranch = -1;
+    mType = rpsUndefined;
+
+}//Clear
+
 StUPCRpsTrack& StUPCRpsTrack::operator=(const StUPCRpsTrack& track) {
     if (this != &track) {
-        for(unsigned int i=0; i<mNumberOfStationsInBranch; ++i)
-            mTrackPoints[i] = const_cast<StUPCRpsTrackPoint*>(track.trackPoint(i));
         mP = track.pVec();
         mType = track.type();
     }
     return *this;
 }
 
+StUPCRpsTrackPoint* StUPCRpsTrack::getTrackPoint(unsigned int station) const {
+    if(!mEvt) return 0x0;
+
+    if(station==0){
+        return mEvt->getTrackPoint(mFirstTrackPointId);
+    }else if(station==1){
+        return mEvt->getTrackPoint(mSecondTrackPointId);
+    }else{
+        return 0x0;
+    }
+}
+
 unsigned int StUPCRpsTrack::planesUsed() const {
     unsigned int nPlanes = 0;
     for(unsigned int i=0; i<mNumberOfStationsInBranch; ++i)
-        nPlanes += mTrackPoints[i].GetObject() ? trackPoint(i)->planesUsed() : 0;
+        nPlanes += getTrackPoint(i) ? getTrackPoint(i)->planesUsed() : 0;
     return nPlanes;
 }
 
 double StUPCRpsTrack::thetaRp(unsigned int coordinate) const {
     if(coordinate>rpsAngleTheta) return 0.0;
     if(mType==rpsLocal) return theta(coordinate);
-    TVector3 deltaVector = trackPoint(1)->positionVec() - trackPoint(0)->positionVec();
+    TVector3 deltaVector = getTrackPoint(1)->positionVec() - getTrackPoint(0)->positionVec();
     return atan((coordinate<rpsAngleTheta ? deltaVector[coordinate] : deltaVector.Perp())/abs(deltaVector.z()));
 }
 
 double StUPCRpsTrack::phiRp() const{
     if(mType==rpsLocal) return phi();
-    TVector3 deltaVector = trackPoint(1)->positionVec() - trackPoint(0)->positionVec();
+    TVector3 deltaVector = getTrackPoint(1)->positionVec() - getTrackPoint(0)->positionVec();
     return deltaVector.Phi();
 }
 
@@ -52,10 +77,10 @@ double StUPCRpsTrack::time() const{
     double sumTime=0.0;
     unsigned int numberOfPmtsWithSignal=0;
     for(unsigned int i=0; i<mNumberOfStationsInBranch; ++i){
-        if(trackPoint(i))
-            for(int j=0; j< trackPoint(i)->mNumberOfPmtsInRp; ++j){
-                if(trackPoint(i)->time(j)>0){
-                    sumTime += trackPoint(i)->time(j);
+        if(getTrackPoint(i))
+            for(int j=0; j< getTrackPoint(i)->mNumberOfPmtsInRp; ++j){
+                if(getTrackPoint(i)->time(j)>0){
+                    sumTime += getTrackPoint(i)->time(j);
                     ++numberOfPmtsWithSignal;
                 }
             }

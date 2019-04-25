@@ -5,9 +5,9 @@ rm -r *.package
 rm *.zip
 
 rm -r sched*
-rm -r log
+#rm -r log
 #rm -r outputs
 
 mkdir sched
-mkdir log
+#mkdir log
 #mkdir outputs

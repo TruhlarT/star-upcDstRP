@@ -2,7 +2,7 @@
 <job nProcesses="25" filesPerHour="1" simulateSubmission="false">
 	<command>
     echo "Starting the job"
-    ./Analysis /gpfs01/star/pwg/truhlar/Test/ELtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
+    ./Analysis /gpfs01/star/pwg/truhlar/ConnectionTest/ELtrig/merge_files/StUPCRP_production.list ${JOBINDEX}
     mv AnalysisOutput.root ${JOBID}.AnalysisOutput.root
     ls
 	</command>
