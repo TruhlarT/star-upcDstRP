@@ -45,9 +45,9 @@ StUPCRpsTrackPoint* StUPCRpsTrack::getTrackPoint(unsigned int station) const {
     if(!mEvt) return 0x0;
 
     if(station==0){
-        return mEvt->getTrackPoint(mFirstTrackPointId);
+        return mFirstTrackPointId == -1 ? nullptr : mEvt->getTrackPoint(mFirstTrackPointId);
     }else if(station==1){
-        return mEvt->getTrackPoint(mSecondTrackPointId);
+        return mSecondTrackPointId == -1 ? nullptr : mEvt->getTrackPoint(mSecondTrackPointId);
     }else{
         return 0x0;
     }

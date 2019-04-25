@@ -33,11 +33,11 @@ public:
 
 
   //getters
-  UShort_t getNumberOfClusters() const;
+  UInt_t getNumberOfClusters() const;
   StUPCRpsCluster *getCluster(Int_t iCluster) const;  
-  UShort_t getNumberOfTracks() const;
+  UInt_t getNumberOfTracks() const;
   StUPCRpsTrack *getTrack(Int_t iTrack) const;
-  UShort_t getNumberOfTrackPoints() const;
+  UInt_t getNumberOfTrackPoints() const;
   StUPCRpsTrackPoint *getTrackPoint(Int_t iTrackPoint) const;
 
 // Setters, romanPotID == RomanPot ID, planeID == Plane Id, val == value of current setter
@@ -200,15 +200,15 @@ private:
 
   static TClonesArray *mgClusters; // array of upc tracks
   TClonesArray *mClusters; //-> array of upc tracks
-  UShort_t mNClusters; //! number of upc tracks in event, local use when filling
+  UInt_t mNClusters; //! number of upc tracks in event, local use when filling
 
   static TClonesArray *mgTracks; // array of upc tracks
   TClonesArray *mTracks; //-> array of upc tracks
-  UShort_t mNTracks; //! number of upc tracks in event, local use when filling
+  UInt_t mNTracks; //! number of upc tracks in event, local use when filling
 
   static TClonesArray *mgTrackPoints; // array of upc tracks
   TClonesArray *mTrackPoints; //-> array of upc tracks
-  UShort_t mNTrackPoints; //! number of upc tracks in event, local use when filling
+  UInt_t mNTrackPoints; //! number of upc tracks in event, local use when filling
 
   ClassDef(StRPEvent, 2);
 };

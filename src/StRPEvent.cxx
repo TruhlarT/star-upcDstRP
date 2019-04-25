@@ -122,7 +122,7 @@ StUPCRpsTrackPoint *StRPEvent::addTrackPoint()
 }//addTrackPoint
 
 //_____________________________________________________________________________
-UShort_t StRPEvent::getNumberOfClusters() const {
+UInt_t StRPEvent::getNumberOfClusters() const {
 
   //number of RP clusters in event
 
@@ -142,7 +142,7 @@ StUPCRpsCluster *StRPEvent::getCluster(Int_t iCluster) const
 }//getCluster
 
 //_____________________________________________________________________________
-UShort_t StRPEvent::getNumberOfTracks() const {
+UInt_t StRPEvent::getNumberOfTracks() const {
 
   //number of RP tracks in event
 
@@ -162,7 +162,7 @@ StUPCRpsTrack *StRPEvent::getTrack(Int_t iTrack) const
 }//getTrack
 
 //_____________________________________________________________________________
-UShort_t StRPEvent::getNumberOfTrackPoints() const {
+UInt_t StRPEvent::getNumberOfTrackPoints() const {
 
   //number of RP trackPoints in event
 

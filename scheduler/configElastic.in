@@ -7,7 +7,7 @@ top  /gpfs01/star/pwg/truhlar/ConnectionTest/ELtrig
 %add_input  test  /gpfs01/star/pwg/truhlar/quickTest.list
 add_input  test  /gpfs01/star/pwg/truhlar/muDst.list
 
-
+#submit  local
 nfiles  10
 
 #data/MC

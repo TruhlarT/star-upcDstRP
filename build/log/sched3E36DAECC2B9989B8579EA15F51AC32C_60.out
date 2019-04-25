@@ -1,0 +1,39 @@
+We are starting on node: rcas2031.rcf.bnl.gov
+HOME is not defined
+Using getent method
+HOME is now /star/u/truhlar
+227147 We will spawn ourselves (/star/u/truhlar/star-upcDstRP/build/sched/sched3E36DAECC2B9989B8579EA15F51AC32C_60.csh )
+227147 We BEGIN on [Thu Apr 25 08:43:29 EDT 2019]
+[1] 227459
+227147 We are waiting for 227459 
+227459 Stepping into the main SUMS wrapper program with []
+Archive:  /star/u/truhlar/star-upcDstRP/build/Package.zip
+  inflating: /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_60/Analysis  
+  inflating: /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_60/libstar-upc.so  
+Swapping $FILELIST with: /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_60/INPUTFILES/3E36DAECC2B9989B8579EA15F51AC32C_60.local.list
+--------------------------------
+STAR Unified Meta Scheduler 1.10.31 we are starting in $SCRATCH : /home/tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_60
+--------------------------------
+total 1144
+-rwxr-xr-x 1 truhlar rhstar 175264 Apr 23 23:33 Analysis
+drwxr-xr-x 2 truhlar rhstar   4096 Apr 25 08:43 INPUTFILES
+-rwxr-xr-x 1 truhlar rhstar 990060 Apr 23 23:33 libstar-upc.so
+Starting the job
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+Input from chain
+Number of UPC events: 691063 RP: 691063
+3E36DAECC2B9989B8579EA15F51AC32C_60.AnalysisOutput.root
+Analysis*
+INPUTFILES/
+libstar-upc.so*
+Cleaning up sandbox file:  /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_60/Analysis
+Cleaning up sandbox file:  /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_60/libstar-upc.so
+Cleaning up sandbox file:  /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_60/.sandboxFiles
+Starting copy block
+Running copy command:  /bin/cp -fp /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_60/3E36DAECC2B9989B8579EA15F51AC32C_60.AnalysisOutput.root /star/u/truhlar/star-upcDstRP/build/outputs/
+227147 Execution of (/star/u/truhlar/star-upcDstRP/build/sched/sched3E36DAECC2B9989B8579EA15F51AC32C_60.csh ) has ended, exiting normally
+227147 We END on [Thu Apr 25 08:43:30 EDT 2019]

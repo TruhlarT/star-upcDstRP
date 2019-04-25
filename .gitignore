@@ -7,11 +7,11 @@ temp_gccflags.c
 *.package
 *.session.xml
 submit_*.xml
-txt/
+build/CMakeFiles/
+build/sched/
 *.log
 *.sh~
 *.mp3
-*.pyc
 *.d
 *.so
 *.root

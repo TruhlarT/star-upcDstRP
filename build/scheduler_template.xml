@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE job>
+
+<job nProcesses="__NProcesses__" filesPerHour="1" simulateSubmission="false">
+  <command>
+    echo "Starting the job"
+    ls
+    hostname
+    starpro
+    ./Analysis __INPUT__ ${JOBINDEX}
+    mv AnalysisOutput.root ${JOBID}.root
+    ls
+  </command>
+  <stdout URL="file:__BASEDIR__/logs/$JOBID.out"/>
+  <stderr URL="file:__BASEDIR__/logs/$JOBID.err"/>
+
+  <output fromScratch="*.root" toURL="file:__BASEDIR__/" />
+
+  <Generator>
+    <Location>__BASEDIR__/sched</Location>
+  </Generator>
+
+  <SandBox installer="ZIP">
+    <Package>
+      <File>file:__SRCDIR__/Analysis</File>
+      <File>file:__SRCDIR__/libstar-upc.so</File>
+    </Package>
+  </SandBox>
+</job>

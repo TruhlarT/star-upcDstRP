@@ -1,0 +1,4 @@
+[1]  + Done                          ( ( setenv SUMS_EXECUTION 1 && nohup $0 $* ) > $SCRATCH/.output.log ) >& $SCRATCH/.errror.log
+
+ *** Break *** segmentation violation
+Segmentation fault

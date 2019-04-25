@@ -45,7 +45,7 @@ void StUPCFilterRPUtil::clear() {
 }//clear
 
 //_____________________________________________________________________________
-void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mCounter) {
+void StUPCFilterRPUtil::processEvent(StRPEvent *rpEvt, StMuDst *mMuDst) {
 
 
   StMuRpsCollection *collection = mMuDst->RpsCollection();

@@ -1,0 +1,39 @@
+We are starting on node: spool0246.sdcc.bnl.gov
+HOME is not defined
+Using getent method
+HOME is now /star/u/truhlar
+5022 We will spawn ourselves (/star/u/truhlar/star-upcDstRP/build/sched/sched3E36DAECC2B9989B8579EA15F51AC32C_40.csh )
+5022 We BEGIN on [Thu Apr 25 08:43:30 EDT 2019]
+[1] 5222
+5022 We are waiting for 5222 
+5222 Stepping into the main SUMS wrapper program with []
+Archive:  /star/u/truhlar/star-upcDstRP/build/Package.zip
+  inflating: /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_40/Analysis  
+  inflating: /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_40/libstar-upc.so  
+Swapping $FILELIST with: /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_40/INPUTFILES/3E36DAECC2B9989B8579EA15F51AC32C_40.local.list
+--------------------------------
+STAR Unified Meta Scheduler 1.10.31 we are starting in $SCRATCH : /home/tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_40
+--------------------------------
+total 1144
+-rwxr-xr-x 1 truhlar rhstar 175264 Apr 23 23:33 Analysis
+drwxr-xr-x 2 truhlar rhstar   4096 Apr 25 08:43 INPUTFILES
+-rwxr-xr-x 1 truhlar rhstar 990060 Apr 23 23:33 libstar-upc.so
+Starting the job
+
+[1mRooFit v3.60 -- Developed by Wouter Verkerke and David Kirkby[0m 
+                Copyright (C) 2000-2013 NIKHEF, University of California & Stanford University
+                All rights reserved, please read http://roofit.sourceforge.net/license.txt
+
+Input from chain
+Number of UPC events: 800069 RP: 800069
+3E36DAECC2B9989B8579EA15F51AC32C_40.AnalysisOutput.root
+Analysis*
+INPUTFILES/
+libstar-upc.so*
+Cleaning up sandbox file:  /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_40/Analysis
+Cleaning up sandbox file:  /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_40/libstar-upc.so
+Cleaning up sandbox file:  /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_40/.sandboxFiles
+Starting copy block
+Running copy command:  /bin/cp -fp /tmp/truhlar/3E36DAECC2B9989B8579EA15F51AC32C_40/3E36DAECC2B9989B8579EA15F51AC32C_40.AnalysisOutput.root /star/u/truhlar/star-upcDstRP/build/outputs/
+5022 Execution of (/star/u/truhlar/star-upcDstRP/build/sched/sched3E36DAECC2B9989B8579EA15F51AC32C_40.csh ) has ended, exiting normally
+5022 We END on [Thu Apr 25 08:43:33 EDT 2019]

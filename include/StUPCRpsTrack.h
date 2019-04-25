@@ -36,8 +36,8 @@ public:
 
 	static const Int_t mNumberOfStationsInBranch = 2;
 
-	UShort_t getFirstTrackPointId() { return mFirstTrackPointId; }
-	UShort_t getSecondTrackPointId() { return mSecondTrackPointId; }
+	Int_t getFirstTrackPointId() { return mFirstTrackPointId; }
+	Int_t getSecondTrackPointId() { return mSecondTrackPointId; }
 	TVector3 pVec() const { return mP; }
 	Int_t branch() const { return mBranch; }
 	StRpsTrackType type() const { return mType; }
@@ -57,8 +57,8 @@ public:
 	StUPCRpsTrackPoint* getTrackPoint(UInt_t  station) const;
 
 	// setters
-	void setFirstTrackPointId(UShort_t Id) { mFirstTrackPointId = Id; }
-	void setSecondTrackPointId(UShort_t Id) { mSecondTrackPointId = Id; }
+	void setFirstTrackPointId(Int_t Id) { mFirstTrackPointId = Id; }
+	void setSecondTrackPointId(Int_t Id) { mSecondTrackPointId = Id; }
 	void setP(const TVector3& P) { mP = P; }
 	void setBranch(Int_t branch) { mBranch = branch; }
 	void setType(StRpsTrackType type) { mType = type; }
@@ -69,8 +69,8 @@ private:
 	StUPCRpsTrack& operator=(const StUPCRpsTrack&); 
 
 	// pointers to trackPoints (local tracks)
-	UShort_t mFirstTrackPointId;
-	UShort_t mSecondTrackPointId;
+	Int_t mFirstTrackPointId;
+	Int_t mSecondTrackPointId;
 	
 	TVector3 mP;				// three-vector with reconstructed track momentum
 	StRpsTrackType mType;			// type of the track

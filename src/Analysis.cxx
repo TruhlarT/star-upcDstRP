@@ -1,6 +1,7 @@
 // Run: ./Analysis input index
 // e.g. ./Analysis /gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production.list -1
-
+// or you can open just root file
+// ./Analysis /gpfs01/star/pwg/truhlar/ConnectionTest/ELtrig/test/A297EEE504EDA768A8E98674FDF699B7_63.root
 
 
 // c++ headers
@@ -174,15 +175,16 @@ int main(int argc, char** argv) {
   if(!outfile) {cout << "Can not open output file." << endl; return -1;}
 
   Init();
+  int fileId = 0;
+  const string& input = argv[1];
+  if( input.find(".root") == string::npos )
+    fileId = atoi(argv[2]);
 
-
-  int fileId = atoi(argv[2]);
   if(!ConnectInput(argv[1], fileId)){
   //if(!ConnectInput("/gpfs01/star/pwg/truhlar/Final/CPtrig/merge_files/StUPCRP_production_0000.root")){
     cout << "No input." << endl; 
     return 1;
   }
-
   //ask for number of events
   Long64_t nev = upcTree->GetEntries();
   cout << "Number of UPC events: " << nev <<" RP: "<<rpTree->GetEntries() <<endl;
@@ -262,7 +264,7 @@ void Make(){
   for(int k=0; k<rpEvt->getNumberOfTracks(); ++k){
   // Get pointer to k-th track in Roman Pot data collection
     StUPCRpsTrack *trk = rpEvt->getTrack(k);
-
+    trk->setEvent(rpEvt);
   // Get ID of a branch in which this k-th track was reconstructed
     int j = trk->branch();
     int side = j<2 ? E : W;

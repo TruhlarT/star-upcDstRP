@@ -19,7 +19,7 @@ public:
 
   void clear();
 
-  void processEvent(StRPEvent *rpEvt, StMuDst *mMuDst, TH1I *mCounter);
+  void processEvent(StRPEvent *rpEvt, StMuDst *mMuDstw);
 
 private:
 
