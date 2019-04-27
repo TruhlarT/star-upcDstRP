@@ -12,10 +12,11 @@ if __name__ == "__main__":
     #command line argumets
     resubmit = False
     args = sys.argv
-    arg = args.pop(0)
-    if arg == "-r": resubmit = True
+    while args != []:
+        arg = args.pop(0)
+        if arg == "-r": resubmit = True
 
-    #get outputs directory from config used for production
+    #get outputs directory from submit used for production
     for line in open("submit.xml").xreadlines(  ): 
         if "Location" in line:
             basedir = line.lstrip().split(">")[1].split("/sched")[0]
