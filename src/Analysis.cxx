@@ -54,7 +54,7 @@
 
 using namespace std;
 
-enum {kCPtrig=1, kEl, kInEl, kTPC2t, kTOF2t, kSameVrtx, kTotCH0, kMissPt, kMaxCount};
+enum {kCPtrig=0, kEl, kInEl,, kTOF2t, kSameVrtx, kTotCH0, kMissPt, kMaxCount};
 enum SIDE {E=0, East=0, W=1, West=1, nSides};
 enum XY_COORDINATE {X, Y, nCoordinates};
 enum RP_ID {E1U, E1D, E2U, E2D, W1U, W1D, W2U, W2D, nRomanPots};
@@ -106,8 +106,9 @@ TString branchName[nBranches] = { TString("EU"), TString("ED"), TString("WU"), T
 TString rpName[nRomanPots] = { TString("E1U"), TString("E1D"), TString("E2U"), TString("E2D"),
                     TString("W1U"), TString("W1D"), TString("W2U"), TString("W2D") };
 TString stationName[nStations] = { TString("E1"), TString("E2"), TString("W1"), TString("W2") };
-TString summaryLabels[10] = { TString("CPTnoBBCL"), TString("Elastic"), TString("Inelastic"), TString("2 TPC tracks"), 
-                    TString("2 TOF tracks"), TString("Same vertex"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), TString(""), TString("")};
+TString summaryLabels[10] = { TString("All"), TString("Elastic"), TString("Inelastic"), TString("2 TPC-TOF tracks"), 
+                              TString("Same vertex"), TString("TotCharge 0"), TString("MissingPt < 0.1 GeV"), 
+                              TString(""), TString(""), TString("")};
 TString systemID[3] = { TString("Combi"), TString("InEl"), TString("El")};
 TString systemState[4] = { TString("TPC2t"), TString("TOF2trk"), TString("Q0"), TString("Excl")};
 TString configLabels[4] = { TString("EUD"), TString("EDU"), TString("IUU"), TString("IDD")};
@@ -146,7 +147,6 @@ TTree *recTree;
 Int_t triggerBits, nTracks;
 Int_t totalCharge;
 Int_t nTofTrks;
-Int_t nTpcTrks;
 Double_t nSigPPion;
 Double_t missingPt; 
 Double_t invMass;
@@ -206,6 +206,7 @@ int main(int argc, char** argv) {
 
 void Init(){
   hAnalysisFlow = new TH1I("AnalysisFlow", "CutsFlow", kMaxCount-1, 1, kMaxCount);
+  //hAnalysisFlow = new TH1F("AnalysisFlow", "AnalysisFlow", 10, -0.5, 9.5);
   for(int tb=1; tb<kMaxCount; ++tb) hAnalysisFlow->GetXaxis()->SetBinLabel(tb, summaryLabels[tb-1]);
 
   hTriggerBits = new TH1F("TriggerBits", "TriggerBits", nTriggers, -0.5, 20.5);
@@ -353,7 +354,7 @@ void Make(){
       }
 
       totalCharge = missingPt = invMass = 0;
-      nTofTrks = nTpcTrks = nSigPPion = 0;
+      nTofTrks = nSigPPion = 0;
       dEdx.clear();
       momentum.clear();
       TOFtime.clear();
@@ -365,9 +366,9 @@ void Make(){
       double nSigmaPairPion2 = 0;
       TLorentzVector centralTracksTotalFourMomentum;
 
-      if( upcEvt->getNPrimTracks() !=2)
-        return;
-      hAnalysisFlow->Fill(kTPC2t);
+   //   if( upcEvt->getNPrimTracks() !=2)
+//        return;
+//      hAnalysisFlow->Fill(kTPC2t);
 
     // loop over all TPC tracks
       for(int j=0; j<upcEvt->getNumberOfTracks(); ++j){
@@ -376,24 +377,21 @@ void Make(){
         TLorentzVector trkLVector;
         trk->getLorentzVector(trkLVector,pionMass);
 
-        if( !trk->getFlag(StUPCTrack::kPrimary) ) continue; // skip global tracks, analyze only primary
-        // read basic information about the track
-        ++nTpcTrks;     
-
-        if( trk->getFlag(StUPCTrack::kTof)){  
-          dEdx.push_back(trk->getDEdxSignal()*1000000);
-          momentum.push_back(trkLVector.P());
-          charge.push_back(trk->getCharge());
-          TOFtime.push_back(trk->getTofTime());
-          TOFlength.push_back(trk->getTofPathLength());
-          nSigmaTPCPion.push_back(trk->getNSigmasTPCPion());
-          vexterId.push_back(trk->getVertexId());
-          vertexZ.push_back(trk->getVertex()->getPosZ());
-          totalCharge += static_cast<int>( trk->getCharge() );
-          centralTracksTotalFourMomentum += trkLVector;
-          nSigmaPairPion2 += pow(trk->getNSigmasTPCPion(),2);
-          ++nTofTrks;
-        }
+        if( !trk->getFlag(StUPCTrack::kPrimary) || !trk->getFlag(StUPCTrack::kTof) ) continue;
+        // read basic information about the track     
+ 
+        dEdx.push_back(trk->getDEdxSignal()*1000000);
+        momentum.push_back(trkLVector.P());
+        charge.push_back(trk->getCharge());
+        TOFtime.push_back(trk->getTofTime());
+        TOFlength.push_back(trk->getTofPathLength());
+        nSigmaTPCPion.push_back(trk->getNSigmasTPCPion());
+        vexterId.push_back(trk->getVertexId());
+        vertexZ.push_back(trk->getVertex()->getPosZ());
+        totalCharge += static_cast<int>( trk->getCharge() );
+        centralTracksTotalFourMomentum += trkLVector;
+        nSigmaPairPion2 += pow(trk->getNSigmasTPCPion(),2);
+        ++nTofTrks;
 
       }
 
@@ -466,7 +464,6 @@ TFile *CreateOutputTree(const string& out) {
 
   recTree ->Branch("triggerBits", &triggerBits, "triggerBits/I");
   recTree ->Branch("nTracks", &nTracks, "nTracks/I");
-  recTree ->Branch("nTpcTrks", &nTpcTrks, "nTpcTrks/I");
   recTree ->Branch("nTofTrks", &nTofTrks, "nTofTrks/I");
   recTree ->Branch("totalCharge", &totalCharge, "totalCharge/I");
   recTree ->Branch("nSigPPion", &nSigPPion, "nSigPPion/D");
