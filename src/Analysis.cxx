@@ -54,7 +54,7 @@
 
 using namespace std;
 
-enum {kCPtrig=0, kEl, kInEl,, kTOF2t, kSameVrtx, kTotCH0, kMissPt, kMaxCount};
+enum {kCPtrig=1, kEl, kInEl, kTOF2t, kSameVrtx, kTotCH0, kMissPt, kMaxCount};
 enum SIDE {E=0, East=0, W=1, West=1, nSides};
 enum XY_COORDINATE {X, Y, nCoordinates};
 enum RP_ID {E1U, E1D, E2U, E2D, W1U, W1D, W2U, W2D, nRomanPots};
@@ -119,7 +119,8 @@ TH1I* hAnalysisFlow; // control plot
 TH1F* hTriggerBits; // control plot
 TH1F* hConfiguration;
 TH1F* hNumberTrackPerBranch[nBranches]; // number of track per each brunch (west up, west down, east up, east down)
-TH1D *hConnection;
+TH1D* hConnection;
+TH1F* hNumberTrack;
 
 // PID
 TH2D* hdEdxVsP[12];
@@ -221,6 +222,8 @@ void Init(){
   for(int i=0; i<nBranches; ++i)
     hNumberTrackPerBranch[i] = new TH1F("NumberTracksPerBranch,"+branchName[i],"Number of tracks in branch "+branchName[i], 8, -0.5, 7.5);
 
+ hNumberTrack = new TH1F("NumberTracks", "Number of Tracks in RP, trigger "+triggerName[analyzedTriggerId], 40, -0.5, 39.5); 
+
   for(int i=0; i<12;++i){
     if(i==0){
       outfile->mkdir("All")->cd();
@@ -307,6 +310,7 @@ void Make(){
       (trk->getTrackPoint(1) ? trk->getTrackPoint(1)->planesUsed()>=3 : true) ) rpTrackIdVec_perSide[side].push_back( k );
   }
 
+ hNumberTrack->Fill(numberOfTracks);
   for(int i=0; i<nBranches; ++i) 
     hNumberTrackPerBranch[i]->Fill(numberOfTracksPerBranch[i]);
 

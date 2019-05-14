@@ -28,7 +28,9 @@ if __name__ == "__main__":
     elif len(args) == 1:
         outputDir = args.pop(0) # read third input from terminal = outputDir
         #inputSource = "/gpfs01/star/pwg/truhlar/Test/ELtrig/merge_files/StUPCRP_production.list"
-        inputSource = "/gpfs01/star/pwg/truhlar/ConnectionTest/CPtrig/test/total.list"
+        #inputSource = "/gpfs01/star/pwg/truhlar/ConnectionTest/total.list"
+        #inputSource = "/gpfs01/star/pwg/truhlar/ConnectionTest/central.list"
+        inputSource = "/gpfs01/star/pwg/truhlar/ConnectionTest/elastic.list"
     else:
         print "Wrong input arguments"
         exit()
