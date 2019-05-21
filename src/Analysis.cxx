@@ -222,7 +222,7 @@ void Init(){
   for(int i=0; i<nBranches; ++i)
     hNumberTrackPerBranch[i] = new TH1F("NumberTracksPerBranch,"+branchName[i],"Number of tracks in branch "+branchName[i], 8, -0.5, 7.5);
 
- hNumberTrack = new TH1F("NumberTracks", "Number of Tracks in RP, trigger "+triggerName[analyzedTriggerId], 40, -0.5, 39.5); 
+  hNumberTrack = new TH1F("NumberTracks", "Number of Tracks in RP", 40, -0.5, 39.5); 
 
   for(int i=0; i<12;++i){
     if(i==0){
