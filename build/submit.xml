@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE job>
 
-<job nProcesses="196" filesPerHour="1" simulateSubmission="false">
+<job nProcesses="38" filesPerHour="1" simulateSubmission="false">
   <command>
     echo "Starting the job"
     ls
     hostname
     starpro
-    ./Analysis /gpfs01/star/pwg/truhlar/ConnectionTest/total.list ${JOBINDEX}
+    ./Analysis /gpfs01/star/pwg/jaroslav/test/star-upcDst/trees/RP_central_elastic_17_v2/merge_files/StUPCRP_central_elastic_17_v2.list ${JOBINDEX}
     mv AnalysisOutput.root ${JOBID}.root
     ls
   </command>
-  <stdout URL="file:/gpfs01/star/pwg/truhlar/Run17Outputs/0513/logs/$JOBID.out"/>
-  <stderr URL="file:/gpfs01/star/pwg/truhlar/Run17Outputs/0513/logs/$JOBID.err"/>
+  <stdout URL="file:/gpfs01/star/pwg/truhlar/Run17Outputs/0716/3/logs/$JOBID.out"/>
+  <stderr URL="file:/gpfs01/star/pwg/truhlar/Run17Outputs/0716/3/logs/$JOBID.err"/>
 
-  <output fromScratch="*.root" toURL="file:/gpfs01/star/pwg/truhlar/Run17Outputs/0513/" />
+  <output fromScratch="*.root" toURL="file:/gpfs01/star/pwg/truhlar/Run17Outputs/0716/3/" />
 
   <Generator>
-    <Location>/gpfs01/star/pwg/truhlar/Run17Outputs/0513/sched</Location>
+    <Location>/gpfs01/star/pwg/truhlar/Run17Outputs/0716/3/sched</Location>
   </Generator>
 
   <SandBox installer="ZIP">

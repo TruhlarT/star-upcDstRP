@@ -2,7 +2,6 @@
 project (star-upc)
 cmake_minimum_required (VERSION 2.6)
 
-
 #sources for shared library LIB
 set (SRCS
   src/StUPCEvent.cxx

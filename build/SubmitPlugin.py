@@ -28,7 +28,8 @@ if __name__ == "__main__":
     elif len(args) == 1:
         outputDir = args.pop(0) # read third input from terminal = outputDir
         #inputSource = "/gpfs01/star/pwg/truhlar/Test/ELtrig/merge_files/StUPCRP_production.list"
-        inputSource = "/gpfs01/star/pwg/truhlar/ConnectionTest/total.list"
+        #inputSource = "/gpfs01/star/pwg/truhlar/ConnectionTest/total.list"
+        inputSource = "/gpfs01/star/pwg/jaroslav/test/star-upcDst/trees/RP_central_elastic_17_v2/merge_files/StUPCRP_central_elastic_17_v2.list"
         #inputSource = "/gpfs01/star/pwg/truhlar/ConnectionTest/central.list"
         #inputSource = "/gpfs01/star/pwg/truhlar/ConnectionTest/elastic.list"
     else:
