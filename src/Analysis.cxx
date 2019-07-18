@@ -75,8 +75,6 @@ const int nTriggers = 21;
 const int triggerID[] = {1,2,3,4,5,8,9,570701,570702,570703,
 570704,570705,570709,570711,570712,570719,590701,590703,590705,590708,590709};
 
-bool PID = true;
-//bool PID = false;
 
 TString triggerName[nTriggers] = {  TString("CPT2_test"), // 1
                         TString("CPT2noBBCL_test"), // 2
@@ -142,6 +140,8 @@ Double_t deltaTOF, deltaDeltaTOF, mSquared;
 Double_t dEdx1, dEdx2;
 Double_t momentum1, momentum2;
 Double_t charge1, charge2;
+Double_t TOFlength1, TOFlength2;
+Double_t TOFtime1, TOFtime2;
 
 Bool_t elastic;
 
@@ -390,29 +390,6 @@ void Make(){
       hAnalysisFlow->Fill(kMissPt);
 
       FillPlots(3,i);
-
-      if(PID){
-        // DeltaDeltaTOF - Daniel
-        double expectedTime1 = (TOFlength[0] / speedOfLight) * sqrt(1 + (pionMass * speedOfLight / momentum[0])*(pionMass * speedOfLight / momentum[0]));
-        double expectedTime2 = (TOFlength[1] / speedOfLight) * sqrt(1 + (pionMass * speedOfLight / momentum[1])*(pionMass * speedOfLight / momentum[1]));
-        deltaTOF = TOFtime[1] - TOFtime[0];
-        double deltaTOFexpected = expectedTime2 - expectedTime1;
-        deltaDeltaTOF = deltaTOF - deltaTOFexpected;
-        
-        // m2 - Rafal
-  		  double length1Squared = TOFlength[0]*TOFlength[0];
-  		  double length2Squared = TOFlength[1]*TOFlength[1];
-        double speedOfLight2 = speedOfLight*speedOfLight;
-        double speedOfLight4 = speedOfLight2*speedOfLight2;
-        double deltaTime2 = (TOFtime[1] - TOFtime[0])*(TOFtime[1] - TOFtime[0]);
-        double deltaTime4 = deltaTime2*deltaTime2;
-        double oneOverMomentum1sq = 1/(momentum[0]*momentum[0]);
-        double oneOverMomentum2sq = 1/(momentum[1]*momentum[1]);
-  		  double cEq = -2*length1Squared*length2Squared + speedOfLight4*deltaTime4 + length2Squared*length2Squared + length1Squared*length1Squared -2*speedOfLight2*deltaTime2*(length2Squared + length1Squared);
-        double bEq = -2*length1Squared*length2Squared*speedOfLight2*(oneOverMomentum1sq + oneOverMomentum2sq) + 2*length1Squared*length1Squared*speedOfLight2*oneOverMomentum1sq + 2*length2Squared*length2Squared*speedOfLight2*oneOverMomentum2sq -2*speedOfLight4*deltaTime2*(length1Squared*oneOverMomentum1sq + length2Squared*oneOverMomentum2sq);
-        double aEq = -2*length1Squared*length2Squared*speedOfLight4*oneOverMomentum1sq*oneOverMomentum2sq + speedOfLight4*(length1Squared*length1Squared*oneOverMomentum1sq*oneOverMomentum1sq + length2Squared*length2Squared*oneOverMomentum2sq*oneOverMomentum2sq);
-        mSquared = (-bEq + sqrt(bEq*bEq-4*aEq*cEq)) / (2*aEq);
-      }
       
       dEdx1 = dEdx[0];
       dEdx2 = dEdx[1];
@@ -420,6 +397,10 @@ void Make(){
       momentum2 = momentum[1];
       charge1 = charge[0];
       charge2 = charge[1];
+      TOFtime1 = TOFtime[0];
+      TOFtime2 = TOFtime[1];
+      TOFlength1 = TOFlength[0];
+      TOFlength2 = TOFlength[1];
 
       recTree->Fill();
 
@@ -448,6 +429,10 @@ TFile *CreateOutputTree(const string& out) {
   recTree ->Branch("momentum2", &momentum2, "momentum2/D");
   recTree ->Branch("charge1", &charge1, "charge1/D");
   recTree ->Branch("charge2", &charge2, "charge2/D");
+  recTree ->Branch("TOFtime1", &TOFtime1, "TOFtime1/D");
+  recTree ->Branch("TOFtime2", &TOFtime2, "TOFtime2/D");
+  recTree ->Branch("TOFlength1", &TOFlength1, "TOFlength1/D");
+  recTree ->Branch("TOFlength2", &TOFlength2, "TOFlength2/D");
   recTree ->Branch("deltaDeltaTOF", &deltaDeltaTOF, "deltaDeltaTOF/D");
   recTree ->Branch("mSquared", &mSquared, "mSquared/D"); 
   recTree ->Branch("deltaTOF", &deltaTOF, "deltaTOF/D");
